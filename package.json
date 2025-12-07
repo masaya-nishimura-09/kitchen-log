@@ -26,7 +26,7 @@
     "framer-motion": "^12.18.1",
     "heic2any": "^0.0.4",
     "lucide-react": "^0.524.0",
-    "next": "15.3.2",
+    "next": "^15.3.6",
     "next-auth": "^5.0.0-beta.28",
     "pg": "^8.16.0",
     "postgres": "^3.4.7",
