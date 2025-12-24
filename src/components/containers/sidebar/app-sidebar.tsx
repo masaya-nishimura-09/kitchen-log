@@ -1,3 +1,4 @@
+import Image from "next/image"
 import {
   Sidebar,
   SidebarContent,
@@ -15,7 +16,14 @@ export function AppSidebar() {
     <Sidebar variant="floating">
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>Application</SidebarGroupLabel>
+          <SidebarGroupLabel>
+            <Image
+              src={"/logo/logo/vector/default-monochrome-white.svg"}
+              alt="logo"
+              width={120}
+              height={54}
+            />
+          </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {items.map((item) => (
