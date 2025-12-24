@@ -16,11 +16,11 @@ export function AppSidebar() {
     <Sidebar variant="floating">
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>
+          <SidebarGroupLabel className="py-6">
             <Image
               src={"/logo/logo/vector/default-monochrome-white.svg"}
               alt="logo"
-              width={120}
+              width={130}
               height={54}
             />
           </SidebarGroupLabel>
