@@ -44,10 +44,10 @@ export default function NewRecipeForm() {
           className="flex flex-col gap-6"
         >
           <div className="grid gap-2">
-            <Label htmlFor="picture">写真</Label>
+            <Label htmlFor="image">写真</Label>
             <Input
-              id="picture"
-              name="picture"
+              id="image"
+              name="image"
               type="file"
               onChange={(e) =>
                 setFormData({ ...formData, image: e.target.files?.[0] || null })
