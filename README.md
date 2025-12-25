@@ -1,27 +1,36 @@
-# Kitchen Log
+This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-レシピ、献立、買い物リストを簡単に管理できる、日常の料理に役立つアプリです。
+## Getting Started
 
-## Features / 主な機能
+First, run the development server:
 
-- レシピ・献立・買い物リストを管理できます。
-- レシピや献立から買い物リストを自動生成します。
+```bash
+npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+# or
+bun dev
+```
 
-## Demo / デモ
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-- https://kitchen-log-next.vercel.app/dashboard
-- ユーザ名：test@gmail.com
-- パスワード：testtest
+You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-## Tech Stack / 使用技術
+This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-- TypeScript
-- React
-- Next.js
-- Supabase
-- Vercel
+## Learn More
 
-## Background / 制作の背景
+To learn more about Next.js, take a look at the following resources:
 
-- 家族とレシピを共有したり、スムーズに買い物できる仕組みがほしいと感じ、自分の生活に役立つアプリとして制作しました。
-- Next.js と TypeScript の学習・実践の場として取り組みました。
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+
+## Deploy on Vercel
+
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
