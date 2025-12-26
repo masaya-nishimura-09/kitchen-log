@@ -26,6 +26,7 @@ export interface StepInput {
 }
 
 export interface RecipeState {
+  success: boolean
   errors?: {
     image?: string[]
     title?: string[]

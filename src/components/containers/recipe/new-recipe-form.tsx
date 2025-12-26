@@ -1,6 +1,6 @@
 "use client"
 
-import { useActionState, useState } from "react"
+import { useState, useTransition } from "react"
 import { addRecipe } from "@/actions/recipe"
 import { Button } from "@/components/ui/button"
 import {
@@ -20,8 +20,12 @@ import StepInput from "./step-input"
 import TagInput from "./tag-input"
 
 export default function NewRecipeForm() {
-  const initialState: RecipeState = { message: null, errors: {} }
-  const [state, formAction, isPending] = useActionState(addRecipe, initialState)
+  const [isPending, startTransition] = useTransition()
+  const [state, setState] = useState<RecipeState>({
+    success: true,
+    message: null,
+    errors: {},
+  })
 
   const [formData, setFormData] = useState<RecipeInput>({
     image: null,
@@ -32,6 +36,34 @@ export default function NewRecipeForm() {
     step: [],
   })
 
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+
+    const fd = new FormData()
+
+    if (formData.image) {
+      fd.append("image", formData.image)
+    }
+
+    fd.append(
+      "recipeData",
+      JSON.stringify({
+        title: formData.title,
+        memo: formData.memo,
+        tag: formData.tag,
+        ingredient: formData.ingredient,
+        step: formData.step,
+      }),
+    )
+
+    startTransition(async () => {
+      const result = await addRecipe(fd)
+      if (!result.success) {
+        setState(result)
+      }
+    })
+  }
+
   return (
     <Card className="max-w-lg">
       <CardHeader>
@@ -40,8 +72,8 @@ export default function NewRecipeForm() {
       <CardContent>
         <form
           id="new-recipe-form"
-          action={formAction}
           className="flex flex-col gap-6"
+          onSubmit={handleSubmit}
         >
           <div className="grid gap-2">
             <Label htmlFor="image">写真</Label>

@@ -8,6 +8,24 @@ import { SignUpFormSchema } from "@/lib/schemas/sign-up-form"
 import { createClient } from "@/lib/supabase/server"
 import type { SignInState, SignUpState } from "@/types/auth"
 
+export async function getUserId() {
+  const supabase = createClient(cookies())
+  const {
+    data: { user },
+    error,
+  } = await supabase.auth.getUser()
+
+  if (error) {
+    return null
+  }
+
+  if (user) {
+    return user.id
+  } else {
+    return null
+  }
+}
+
 export async function signUp(
   _prevState: SignUpState | undefined,
   formData: FormData,
