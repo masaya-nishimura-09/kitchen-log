@@ -25,11 +25,7 @@ async function uploadImage(
       return { url: null, error: uploadError.message }
     }
 
-    const {
-      data: { publicUrl },
-    } = supabase.storage.from("recipe-images").getPublicUrl(uploadData.path)
-
-    return { url: publicUrl }
+    return { url: uploadData.path }
   } catch (error) {
     console.error("Image upload failed:", error)
     return {
@@ -83,15 +79,17 @@ export async function addRecipe(formData: FormData): Promise<RecipeState> {
 
   const supabase = createClient(cookies())
 
-  const { data, error } = await supabase.rpc("add_recipe_with_details", {
-    p_user_id: userId,
-    p_title: title,
-    p_image_url: imageUrl,
-    p_memo: memo,
-    p_tags: tag,
-    p_ingredients: ingredient,
-    p_steps: step,
-  })
+  const { data, error } = await supabase
+    .rpc("add_recipe_with_details", {
+      p_user_id: userId,
+      p_title: title,
+      p_image_url: imageUrl,
+      p_memo: memo,
+      p_tags: tag,
+      p_ingredients: ingredient,
+      p_steps: step,
+    })
+    .single<{ id: number }>()
 
   if (error || !data) {
     console.error("Recipe insert failed:", error)

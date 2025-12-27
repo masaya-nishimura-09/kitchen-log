@@ -13,7 +13,7 @@ import { items } from "@/lib/sidebar/items"
 
 export function AppSidebar() {
   return (
-    <Sidebar variant="floating" collapsible="icon">
+    <Sidebar variant="sidebar" collapsible="icon">
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupLabel className="py-6">
