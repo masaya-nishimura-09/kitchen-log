@@ -7,6 +7,7 @@ import { RecipeFormSchema } from "@/lib/schemas/recipe-form"
 import { createClient } from "@/lib/supabase/server"
 import type { Recipe } from "@/types/recipe/recipe"
 import type { RecipeInput, RecipeState } from "@/types/recipe/recipe-input"
+import type { RecipeRaw } from "@/types/recipe/recipe-raw"
 import { getUserId } from "./auth"
 
 async function uploadImage(
@@ -103,7 +104,7 @@ export async function addRecipe(formData: FormData): Promise<RecipeState> {
   redirect(`/dashboard/recipe/${data.id}`)
 }
 
-export default async function fetchRecipe(recipeId: number): Promise<Recipe> {
+export async function fetchRecipe(recipeId: number): Promise<Recipe> {
   const userId = await getUserId()
   if (!userId) {
     throw new Error(
@@ -164,48 +165,112 @@ export default async function fetchRecipe(recipeId: number): Promise<Recipe> {
   if (!data) {
     throw new Error("レシピの取得に失敗しました。")
   } else {
-    const convertedData = {
-      id: data.id as number,
-      userId: data.user_id as string,
-      title: data.title as string,
-      imageUrl: data.image_url as string | null,
-      memo: data.memo as string | null,
-      updatedAt: data.updated_at as string,
-      createdAt: data.created_at as string,
-      tag: data.tags.map((t) => ({
-        id: t.id as number,
-        recipeId: t.recipe_id as number,
-        userId: t.user_id as string,
-        name: t.name as string,
-        updatedAt: t.updated_at as string,
-        createdAt: t.created_at as string,
-      })),
-      ingredient: data.ingredients
-        .map((i) => ({
-          id: i.id as number,
-          recipeId: i.recipe_id as number,
-          userId: i.user_id as string,
-          name: i.name as string,
-          amount: i.amount as string,
-          unit: i.unit as string,
-          order: i.order as number,
-          updatedAt: i.updated_at as string,
-          createdAt: i.created_at as string,
-        }))
-        .sort((a, b) => a.order - b.order),
-      step: data.steps
-        .map((s) => ({
-          id: s.id as number,
-          recipeId: s.recipe_id as number,
-          userId: s.user_id as string,
-          text: s.text as string,
-          order: s.order as number,
-          updatedAt: s.updated_at as string,
-          createdAt: s.created_at as string,
-        }))
-        .sort((a, b) => a.order - b.order),
-    }
+    const convertedData = convertRecipe(data)
 
     return convertedData
+  }
+}
+
+export async function fetchRecipes(): Promise<Recipe[]> {
+  const userId = await getUserId()
+  if (!userId) {
+    throw new Error(
+      "認証情報が取得できませんでした。再度ログインしてください。",
+    )
+  }
+
+  const supabase = createClient(cookies())
+  const { data, error } = await supabase
+    .from("recipes")
+    .select(
+      `
+      id,
+      user_id,
+      title,
+      image_url,
+      memo,
+      updated_at,
+      created_at,
+      tags (
+        id,
+        recipe_id,
+        user_id,
+        name,
+        updated_at,
+        created_at
+      ),
+      ingredients (
+        id,
+        recipe_id,
+        user_id,
+        name,
+        amount,
+        unit,
+        order,
+        updated_at,
+        created_at
+      ),
+      steps (
+        id,
+        recipe_id,
+        user_id,
+        text,
+        order,
+        updated_at,
+        created_at
+      )`,
+    )
+    .eq("user_id", userId)
+    .order("updated_at", { ascending: false })
+
+  if (error) {
+    console.error("Recipe Fetch Failed:", error)
+    throw new Error("レシピの取得に失敗しました。")
+  }
+
+  return data?.map(convertRecipe) ?? []
+}
+
+function convertRecipe(data: RecipeRaw): Recipe {
+  return {
+    id: data.id as number,
+    userId: data.user_id as string,
+    title: data.title as string,
+    imageUrl: data.image_url as string | null,
+    memo: data.memo as string | null,
+    updatedAt: data.updated_at as string,
+    createdAt: data.created_at as string,
+    tag: data.tags.map((t) => ({
+      id: t.id as number,
+      recipeId: t.recipe_id as number,
+      userId: t.user_id as string,
+      name: t.name as string,
+      updatedAt: t.updated_at as string,
+      createdAt: t.created_at as string,
+    })),
+    ingredient: data.ingredients
+      .map((i) => ({
+        id: i.id as number,
+        recipeId: i.recipe_id as number,
+        userId: i.user_id as string,
+        name: i.name as string,
+        amount: i.amount as string,
+        unit: i.unit as string,
+        order: i.order as number,
+        updatedAt: i.updated_at as string,
+        createdAt: i.created_at as string,
+      }))
+      .sort((a, b) => a.order - b.order),
+    step: data.steps
+      .map((s) => ({
+        id: s.id as number,
+        recipeId: s.recipe_id as number,
+        userId: s.user_id as string,
+        text: s.text as string,
+        order: s.order as number,
+        updatedAt: s.updated_at as string,
+        createdAt: s.created_at as string,
+      }))
+      .sort((a, b) => a.order - b.order),
   }
 }
