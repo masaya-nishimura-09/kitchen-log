@@ -19,6 +19,7 @@ import {
 import { CSS } from "@dnd-kit/utilities"
 import { IconCircleX, IconGripVertical } from "@tabler/icons-react"
 import { type Dispatch, type SetStateAction, useState } from "react"
+import { AccordionContent } from "@/components/ui/accordion"
 import { Button } from "@/components/ui/button"
 import {
   Item,
@@ -27,7 +28,6 @@ import {
   ItemMedia,
   ItemTitle,
 } from "@/components/ui/item"
-import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import type { RecipeInput, RecipeState } from "@/types/recipe/recipe-input"
 
@@ -151,8 +151,7 @@ export default function StepInput({
   }
 
   return (
-    <div className="grid gap-2">
-      <Label htmlFor="step">手順</Label>
+    <AccordionContent className="grid gap-2 max-w-xl">
       <div className="flex w-full items-center gap-2">
         <Textarea
           id="step"
@@ -164,7 +163,12 @@ export default function StepInput({
           placeholder="手順を入力してください"
           className="break-all w-full"
         />
-        <Button type="button" variant="outline" onClick={handleAddStep}>
+        <Button
+          type="button"
+          variant="outline"
+          onClick={handleAddStep}
+          className="mt-auto"
+        >
           追加
         </Button>
       </div>
@@ -197,6 +201,6 @@ export default function StepInput({
           </p>
         ))}
       </div>
-    </div>
+    </AccordionContent>
   )
 }

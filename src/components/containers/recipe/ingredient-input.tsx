@@ -19,10 +19,10 @@ import {
 import { CSS } from "@dnd-kit/utilities"
 import { IconCircleX, IconGripVertical } from "@tabler/icons-react"
 import { type Dispatch, type SetStateAction, useState } from "react"
+import { AccordionContent } from "@/components/ui/accordion"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Item, ItemActions, ItemContent, ItemMedia } from "@/components/ui/item"
-import { Label } from "@/components/ui/label"
 import {
   Select,
   SelectContent,
@@ -182,8 +182,7 @@ export default function IngredientInput({
   }
 
   return (
-    <div className="grid gap-2">
-      <Label htmlFor="ingredient">材料</Label>
+    <AccordionContent className="grid gap-2 max-w-xl">
       <div className="flex w-full gap-2">
         <div className="flex flex-col w-full items-center gap-2">
           <Input
@@ -264,6 +263,6 @@ export default function IngredientInput({
           </p>
         ))}
       </div>
-    </div>
+    </AccordionContent>
   )
 }
