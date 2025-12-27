@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useTransition } from "react"
-import { addRecipe } from "@/actions/recipe"
+import { addRecipe, editRecipe } from "@/actions/recipe"
 import {
   Accordion,
   AccordionContent,
@@ -24,7 +24,13 @@ import IngredientInput from "./ingredient-input"
 import StepInput from "./step-input"
 import TagInput from "./tag-input"
 
-export default function NewRecipeForm() {
+export default function RecipeForm({
+  recipe,
+  mode,
+}: {
+  recipe: RecipeInput | null
+  mode: string
+}) {
   const [isPending, startTransition] = useTransition()
   const [state, setState] = useState<RecipeState>({
     success: true,
@@ -34,11 +40,11 @@ export default function NewRecipeForm() {
 
   const [formData, setFormData] = useState<RecipeInput>({
     image: null,
-    title: "",
-    memo: "",
-    tag: [],
-    ingredient: [],
-    step: [],
+    title: recipe?.title || "",
+    memo: recipe?.memo || "",
+    tag: recipe?.tag || [],
+    ingredient: recipe?.ingredient || [],
+    step: recipe?.step || [],
   })
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -61,18 +67,31 @@ export default function NewRecipeForm() {
       }),
     )
 
-    startTransition(async () => {
-      const result = await addRecipe(fd)
-      if (!result.success) {
-        setState(result)
-      }
-    })
+    if (mode === "new") {
+      startTransition(async () => {
+        const result = await addRecipe(fd)
+        if (!result.success) {
+          setState(result)
+        }
+      })
+    } else {
+      startTransition(async () => {
+        const result = await editRecipe(fd)
+        if (!result.success) {
+          setState(result)
+        }
+      })
+    }
   }
 
   return (
     <Card className="size-full">
       <CardHeader>
-        <CardTitle>新規レシピ</CardTitle>
+        {mode && "new" ? (
+          <CardTitle>新規レシピ</CardTitle>
+        ) : (
+          <CardTitle>レシピを編集</CardTitle>
+        )}
       </CardHeader>
       <CardContent>
         <form

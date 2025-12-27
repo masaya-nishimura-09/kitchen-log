@@ -1,9 +1,9 @@
-import NewRecipeForm from "@/components/containers/recipe/new/new-recipe-form"
+import RecipeForm from "@/components/containers/recipe/form"
 
 export default async function Page() {
   return (
     <div className="size-full">
-      <NewRecipeForm />
+      <RecipeForm recipe={null} mode="new" />
     </div>
   )
 }
