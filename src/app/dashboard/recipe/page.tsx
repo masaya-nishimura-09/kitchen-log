@@ -25,12 +25,17 @@ export default async function Page(props: {
 function RecipesPage({ recipes }: { recipes: Recipe[] }) {
   return (
     <div className="size-full flex flex-col gap-2">
-      <div className="flex w-full items-center gap-2">
-        <div className="relative max-w-xl">
+      <div className="flex w-full justify-end items-center gap-2">
+        <form method="GET" className="relative max-w-lg">
           <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-          <Input type="search" placeholder="検索..." className="pl-8" />
-        </div>
-        <Button type="button" className="ml-auto">
+          <Input
+            type="search"
+            name="title"
+            placeholder="検索..."
+            className="pl-8 w-full"
+          />
+        </form>
+        <Button type="button">
           <Link href="/dashboard/recipe/new">新規追加</Link>
         </Button>
       </div>
