@@ -6,10 +6,15 @@ import Recipes from "@/components/containers/recipe/recipes"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import type { Recipe } from "@/types/recipe/recipe"
+import type { SearchParams } from "@/types/recipe/search-params"
 
-export default async function Page() {
+export default async function Page(props: {
+  searchParams?: Promise<SearchParams>
+}) {
+  const searchParams = await props.searchParams
+
   try {
-    const recipes = await fetchRecipes()
+    const recipes = await fetchRecipes(searchParams)
     return <RecipesPage recipes={recipes} />
   } catch (error) {
     console.error("Recipes fetch error:", error)

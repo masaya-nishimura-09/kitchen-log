@@ -8,6 +8,7 @@ import { createClient } from "@/lib/supabase/server"
 import type { Recipe } from "@/types/recipe/recipe"
 import type { RecipeInput, RecipeState } from "@/types/recipe/recipe-input"
 import type { RecipeRaw } from "@/types/recipe/recipe-raw"
+import type { SearchParams } from "@/types/recipe/search-params"
 import { getUserId } from "./auth"
 
 async function uploadImage(
@@ -171,13 +172,17 @@ export async function fetchRecipe(recipeId: number): Promise<Recipe> {
   }
 }
 
-export async function fetchRecipes(): Promise<Recipe[]> {
+export async function fetchRecipes(
+  searchParams: SearchParams | undefined,
+): Promise<Recipe[]> {
   const userId = await getUserId()
   if (!userId) {
     throw new Error(
       "認証情報が取得できませんでした。再度ログインしてください。",
     )
   }
+
+  const titleParam = searchParams?.title || ""
 
   const supabase = createClient(cookies())
   const { data, error } = await supabase
@@ -221,6 +226,7 @@ export async function fetchRecipes(): Promise<Recipe[]> {
       )`,
     )
     .eq("user_id", userId)
+    .like("title", `%${titleParam}%`)
     .order("updated_at", { ascending: false })
 
   if (error) {
