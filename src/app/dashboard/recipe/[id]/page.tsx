@@ -2,7 +2,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { notFound } from "next/navigation"
 import React from "react"
-import fetchRecipe from "@/actions/recipe"
+import { fetchRecipe } from "@/actions/recipe"
 import { AspectRatio } from "@/components/ui/aspect-ratio"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -24,32 +24,32 @@ export default async function Page({ params }: { params: { id: string } }) {
   const { id } = await params
 
   try {
-    const data = await fetchRecipe(Number(id))
-    return <RecipePage data={data} />
+    const recipe = await fetchRecipe(Number(id))
+    return <RecipePage recipe={recipe} />
   } catch (error) {
     console.error("Recipe fetch error:", error)
     notFound()
   }
 }
 
-function RecipePage({ data }: { data: Recipe }) {
+function RecipePage({ recipe }: { recipe: Recipe }) {
   return (
     <div className="size-full grid grid-cols-1 md:grid-cols-2 gap-4">
       <Card className="h-full">
         <CardHeader>
-          <CardTitle className="text-xl"> {data.title}</CardTitle>
-          {data.memo && <CardDescription>{data.memo}</CardDescription>}
+          <CardTitle className="text-xl"> {recipe.title}</CardTitle>
+          {recipe.memo && <CardDescription>{recipe.memo}</CardDescription>}
           <CardAction>
             <Button>
-              <Link href={`/dashboard/recipe/${data.id}/edit`}>編集する</Link>
+              <Link href={`/dashboard/recipe/${recipe.id}/edit`}>編集する</Link>
             </Button>
           </CardAction>
         </CardHeader>
         <CardContent>
-          {data.imageUrl ? (
+          {recipe.imageUrl ? (
             <AspectRatio ratio={16 / 9} className="bg-muted rounded-lg">
               <Image
-                src={`/api/recipe-image?path=${data.imageUrl}`}
+                src={`/api/recipe-image?path=${recipe.imageUrl}`}
                 alt="recipe image"
                 width={500}
                 height={300}
@@ -70,7 +70,7 @@ function RecipePage({ data }: { data: Recipe }) {
           )}
         </CardContent>
         <CardFooter className="flex flex-wrap gap-2">
-          {data.tag.map((t, index) => (
+          {recipe.tag.map((t, index) => (
             <Badge key={`${t.name}-${index}`} variant="secondary">
               {t.name}
             </Badge>
@@ -91,7 +91,7 @@ function RecipePage({ data }: { data: Recipe }) {
           <CardContent className="size-ful">
             <TabsContent value="ingredient" className="size-ful p-2">
               <ScrollArea className="rounded-md size-ful">
-                {data.ingredient.map((i) => (
+                {recipe.ingredient.map((i) => (
                   <React.Fragment key={i.id}>
                     <div className="flex gap-2">
                       <div className="text-sm">{i.name}</div>
@@ -106,7 +106,7 @@ function RecipePage({ data }: { data: Recipe }) {
             </TabsContent>
             <TabsContent value="step" className="size-ful p-2">
               <ScrollArea className="rounded-md size-ful">
-                {data.step.map((i) => (
+                {recipe.step.map((i) => (
                   <React.Fragment key={i.id}>
                     <div className="flex gap-2">
                       <div className="text-sm">{i.order}. </div>
