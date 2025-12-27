@@ -21,7 +21,10 @@ export const RecipeFormSchema = z.object({
     .string()
     .min(1, { message: "タイトルを入力してください。" })
     .max(100, { message: "タイトルは100文字以内で入力して下さい。" }),
-  memo: z.string().max(500, { message: "メモは500文字以内で入力して下さい。" }),
+  memo: z
+    .string()
+    .max(500)
+    .transform((val) => (val === "" ? null : val)),
   tag: z
     .array(
       z.object({
