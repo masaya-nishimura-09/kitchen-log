@@ -1,13 +1,7 @@
 import Image from "next/image"
 import Link from "next/link"
 import { AspectRatio } from "@/components/ui/aspect-ratio"
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import type { Recipe } from "@/types/recipe/recipe"
 
 export default function Recipes({ recipes }: { recipes: Recipe[] }) {
@@ -41,8 +35,9 @@ export default function Recipes({ recipes }: { recipes: Recipe[] }) {
               )}
             </CardContent>
             <CardHeader>
-              <CardTitle>{recipe.title}</CardTitle>
-              <CardDescription>{recipe.memo}</CardDescription>
+              <CardTitle className="whitespace-nowrap overflow-hidden text-ellipsis">
+                {recipe.title}
+              </CardTitle>
             </CardHeader>
           </Card>
         </Link>

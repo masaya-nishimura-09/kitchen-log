@@ -21,7 +21,7 @@ function RecipesPage({ recipes }: { recipes: Recipe[] }) {
   return (
     <div className="size-full flex flex-col gap-2">
       <div className="flex w-full items-center gap-2">
-        <div className="relative w-full">
+        <div className="relative max-w-xl">
           <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
           <Input type="search" placeholder="検索..." className="pl-8" />
         </div>
