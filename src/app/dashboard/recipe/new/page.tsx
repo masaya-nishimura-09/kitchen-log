@@ -1,4 +1,4 @@
-import NewRecipeForm from "@/components/containers/recipe/new-recipe-form"
+import NewRecipeForm from "@/components/containers/recipe/new/new-recipe-form"
 
 export default async function Page() {
   return (
