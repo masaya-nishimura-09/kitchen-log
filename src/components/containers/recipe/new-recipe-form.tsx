@@ -88,7 +88,7 @@ export default function NewRecipeForm() {
           >
             <AccordionItem value="image">
               <AccordionTrigger>写真</AccordionTrigger>
-              <AccordionContent className="grid gap-2">
+              <AccordionContent className="grid gap-2 max-w-xl">
                 <Input
                   id="image"
                   name="image"
@@ -112,7 +112,7 @@ export default function NewRecipeForm() {
 
             <AccordionItem value="title">
               <AccordionTrigger>タイトル</AccordionTrigger>
-              <AccordionContent className="grid gap-2">
+              <AccordionContent className="grid gap-2 max-w-xl">
                 <Input
                   id="title"
                   name="title"
@@ -135,7 +135,7 @@ export default function NewRecipeForm() {
 
             <AccordionItem value="memo">
               <AccordionTrigger>メモ</AccordionTrigger>
-              <AccordionContent className="grid gap-2">
+              <AccordionContent className="grid gap-2 max-w-xl">
                 <Textarea
                   id="memo"
                   name="memo"
