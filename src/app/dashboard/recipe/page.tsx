@@ -1,7 +1,7 @@
 import { Search } from "lucide-react"
 import Link from "next/link"
 import { notFound } from "next/navigation"
-import { fetchRecipes } from "@/actions/recipe"
+import { fetchRecipes } from "@/actions/recipe/fetch"
 import Recipes from "@/components/containers/recipe/recipes"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"

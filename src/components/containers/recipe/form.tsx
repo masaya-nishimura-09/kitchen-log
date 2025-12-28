@@ -2,7 +2,8 @@
 
 import Link from "next/link"
 import { useState, useTransition } from "react"
-import { addRecipe, editRecipe } from "@/actions/recipe"
+import { createRecipe } from "@/actions/recipe/create"
+import { editRecipe } from "@/actions/recipe/edit"
 import {
   Accordion,
   AccordionContent,
@@ -74,7 +75,7 @@ export default function RecipeForm({
 
     if (mode === "new") {
       startTransition(async () => {
-        const result = await addRecipe(fd)
+        const result = await createRecipe(fd)
         if (!result.success) {
           setState(result)
         }
@@ -221,13 +222,9 @@ export default function RecipeForm({
         </Button>
         <Button type="button" variant="outline" disabled={isPending}>
           {mode === "new" ? (
-            <Link href="/dashboard/recipe">
-              キャンセル
-            </Link>
+            <Link href="/dashboard/recipe">キャンセル</Link>
           ) : (
-            <Link href={`/dashboard/recipe/${formData.id}`}>
-              キャンセル
-            </Link>
+            <Link href={`/dashboard/recipe/${formData.id}`}>キャンセル</Link>
           )}
         </Button>
       </CardFooter>

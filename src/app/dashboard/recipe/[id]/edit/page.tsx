@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation"
-import { fetchRecipeInput } from "@/actions/recipe"
+import { fetchRecipeInput } from "@/actions/recipe/fetch"
 import RecipeForm from "@/components/containers/recipe/form"
 
 export default async function Page({ params }: { params: { id: string } }) {
