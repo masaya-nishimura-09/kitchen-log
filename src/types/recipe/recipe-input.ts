@@ -1,7 +1,7 @@
 export interface RecipeInput {
-  id: number 
+  id: number
   image: File | null
-  imageUrl: string 
+  imageUrl: string
   title: string
   memo: string
   tag: TagInput[]

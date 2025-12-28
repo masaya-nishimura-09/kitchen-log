@@ -15,6 +15,8 @@ export async function createRecipe(formData: FormData): Promise<RecipeState> {
   ) as RecipeInput
 
   const validatedFields = RecipeFormSchema.safeParse({
+    id: recipeData.id,
+    imageUrl: recipeData.imageUrl,
     image: formData.get("image") as File | null,
     title: recipeData.title,
     memo: recipeData.memo,
@@ -24,6 +26,7 @@ export async function createRecipe(formData: FormData): Promise<RecipeState> {
   })
 
   if (!validatedFields.success) {
+    console.error(validatedFields.error)
     return {
       success: false,
       errors: validatedFields.error.flatten().fieldErrors,

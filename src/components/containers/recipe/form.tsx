@@ -1,9 +1,21 @@
 "use client"
 
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
 import Link from "next/link"
 import { useState, useTransition } from "react"
 import { createRecipe } from "@/actions/recipe/create"
 import { editRecipe } from "@/actions/recipe/edit"
+import { deleteRecipe } from "@/actions/recipe/delete"
 import {
   Accordion,
   AccordionContent,
@@ -13,6 +25,7 @@ import {
 import { Button } from "@/components/ui/button"
 import {
   Card,
+  CardAction,
   CardContent,
   CardFooter,
   CardHeader,
@@ -97,6 +110,35 @@ export default function RecipeForm({
           <CardTitle>新規レシピ</CardTitle>
         ) : (
           <CardTitle>レシピを編集</CardTitle>
+        )}
+        {mode === "edit" && (
+          <CardAction>
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button variant="outline">レシピを削除</Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>レシピの削除</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    このレシピを本当に削除してもよろしいですか？
+                    この操作は元に戻せません。
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>キャンセル</AlertDialogCancel>
+                  <AlertDialogAction
+                    onClick={() => {
+                      deleteRecipe(formData.id)
+                    }}
+                  >
+                    {isPending && <Spinner />}
+                    OK
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+          </CardAction>
         )}
       </CardHeader>
       <CardContent>
