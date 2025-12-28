@@ -412,11 +412,6 @@ export async function editRecipe(formData: FormData): Promise<RecipeState> {
   })
 
   if (!validatedFields.success) {
-
-
-    console.error(validatedFields.error)
-
-
     return {
       success: false,
       errors: validatedFields.error.flatten().fieldErrors,
