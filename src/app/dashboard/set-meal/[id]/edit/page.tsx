@@ -1,0 +1,15 @@
+import { notFound } from "next/navigation"
+import { fetchSetMealInput } from "@/actions/set-meal/fetch"
+import SetMealForm from "@/components/containers/set-meal/form"
+
+export default async function Page({ params }: { params: { id: string } }) {
+  const { id } = await params
+
+  try {
+    const setMeal = await fetchSetMealInput(Number(id))
+    return <SetMealForm setMeal={setMeal} mode="edit" />
+  } catch (error) {
+    console.error("Set meal fetch error:", error)
+    notFound()
+  }
+}
