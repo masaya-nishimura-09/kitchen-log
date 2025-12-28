@@ -1,7 +1,7 @@
 import type { Recipe } from "@/types/recipe/recipe"
 import type { RecipeRaw } from "@/types/recipe/recipe-raw"
 
-export function converter(data: RecipeRaw): Recipe {
+export function recipeConverter(data: RecipeRaw): Recipe {
   return {
     id: data.id as number,
     userId: data.user_id as string,

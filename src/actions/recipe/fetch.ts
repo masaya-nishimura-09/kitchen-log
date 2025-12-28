@@ -2,7 +2,7 @@
 
 import { cookies } from "next/headers"
 import { getUserId } from "@/actions/auth"
-import { converter } from "@/lib/recipe/converter"
+import { recipeConverter } from "@/lib/recipe/converter"
 import { createClient } from "@/lib/supabase/server"
 import type { Recipe } from "@/types/recipe/recipe"
 import type { RecipeInput } from "@/types/recipe/recipe-input"
@@ -69,7 +69,7 @@ export async function fetchRecipe(recipeId: number): Promise<Recipe> {
   if (!data) {
     throw new Error("レシピの取得に失敗しました。")
   } else {
-    const convertedData = converter(data)
+    const convertedData = recipeConverter(data)
 
     return convertedData
   }
@@ -137,7 +137,7 @@ export async function fetchRecipes(
     throw new Error("レシピの取得に失敗しました。")
   }
 
-  return data?.map(converter) ?? []
+  return data?.map(recipeConverter) ?? []
 }
 
 export async function fetchRecipeInput(recipeId: number): Promise<RecipeInput> {
@@ -201,7 +201,7 @@ export async function fetchRecipeInput(recipeId: number): Promise<RecipeInput> {
   if (!data) {
     throw new Error("レシピの取得に失敗しました。")
   } else {
-    const convertedData = converter(data)
+    const convertedData = recipeConverter(data)
     const recipeInput = {
       id: convertedData.id,
       image: null,

@@ -7,5 +7,10 @@ export interface SetMealRaw {
   memo: string | null
   updated_at: string
   created_at: string
-  recips: Array<RecipeRaw>
+  set_meal_recipes: {
+    id: number;
+    recipe_id: number;
+    set_meal_id: number;
+    recipes: RecipeRaw
+  }[];
 }
