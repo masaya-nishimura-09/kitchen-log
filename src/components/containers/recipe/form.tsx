@@ -39,7 +39,9 @@ export default function RecipeForm({
   })
 
   const [formData, setFormData] = useState<RecipeInput>({
+    id: recipe?.id || 0,
     image: null,
+    imageUrl: recipe?.imageUrl || "",
     title: recipe?.title || "",
     memo: recipe?.memo || "",
     tag: recipe?.tag || [],
@@ -59,6 +61,8 @@ export default function RecipeForm({
     fd.append(
       "recipeData",
       JSON.stringify({
+        id: formData.id,
+        imageUrl: formData.imageUrl,
         title: formData.title,
         memo: formData.memo,
         tag: formData.tag,
@@ -87,7 +91,7 @@ export default function RecipeForm({
   return (
     <Card className="size-full">
       <CardHeader>
-        {mode && "new" ? (
+        {mode === "new" ? (
           <CardTitle>新規レシピ</CardTitle>
         ) : (
           <CardTitle>レシピを編集</CardTitle>

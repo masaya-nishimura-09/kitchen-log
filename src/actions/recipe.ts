@@ -40,6 +40,33 @@ async function uploadImage(
   }
 }
 
+async function deleteImage(
+  imageUrl: string,
+): Promise<{ error?: string } | null> {
+  try {
+    const supabase = createClient(cookies())
+
+    const { error: removeError } = await supabase.storage
+      .from("recipe-images")
+      .remove([imageUrl])
+
+    if (removeError) {
+      console.error("Supabase file delete error:", removeError)
+      return { error: removeError.message }
+    }
+
+    return null
+  } catch (error) {
+    console.error("Image delete failed:", error)
+    return {
+      error:
+        error instanceof Error
+          ? error.message
+          : "画像の削除に失敗しました",
+    }
+  }
+}
+
 export async function addRecipe(formData: FormData): Promise<RecipeState> {
   const recipeData = JSON.parse(
     formData.get("recipeData") as string,
@@ -344,7 +371,9 @@ export async function fetchRecipeInput(recipeId: number): Promise<RecipeInput> {
   } else {
     const convertedData = convertRecipe(data)
     const recipeInput = {
+      id: convertedData.id,
       image: null,
+      imageUrl: convertedData.imageUrl,
       title: convertedData.title,
       memo: convertedData.memo || "",
       tag: convertedData.tag.map((t) => ({ name: t.name })),
@@ -372,7 +401,9 @@ export async function editRecipe(formData: FormData): Promise<RecipeState> {
   ) as RecipeInput
 
   const validatedFields = RecipeFormSchema.safeParse({
+    id: recipeData.id,
     image: formData.get("image") as File | null,
+    imageUrl: recipeData.imageUrl,
     title: recipeData.title,
     memo: recipeData.memo,
     tag: recipeData.tag,
@@ -381,13 +412,20 @@ export async function editRecipe(formData: FormData): Promise<RecipeState> {
   })
 
   if (!validatedFields.success) {
+
+
+    console.error(validatedFields.error)
+
+
     return {
       success: false,
       errors: validatedFields.error.flatten().fieldErrors,
       message: "入力内容に誤りがあります。",
     }
   }
-  const { image, title, memo, tag, ingredient, step } = validatedFields.data
+  const { id, image, title, memo, tag, ingredient, step } = validatedFields.data
+  let { imageUrl } = validatedFields.data
+
   const userId = await getUserId()
   if (!userId) {
     return {
@@ -396,8 +434,14 @@ export async function editRecipe(formData: FormData): Promise<RecipeState> {
     }
   }
 
-  let imageUrl: string | null = null
   if (image) {
+    if (imageUrl) {
+      const error = await deleteImage(imageUrl)
+      if (error) {
+        console.warn("画像の更新に失敗しましたが処理を続行します:", error)
+      }
+    } 
+
     const { url, error } = await uploadImage(image, userId)
     imageUrl = url
     if (error) {
@@ -408,7 +452,8 @@ export async function editRecipe(formData: FormData): Promise<RecipeState> {
   const supabase = createClient(cookies())
 
   const { data, error } = await supabase
-    .rpc("add_recipe_with_details", {
+    .rpc("edit_recipe_with_details", {
+      p_id: id,
       p_user_id: userId,
       p_title: title,
       p_image_url: imageUrl,
@@ -419,14 +464,14 @@ export async function editRecipe(formData: FormData): Promise<RecipeState> {
     })
     .single<{ id: number }>()
 
-  if (error || !data) {
-    console.error("Recipe insert failed:", error)
+  if (error) {
+    console.error("Recipe update failed:", error)
     return {
       success: false,
-      message: "データベースへの保存に失敗しました。",
+      message: "データベースの更新に失敗しました。",
     }
   }
 
   revalidatePath("/", "layout")
-  redirect(`/dashboard/recipe/${data.id}`)
+  redirect(`/dashboard/recipe/${id}`)
 }

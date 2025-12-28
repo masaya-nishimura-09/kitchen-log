@@ -1,6 +1,8 @@
 import { z } from "zod"
 
 export const RecipeFormSchema = z.object({
+  id: z
+    .number(),
   image: z
     .instanceof(File)
     .refine(
@@ -17,6 +19,9 @@ export const RecipeFormSchema = z.object({
     )
     .nullable()
     .optional(),
+  imageUrl: z
+    .string()
+    .transform((val) => (val === "" ? null : val)),
   title: z
     .string()
     .min(1, { message: "タイトルを入力してください。" })
