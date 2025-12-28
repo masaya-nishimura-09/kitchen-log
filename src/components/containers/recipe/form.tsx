@@ -1,5 +1,6 @@
 "use client"
 
+import Link from "next/link"
 import { useState, useTransition } from "react"
 import { addRecipe, editRecipe } from "@/actions/recipe"
 import {
@@ -213,10 +214,21 @@ export default function RecipeForm({
           </div>
         </form>
       </CardContent>
-      <CardFooter>
+      <CardFooter className="flex gap-2">
         <Button type="submit" form="new-recipe-form" disabled={isPending}>
           {isPending && <Spinner />}
           {isPending ? "登録中..." : "登録"}
+        </Button>
+        <Button type="button" variant="outline" disabled={isPending}>
+          {mode === "new" ? (
+            <Link href="/dashboard/recipe">
+              キャンセル
+            </Link>
+          ) : (
+            <Link href={`/dashboard/recipe/${formData.id}`}>
+              キャンセル
+            </Link>
+          )}
         </Button>
       </CardFooter>
     </Card>
