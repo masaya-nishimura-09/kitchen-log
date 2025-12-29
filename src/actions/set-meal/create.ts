@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache"
 import { cookies } from "next/headers"
 import { redirect } from "next/navigation"
 import { getUserId } from "@/actions/auth"
-import { SetMealSchema } from "@/lib/schemas/set-meal-form"
+import { SetMealFormSchema } from "@/lib/schemas/set-meal-form"
 import { createClient } from "@/lib/supabase/server"
 import type {
   SetMealInput,
@@ -14,7 +14,7 @@ import type {
 export async function createSetMeal(formData: FormData): Promise<SetMealState> {
   const setMealData = JSON.parse(formData.get("data") as string) as SetMealInput
 
-  const validatedFields = SetMealSchema.safeParse({
+  const validatedFields = SetMealFormSchema.safeParse({
     id: setMealData.id,
     title: setMealData.title,
     memo: setMealData.memo,

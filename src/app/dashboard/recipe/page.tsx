@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import type { Recipe } from "@/types/recipe/recipe"
 import type { SearchParams } from "@/types/recipe/search-params"
+import NoRecipes from "@/components/containers/recipe/no-recipes"
 
 export default async function Page(props: {
   searchParams?: Promise<SearchParams>
@@ -39,7 +40,11 @@ function RecipesPage({ recipes }: { recipes: Recipe[] }) {
           <Link href="/dashboard/recipe/new">新規追加</Link>
         </Button>
       </div>
-      <Recipes recipes={recipes} />
-    </div>
+      {recipes.length > 0 ? (
+        <Recipes recipes={recipes} />
+      ):(
+        <NoRecipes />
+      )}
+      </div>
   )
 }
