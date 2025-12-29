@@ -134,7 +134,7 @@ export default function IngredientInput({
       order: index + 1,
     }))
 
-    setFormData({
+    setFormDataAction({
       ...formData,
       ingredient: reorderedIngredients,
     })
@@ -148,7 +148,7 @@ export default function IngredientInput({
 
     if (formData.ingredient.some((i) => i.name === trimmedName)) return
 
-    setFormData({
+    setFormDataAction({
       ...formData,
       ingredient: [
         ...formData.ingredient,
@@ -169,7 +169,7 @@ export default function IngredientInput({
   }
 
   function handleRemoveIngredient(name: string) {
-    setFormData({
+    setFormDataAction({
       ...formData,
       ingredient: formData.ingredient.filter((i) => i.name !== name),
     })

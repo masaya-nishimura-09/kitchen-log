@@ -21,25 +21,25 @@ export async function fetchSetMeal(setMealId: number): Promise<SetMeal> {
     .from("set_meals")
     .select(
       `
-    id, 
-    user_id, 
-    title, 
-    memo,
-    updated_at,
-    created_at,
-    set_meal_recipes (
       id, 
-      recipe_id, 
-      set_meal_id, 
-      recipes ( 
-         id,
-         user_id, 
-         title,
-         image_url,
-         memo, 
-        updated_at,
-        created_at,
-         tags (
+      user_id, 
+      title, 
+      memo,
+      updated_at,
+      created_at,
+      set_meal_recipes (
+        id, 
+        recipe_id, 
+        set_meal_id, 
+        recipes ( 
+          id,
+          user_id, 
+          title,
+          image_url,
+          memo, 
+          updated_at,
+          created_at,
+          tags (
             id,
             recipe_id,
             user_id,
@@ -68,7 +68,7 @@ export async function fetchSetMeal(setMealId: number): Promise<SetMeal> {
             created_at
           )
         )
-    )
+      )
     `,
     )
     .eq("user_id", userId)

@@ -226,7 +226,7 @@ export default function RecipeForm({
               <AccordionTrigger>タグ</AccordionTrigger>
               <TagInput
                 formData={formData}
-                setFormData={setFormDataAction}
+                setFormDataAction={setFormDataAction}
                 state={state}
               />
             </AccordionItem>
