@@ -12,7 +12,9 @@ import type {
 } from "@/types/set-meal/set-meal-input"
 
 export async function createSetMeal(formData: FormData): Promise<SetMealState> {
-  const setMealData = JSON.parse(formData.get("setMealData") as string) as SetMealInput
+  const setMealData = JSON.parse(
+    formData.get("setMealData") as string,
+  ) as SetMealInput
 
   const validatedFields = SetMealFormSchema.safeParse({
     id: setMealData.id,

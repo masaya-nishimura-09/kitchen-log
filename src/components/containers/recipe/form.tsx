@@ -53,7 +53,7 @@ export default function RecipeForm({
     errors: {},
   })
 
-  const [formData, setFormData] = useState<RecipeInput>({
+  const [formData, setFormDataAction] = useState<RecipeInput>({
     id: recipe?.id || 0,
     image: null,
     imageUrl: recipe?.imageUrl || "",
@@ -161,7 +161,7 @@ export default function RecipeForm({
                   name="image"
                   type="file"
                   onChange={(e) =>
-                    setFormData({
+                    setFormDataAction({
                       ...formData,
                       image: e.target.files?.[0] || null,
                     })
@@ -187,7 +187,7 @@ export default function RecipeForm({
                   placeholder="タイトルを入力してください"
                   value={formData.title}
                   onChange={(e) =>
-                    setFormData({ ...formData, title: e.target.value })
+                    setFormDataAction({ ...formData, title: e.target.value })
                   }
                 />
                 <div aria-live="polite" aria-atomic="true">
@@ -209,7 +209,7 @@ export default function RecipeForm({
                   placeholder="メモすることがある場合入力してください"
                   value={formData.memo}
                   onChange={(e) =>
-                    setFormData({ ...formData, memo: e.target.value })
+                    setFormDataAction({ ...formData, memo: e.target.value })
                   }
                 />
                 <div aria-live="polite" aria-atomic="true">
@@ -226,7 +226,7 @@ export default function RecipeForm({
               <AccordionTrigger>タグ</AccordionTrigger>
               <TagInput
                 formData={formData}
-                setFormData={setFormData}
+                setFormData={setFormDataAction}
                 state={state}
               />
             </AccordionItem>
@@ -235,7 +235,7 @@ export default function RecipeForm({
               <AccordionTrigger>材料</AccordionTrigger>
               <IngredientInput
                 formData={formData}
-                setFormData={setFormData}
+                setFormDataAction={setFormDataAction}
                 state={state}
               />
             </AccordionItem>
@@ -244,7 +244,7 @@ export default function RecipeForm({
               <AccordionTrigger>手順</AccordionTrigger>
               <StepInput
                 formData={formData}
-                setFormData={setFormData}
+                setFormDataAction={setFormDataAction}
                 state={state}
               />
             </AccordionItem>

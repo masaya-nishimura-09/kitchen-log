@@ -13,9 +13,7 @@ export default function NoRecipes() {
     <Card className="w-xs md:w-md m-auto">
       <CardHeader>
         <CardTitle>レシピがまだ登録されていません</CardTitle>
-        <CardDescription>
-          最初のレシピを作成してみましょう。
-        </CardDescription>
+        <CardDescription>最初のレシピを作成してみましょう。</CardDescription>
       </CardHeader>
       <CardFooter>
         <Button>

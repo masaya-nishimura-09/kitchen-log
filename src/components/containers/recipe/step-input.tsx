@@ -81,11 +81,11 @@ function SortableStepItem({
 
 export default function StepInput({
   formData,
-  setFormData,
+  setFormDataAction,
   state,
 }: {
   formData: RecipeInput
-  setFormData: Dispatch<SetStateAction<RecipeInput>>
+  setFormDataAction: Dispatch<SetStateAction<RecipeInput>>
   state: RecipeState | undefined
 }) {
   const [inputValue, setInputValue] = useState({
@@ -114,7 +114,7 @@ export default function StepInput({
       order: index + 1,
     }))
 
-    setFormData({
+    setFormDataAction({
       ...formData,
       step: reorderedSteps,
     })
@@ -127,7 +127,7 @@ export default function StepInput({
 
     if (formData.step.some((i) => i.text === trimmed)) return
 
-    setFormData({
+    setFormDataAction({
       ...formData,
       step: [
         ...formData.step,
@@ -144,7 +144,7 @@ export default function StepInput({
   }
 
   function handleRemoveStep(name: string) {
-    setFormData({
+    setFormDataAction({
       ...formData,
       step: formData.step.filter((i) => i.text !== name),
     })

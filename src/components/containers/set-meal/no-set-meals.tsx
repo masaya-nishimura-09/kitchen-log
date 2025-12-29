@@ -13,9 +13,7 @@ export default function NoSetMeals() {
     <Card className="w-xs md:w-md m-auto">
       <CardHeader>
         <CardTitle>献立がまだ登録されていません</CardTitle>
-        <CardDescription>
-          最初の献立を作成してみましょう。
-        </CardDescription>
+        <CardDescription>最初の献立を作成してみましょう。</CardDescription>
       </CardHeader>
       <CardFooter>
         <Button>

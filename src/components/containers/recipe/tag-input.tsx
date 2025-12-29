@@ -10,11 +10,11 @@ import type { RecipeInput, RecipeState } from "@/types/recipe/recipe-input"
 
 export default function TagInput({
   formData,
-  setFormData,
+  setFormDataAction,
   state,
 }: {
   formData: RecipeInput
-  setFormData: Dispatch<SetStateAction<RecipeInput>>
+  setFormDataAction: Dispatch<SetStateAction<RecipeInput>>
   state: RecipeState | undefined
 }) {
   const [inputValue, setInputValue] = useState("")
@@ -25,7 +25,7 @@ export default function TagInput({
 
     if (formData.tag.some((t) => t.name === trimmed)) return
 
-    setFormData({
+    setFormDataAction({
       ...formData,
       tag: [...formData.tag, { name: trimmed }],
     })
@@ -33,7 +33,7 @@ export default function TagInput({
   }
 
   function handleRemoveTag(name: string) {
-    setFormData({
+    setFormDataAction({
       ...formData,
       tag: formData.tag.filter((t) => t.name !== name),
     })

@@ -1,9 +1,9 @@
 "use client"
 
+import type { DragEndEvent } from "@dnd-kit/core"
 import {
   closestCenter,
   DndContext,
-  type DragEndEvent,
   KeyboardSensor,
   PointerSensor,
   useSensor,
@@ -18,7 +18,8 @@ import {
 } from "@dnd-kit/sortable"
 import { CSS } from "@dnd-kit/utilities"
 import { IconCircleX, IconGripVertical } from "@tabler/icons-react"
-import { type Dispatch, type SetStateAction, useState } from "react"
+import type { Dispatch, SetStateAction } from "react"
+import { useState } from "react"
 import { AccordionContent } from "@/components/ui/accordion"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -94,11 +95,11 @@ function SortableStepItem({
 
 export default function IngredientInput({
   formData,
-  setFormData,
+  setFormDataAction,
   state,
 }: {
   formData: RecipeInput
-  setFormData: Dispatch<SetStateAction<RecipeInput>>
+  setFormDataAction: Dispatch<SetStateAction<RecipeInput>>
   state: RecipeState | undefined
 }) {
   const [inputValue, setInputValue] = useState({
