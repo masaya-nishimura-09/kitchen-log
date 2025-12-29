@@ -35,7 +35,7 @@ export async function fetchSetMeal(setMealId: number): Promise<SetMeal> {
          id,
          user_id, 
          title,
-         img_url,
+         image_url,
          memo, 
          tags (
             id,
@@ -116,7 +116,7 @@ export async function fetchSetMeals(
            id,
            user_id, 
            title,
-           img_url,
+           image_url,
            memo, 
            tags (
               id,
@@ -189,7 +189,7 @@ export async function fetchSetMealInput(
            id,
            user_id, 
            title,
-           img_url,
+           image_url,
            memo, 
            tags (
               id,
