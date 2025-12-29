@@ -37,6 +37,8 @@ export async function fetchSetMeal(setMealId: number): Promise<SetMeal> {
          title,
          image_url,
          memo, 
+        updated_at,
+        created_at,
          tags (
             id,
             recipe_id,
@@ -108,16 +110,22 @@ export async function fetchSetMeals(
       user_id, 
       title, 
       memo,
+      updated_at,
+      created_at,
       set_meal_recipes (
         id, 
         recipe_id, 
         set_meal_id, 
+        updated_at,
+        created_at,
         recipes ( 
            id,
            user_id, 
            title,
            image_url,
-           memo, 
+           memo,
+           updated_at,
+          created_at,
            tags (
               id,
               recipe_id,
@@ -181,6 +189,8 @@ export async function fetchSetMealInput(
       user_id, 
       title, 
       memo,
+      updated_at,
+        created_at,
       set_meal_recipes (
         id, 
         recipe_id, 
@@ -190,7 +200,9 @@ export async function fetchSetMealInput(
            user_id, 
            title,
            image_url,
-           memo, 
+           memo,
+          updated_at,
+          created_at, 
            tags (
               id,
               recipe_id,
@@ -240,7 +252,7 @@ export async function fetchSetMealInput(
       id: convertedData.id,
       title: convertedData.title,
       memo: convertedData.memo || "",
-      recipes: convertedData.recipes.map((r) => ({ name: t.name })),
+      recipes: convertedData.recipes,
     } as SetMealInput
 
     return setMealInput

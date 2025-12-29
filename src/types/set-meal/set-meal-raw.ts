@@ -11,6 +11,6 @@ export interface SetMealRaw {
     id: number
     recipe_id: number
     set_meal_id: number
-    recipes: RecipeRaw
+    recipes: RecipeRaw | RecipeRaw[]
   }[]
 }

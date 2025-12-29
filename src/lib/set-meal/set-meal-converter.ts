@@ -10,6 +10,9 @@ export function setMealConverter(data: SetMealRaw): SetMeal {
     memo: data.memo as string | null,
     updatedAt: data.updated_at as string,
     createdAt: data.created_at as string,
-    recipes: data.set_meal_recipes.map((s) => recipeConverter(s.recipes)),
+    recipes: data.set_meal_recipes.map((sr) => {
+      const recipe = Array.isArray(sr.recipes) ? sr.recipes[0] : sr.recipes
+      return recipeConverter(recipe)
+    }),
   }
 }
