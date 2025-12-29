@@ -1,10 +1,12 @@
 "use client"
 
 import { IconCircleX } from "@tabler/icons-react"
+import Image from "next/image"
 import type { Dispatch, SetStateAction } from "react"
 import { useState } from "react"
 import { AccordionContent } from "@/components/ui/accordion"
-import { Badge } from "@/components/ui/badge"
+import { AspectRatio } from "@/components/ui/aspect-ratio"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Separator } from "@/components/ui/separator"
@@ -68,7 +70,7 @@ export default function RecipesInput({
         />
 
         {recipeSuggestions.length > 0 && (
-          <ScrollArea className="h-72 w-full rounded-md border p-4">
+          <ScrollArea className="max-h-72 w-full rounded-md border p-4">
             {recipeSuggestions.map((r) => (
               <div key={r.id}>
                 <button
@@ -85,23 +87,48 @@ export default function RecipesInput({
         )}
       </div>
 
-      <div className="flex w-full flex-wrap gap-2">
-        {formData.recipes.map((r) => (
-          <Badge key={r.id} variant="secondary">
-            <div className="flex items-center gap-1">
-              <span>{r.title}</span>
+      <div className="size-full grid grid-cols-[repeat(auto-fill,minmax(150px,1fr))] gap-2">
+        {formData.recipes.map((recipe) => (
+          <Card key={recipe.id} className="aspect-video py-2">
+            <CardContent className="flex flex-col gap-2">
               <button
                 type="button"
-                className="rounded-full"
-                onClick={() => handleRemoveRecipe(r.id)}
+                className="block ml-auto rounded-full"
+                onClick={() => handleRemoveRecipe(recipe.id)}
               >
-                <IconCircleX size={18} />
+                <IconCircleX size={20} />
               </button>
-            </div>
-          </Badge>
+              {recipe.imageUrl ? (
+                <AspectRatio ratio={16 / 9} className="bg-muted rounded-lg">
+                  <Image
+                    src={`/api/recipe-image?path=${recipe.imageUrl}`}
+                    alt="recipe image"
+                    width={500}
+                    height={300}
+                    className="h-full w-full rounded-lg object-cover"
+                    unoptimized
+                  />
+                </AspectRatio>
+              ) : (
+                <AspectRatio ratio={16 / 9} className="bg-muted rounded-lg">
+                  <Image
+                    src="/image-not-found/cover.png"
+                    alt="recipe image"
+                    width={500}
+                    height={300}
+                    className="h-full w-full rounded-lg object-cover"
+                  />
+                </AspectRatio>
+              )}
+            </CardContent>
+            <CardHeader>
+              <CardTitle className="whitespace-nowrap overflow-hidden text-ellipsis">
+                {recipe.title}
+              </CardTitle>
+            </CardHeader>
+          </Card>
         ))}
       </div>
-
       <div aria-live="polite" aria-atomic="true">
         {state?.errors?.recipes?.map((error: string) => (
           <p className="mt-2 text-red-500 text-sm" key={error}>
