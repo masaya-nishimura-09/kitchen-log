@@ -10,7 +10,7 @@ export default function SetMeals({ setMeals }: { setMeals: SetMeal[] }) {
       {setMeals.map((sm) => (
         <Link key={sm.id} href={`/dashboard/set-meal/${sm.id}`}>
           <Card className="aspect-video">
-            <CardContent>
+            <CardContent className="grid grid-cols-2 grid-rows-2 gap-2">
               {sm.recipes.slice(0, 4).map((r) => (
                 <AspectRatio
                   key={r.id}
