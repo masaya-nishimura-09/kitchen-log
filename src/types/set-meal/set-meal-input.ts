@@ -2,7 +2,6 @@ import type { Recipe } from "@/types/recipe/recipe"
 
 export interface SetMealInput {
   id: number
-  userId: string
   title: string
   memo: string
   recipes: Recipe[]

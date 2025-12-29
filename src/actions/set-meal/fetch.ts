@@ -4,9 +4,9 @@ import { cookies } from "next/headers"
 import { getUserId } from "@/actions/auth"
 import { setMealConverter } from "@/lib/set-meal/set-meal-converter"
 import { createClient } from "@/lib/supabase/server"
+import type { SearchParams } from "@/types/recipe/search-params"
 import type { SetMeal } from "@/types/set-meal/set-meal"
 import type { SetMealInput } from "@/types/set-meal/set-meal-input"
-import type { SearchParams } from "@/types/recipe/search-params"
 
 export async function fetchSetMeal(setMealId: number): Promise<SetMeal> {
   const userId = await getUserId()
@@ -18,9 +18,9 @@ export async function fetchSetMeal(setMealId: number): Promise<SetMeal> {
 
   const supabase = createClient(cookies())
   const { data, error } = await supabase
-  .from("set_meals")
-  .select(
-    `
+    .from("set_meals")
+    .select(
+      `
     id, 
     user_id, 
     title, 
@@ -68,10 +68,10 @@ export async function fetchSetMeal(setMealId: number): Promise<SetMeal> {
         )
     )
     `,
-  )
-  .eq("user_id", userId)
-  .eq("id", setMealId)
-  .single()
+    )
+    .eq("user_id", userId)
+    .eq("id", setMealId)
+    .single()
 
   if (error) {
     console.error("Recipe Fetch Failed:", error)
@@ -162,7 +162,9 @@ export async function fetchSetMeals(
   return data?.map(setMealConverter) ?? []
 }
 
-export async function fetchSetMealInput(setMealId: number): Promise<SetMealInput> {
+export async function fetchSetMealInput(
+  setMealId: number,
+): Promise<SetMealInput> {
   const userId = await getUserId()
   if (!userId) {
     throw new Error(
