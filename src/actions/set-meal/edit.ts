@@ -6,7 +6,10 @@ import { redirect } from "next/navigation"
 import { getUserId } from "@/actions/auth"
 import { SetMealFormSchema } from "@/lib/schemas/set-meal-form"
 import { createClient } from "@/lib/supabase/server"
-import type { SetMealInput, SetMealState } from "@/types/set-meal/set-meal-input"
+import type {
+  SetMealInput,
+  SetMealState,
+} from "@/types/set-meal/set-meal-input"
 
 export async function editSetMeal(formData: FormData): Promise<SetMealState> {
   const setMealData = JSON.parse(

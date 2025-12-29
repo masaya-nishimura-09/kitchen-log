@@ -1,6 +1,6 @@
+import { recipeConverter } from "@/lib/recipe/recipe-converter"
 import type { SetMeal } from "@/types/set-meal/set-meal"
 import type { SetMealRaw } from "@/types/set-meal/set-meal-raw"
-import { recipeConverter } from "@/lib/recipe/recipe-converter"
 
 export function setMealConverter(data: SetMealRaw): SetMeal {
   return {
