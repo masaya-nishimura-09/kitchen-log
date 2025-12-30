@@ -41,5 +41,5 @@ export function useShoppingListTable(items: ShoppingListItem[]) {
     },
   })
 
-  return { table }
+  return table
 }
