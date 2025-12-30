@@ -16,6 +16,19 @@ export default async function Page() {
   }
 }
 
+// function ShoppingListPage({ shoppingList }: { shoppingList: ShoppingListItem[] }) {
+//   return (
+//     <div className="size-full flex flex-col gap-2">
+//       <div className="flex w-full justify-end items-center gap-2">
+//         <Button type="button">
+//           <Link href="/dashboard/shopping-list/new">新規追加</Link>
+//         </Button>
+//       </div>
+//       {shoppingList.length > 0 ? <ShoppingListItems shoppingList={shoppingList} /> : <NoShoppingListItems />}
+//     </div>
+//   )
+// }
+
 function ShoppingListPage({ shoppingList }: { shoppingList: ShoppingListItem[] }) {
   return (
     <div className="size-full flex flex-col gap-2">
@@ -24,7 +37,7 @@ function ShoppingListPage({ shoppingList }: { shoppingList: ShoppingListItem[] }
           <Link href="/dashboard/shopping-list/new">新規追加</Link>
         </Button>
       </div>
-      {shoppingList.length > 0 ? <ShoppingListItems shoppingList={shoppingList} /> : <NoShoppingListItems />}
+      <ShoppingListItems shoppingList={shoppingList} /> 
     </div>
   )
 }
