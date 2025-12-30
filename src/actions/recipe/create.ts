@@ -8,6 +8,7 @@ import { RecipeFormSchema } from "@/lib/schemas/recipe-form"
 import { createClient } from "@/lib/supabase/server"
 import type { RecipeInput, RecipeState } from "@/types/recipe/recipe-input"
 import { uploadImage } from "./image"
+import { zenkakuToHankaku } from "@/lib/recipe/zenkaku-to-hankaku"
 
 export async function createRecipe(formData: FormData): Promise<RecipeState> {
   const recipeData = JSON.parse(
@@ -51,6 +52,11 @@ export async function createRecipe(formData: FormData): Promise<RecipeState> {
     }
   }
 
+  const convertedIngredients = ingredient.map((i) => ({
+    ...i,
+    amount: zenkakuToHankaku(i.amount),
+  }))
+
   const supabase = createClient(cookies())
 
   const { data, error } = await supabase
@@ -60,7 +66,7 @@ export async function createRecipe(formData: FormData): Promise<RecipeState> {
       p_image_url: imageUrl,
       p_memo: memo,
       p_tags: tag,
-      p_ingredients: ingredient,
+      p_ingredients: convertedIngredients,
       p_steps: step,
     })
     .single<{ id: number }>()
