@@ -88,7 +88,22 @@ export async function createItem(
 
     const newAmount = Number(amount) + Number(sameItem.amount)
     if (!Number.isNaN(newAmount)) {
-      // await updateItem(sameItem.id, String(newAmount), sameItem.status)
+      const supabase = createClient(cookies())
+      const { error } = await supabase
+        .from("shopping_list")
+        .update({
+          amount: newAmount,
+        })
+        .eq("id", sameItem.id)
+        .eq("user_id", userId)
+
+      if (error) {
+        console.error(error)
+        return {
+          success: false,
+          message: "アイテムの登録に失敗しました。",
+        }
+      }
       return {
         success: true,
       }
