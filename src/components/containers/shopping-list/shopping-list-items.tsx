@@ -1,7 +1,6 @@
 "use client"
 
 import { useState } from "react"
-import { Button } from "@/components/ui/button"
 import {
   Card,
   CardAction,
@@ -9,9 +8,11 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
+
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useShoppingListTable } from "@/hooks/use-shopping-list-table"
 import type { ShoppingListItem } from "@/types/shopping-list/shopping-list-item"
+import ShoppingListItemForm from "./shopping-list-item-form"
 import ShoppingListTable from "./shopping-list-table"
 
 export default function ShoppingListItems({
@@ -34,7 +35,7 @@ export default function ShoppingListItems({
       <CardHeader>
         <CardTitle>買い物リスト</CardTitle>
         <CardAction>
-          <Button variant="default">追加</Button>
+          <ShoppingListItemForm />
         </CardAction>
       </CardHeader>
       <CardContent>
