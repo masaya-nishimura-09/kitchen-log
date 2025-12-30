@@ -7,9 +7,12 @@ export default async function Page({ params }: { params: { id: string } }) {
 
   try {
     const recipe = await fetchRecipeInput(Number(id))
+    if (!recipe) {
+      notFound()
+    }
     return <RecipeForm recipe={recipe} mode="edit" />
   } catch (error) {
     console.error("Recipe fetch error:", error)
-    notFound()
+    throw error
   }
 }

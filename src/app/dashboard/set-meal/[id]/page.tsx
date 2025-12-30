@@ -19,10 +19,13 @@ export default async function Page({ params }: { params: { id: string } }) {
 
   try {
     const setMeal = await fetchSetMeal(Number(id))
+    if (!setMeal) {
+      notFound()
+    }
     return <SetMealPage setMeal={setMeal} />
   } catch (error) {
     console.error("Set meal fetch error:", error)
-    notFound()
+    throw error
   }
 }
 

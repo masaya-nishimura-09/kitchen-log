@@ -1,26 +1,53 @@
 "use server"
 
-import { revalidatePath } from "next/cache"
 import { cookies } from "next/headers"
-import { redirect } from "next/navigation"
 import { getUserId } from "@/actions/auth"
-import { SetMealFormSchema } from "@/lib/schemas/set-meal-form"
+import { fetchShoppingList } from "@/actions/shopping-list/fetch"
+import { zenkakuToHankaku } from "@/lib/recipe/zenkaku-to-hankaku"
+import { ShoppingListItemFormSchema } from "@/lib/schemas/shopping-list-item-form"
 import { createClient } from "@/lib/supabase/server"
 import type {
-  SetMealInput,
-  SetMealState,
-} from "@/types/set-meal/set-meal-input"
+  ShoppingListItemInput,
+  ShoppingListItemState,
+} from "@/types/shopping-list/shopping-list-item-input"
 
-export async function createSetMeal(formData: FormData): Promise<SetMealState> {
-  const setMealData = JSON.parse(
-    formData.get("setMealData") as string,
-  ) as SetMealInput
+async function insertItem(
+  userId: string,
+  name: string | null,
+  amount: string | null,
+  unit: string,
+) {
+  if (!name) {
+    throw new Error("アイテム名がありません。")
+  }
 
-  const validatedFields = SetMealFormSchema.safeParse({
-    id: setMealData.id,
-    title: setMealData.title,
-    memo: setMealData.memo,
-    recipes: setMealData.recipes,
+  const supabase = createClient(cookies())
+  const { error } = await supabase.from("shopping_list").insert({
+    user_id: userId,
+    name: name,
+    amount: amount,
+    unit: unit,
+  })
+
+  if (error) {
+    console.error(error)
+    throw new Error("アイテムの登録に失敗しました。")
+  }
+}
+
+export async function createItem(
+  formData: FormData,
+): Promise<ShoppingListItemState> {
+  const itemData = JSON.parse(
+    formData.get("shoppingListItemData") as string,
+  ) as ShoppingListItemInput
+
+  const validatedFields = ShoppingListItemFormSchema.safeParse({
+    id: itemData.id,
+    name: itemData.name,
+    amount: itemData.amount,
+    unit: itemData.unit,
+    status: itemData.status,
   })
 
   if (!validatedFields.success) {
@@ -31,7 +58,11 @@ export async function createSetMeal(formData: FormData): Promise<SetMealState> {
       message: "入力内容に誤りがあります。",
     }
   }
-  const { title, memo, recipes } = validatedFields.data
+  const { name, amount, unit } = validatedFields.data
+
+  const convertedName = zenkakuToHankaku(name)
+  const convertedAmount = zenkakuToHankaku(amount)
+
   const userId = await getUserId()
   if (!userId) {
     return {
@@ -40,24 +71,54 @@ export async function createSetMeal(formData: FormData): Promise<SetMealState> {
     }
   }
 
-  const supabase = createClient(cookies())
-  const { data, error } = await supabase
-    .rpc("add_set_meal_with_details", {
-      p_user_id: userId,
-      p_title: title,
-      p_memo: memo,
-      p_recipes: recipes,
-    })
-    .single<{ id: number }>()
+  try {
+    const list = await fetchShoppingList()
+    const sameItem = list.find(
+      (item) => item.name === convertedName && item.unit === unit,
+    )
 
-  if (error || !data) {
-    console.error("Set meal insert failed:", error)
+    // if there are no items  in the shopping list then insert it
+    // if there are no same items in the shopping list then insert it
+    if (list.length < 1 || !sameItem) {
+      await insertItem(userId, convertedName, convertedAmount, unit)
+      return {
+        success: true,
+      }
+    }
+
+    const newAmount = Number(convertedAmount) + Number(sameItem.amount)
+    if (!Number.isNaN(newAmount)) {
+      const supabase = createClient(cookies())
+      const { error } = await supabase
+        .from("shopping_list")
+        .update({
+          amount: newAmount,
+        })
+        .eq("id", sameItem.id)
+        .eq("user_id", userId)
+
+      if (error) {
+        console.error(error)
+        return {
+          success: false,
+          message: "アイテムの登録に失敗しました。",
+        }
+      }
+      return {
+        success: true,
+      }
+    } else {
+      console.error("Failed")
+      return {
+        success: false,
+        message: "アイテムの登録に失敗しました。",
+      }
+    }
+  } catch (error) {
+    console.error(error)
     return {
       success: false,
-      message: "データベースへの保存に失敗しました。",
+      message: "アイテムの登録に失敗しました。",
     }
   }
-
-  revalidatePath("/", "layout")
-  redirect(`/dashboard/set-meal/${data.id}`)
 }

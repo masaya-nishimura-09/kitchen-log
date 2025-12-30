@@ -11,10 +11,9 @@ import { deleteImage } from "./image"
 export async function deleteRecipe(id: number): Promise<RecipeState> {
   const userId = await getUserId()
   if (!userId) {
-    return {
-      success: false,
-      message: "認証情報が取得できませんでした。再度ログインしてください。",
-    }
+    throw new Error(
+      "認証情報が取得できませんでした。再度ログインしてください。",
+    )
   }
 
   const supabase = createClient(cookies())
@@ -27,16 +26,15 @@ export async function deleteRecipe(id: number): Promise<RecipeState> {
 
   if (deleteRecipeError) {
     console.error("Recipe delete failed:", deleteRecipeError)
-    return {
-      success: false,
-      message: "レシピの削除に失敗しました。",
-    }
+    throw new Error("レシピの削除に失敗しました。")
   }
 
   if (data.imageUrl) {
-    const error = await deleteImage(data.imageUrl)
-    if (error) {
+    try {
+      await deleteImage(data.imageUrl)
+    } catch (error) {
       console.warn("画像の削除に失敗しました:", error)
+      throw new Error("画像の削除に失敗しました")
     }
   }
 

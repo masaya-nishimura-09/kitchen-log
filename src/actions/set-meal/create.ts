@@ -50,7 +50,7 @@ export async function createSetMeal(formData: FormData): Promise<SetMealState> {
     })
     .single<{ id: number }>()
 
-  if (error || !data) {
+  if (error) {
     console.error("Set meal insert failed:", error)
     return {
       success: false,

@@ -24,7 +24,7 @@ export function recipeConverter(data: RecipeRaw): Recipe {
         recipeId: i.recipe_id as number,
         userId: i.user_id as string,
         name: i.name as string,
-        amount: i.amount as string,
+        amount: i.amount as string | null,
         unit: i.unit as string,
         order: i.order as number,
         updatedAt: i.updated_at as string,

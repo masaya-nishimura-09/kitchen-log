@@ -16,10 +16,13 @@ export default async function Page(props: {
 
   try {
     const recipes = await fetchRecipes(searchParams)
+    if (!recipes) {
+      notFound()
+    }
     return <RecipesPage recipes={recipes} />
   } catch (error) {
     console.error("Recipes fetch error:", error)
-    notFound()
+    throw error
   }
 }
 

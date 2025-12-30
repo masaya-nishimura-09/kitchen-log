@@ -4,11 +4,11 @@ import { revalidatePath } from "next/cache"
 import { cookies } from "next/headers"
 import { redirect } from "next/navigation"
 import { getUserId } from "@/actions/auth"
+import { zenkakuToHankaku } from "@/lib/recipe/zenkaku-to-hankaku"
 import { RecipeFormSchema } from "@/lib/schemas/recipe-form"
 import { createClient } from "@/lib/supabase/server"
 import type { RecipeInput, RecipeState } from "@/types/recipe/recipe-input"
 import { deleteImage, uploadImage } from "./image"
-import { zenkakuToHankaku } from "@/lib/recipe/zenkaku-to-hankaku"
 
 export async function editRecipe(formData: FormData): Promise<RecipeState> {
   const recipeData = JSON.parse(
@@ -46,15 +46,16 @@ export async function editRecipe(formData: FormData): Promise<RecipeState> {
 
   if (image) {
     if (imageUrl) {
-      const error = await deleteImage(imageUrl)
-      if (error) {
+      try {
+        await deleteImage(imageUrl)
+      } catch (error) {
         console.warn("画像の更新に失敗しましたが処理を続行します:", error)
       }
     }
 
-    const { url, error } = await uploadImage(image, userId)
-    imageUrl = url
-    if (error) {
+    try {
+      imageUrl = await uploadImage(image, userId)
+    } catch (error) {
       console.warn("画像アップロードに失敗しましたが処理を続行します:", error)
     }
   }
