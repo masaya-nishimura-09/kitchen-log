@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache"
 import { cookies } from "next/headers"
 import { redirect } from "next/navigation"
+import { success } from "zod"
 import { getUserId } from "@/actions/auth"
 import { fetchShoppingList } from "@/actions/shopping-list/fetch"
 import { zenkakuToHankaku } from "@/lib/recipe/zenkaku-to-hankaku"
@@ -18,7 +19,7 @@ async function insertItem(
   name: string,
   amount: string,
   unit: string,
-) {
+): Promise<ShoppingListItemState> {
   const supabase = createClient(cookies())
   const { error } = await supabase.from("shopping_list").insert({
     user_id: userId,
@@ -28,8 +29,15 @@ async function insertItem(
   })
 
   if (error) {
-    console.error("Item insert failed:", error)
-    throw new Error(error.message)
+    console.error(error)
+    return {
+      success: false,
+      message: "アイテムの登録に失敗しました。",
+    }
+  }
+
+  return {
+    success: true,
   }
 }
 
@@ -57,12 +65,6 @@ export async function createItem(
   }
   const { name, amount, unit } = validatedFields.data
 
-  // don't add item if the unit is "少々" or "適量"
-  if (unit === "少々" || unit === "適量") {
-    revalidatePath("/", "layout")
-    redirect(`/dashboard/shopping-list`)
-  }
-
   const hankakuName = zenkakuToHankaku(name)
   const hankakuAmount = zenkakuToHankaku(amount)
 
@@ -76,7 +78,32 @@ export async function createItem(
 
   try {
     const list = await fetchShoppingList()
-    if (!list || list.length === 0) {
+  } catch (error) {
+    console.error(error)
+    return {
+      success: false,
+      message: "アイテムの登録に失敗しました。",
+    }
+  }
+
+  if (!list || list.length === 0) {
+    try {
+      await insertItem(userId, hankakuName, hankakuAmount, unit)
+      revalidatePath("/", "layout")
+      redirect(`/dashboard/shopping-list`)
+    } catch (error) {
+      console.error(error)
+      return {
+        success: false,
+        message: "アイテムの登録に失敗しました。",
+      }
+    }
+  } else {
+    const sameItem = list.find(
+      (item) => item.name === hankakuName && item.unit === unit,
+    )
+
+    if (!sameItem) {
       try {
         await insertItem(userId, hankakuName, hankakuAmount, unit)
         revalidatePath("/", "layout")
@@ -85,39 +112,21 @@ export async function createItem(
         console.error(error)
         return {
           success: false,
-          message: "データベースへの保存に失敗しました。",
+          message: "アイテムの登録に失敗しました。",
         }
-      }
-    } else {
-      const sameItem = list.find(
-        (item) => item.name === hankakuName && item.unit === unit,
-      )
-
-      if (!sameItem) {
-        try {
-          await insertItem(userId, hankakuName, hankakuAmount, unit)
-          revalidatePath("/", "layout")
-          redirect(`/dashboard/shopping-list`)
-        } catch (error) {
-          console.error(error)
-          return {
-            success: false,
-            message: "データベースへの保存に失敗しました。",
-          }
-        }
-      }
-
-      const newAmount = Number(amount) + Number(sameItem.amount)
-
-      if (!Number.isNaN(newAmount)) {
-        //      await updateItem(sameItem.id, String(newAmount))
       }
     }
-  } catch (error) {
-    console.error(error)
-    return {
-      success: false,
-      message: "データベースへの保存に失敗しました。",
+
+    if (unit === "少々" || unit === "適量") {
+      return {
+        success: true,
+      }
+    }
+
+    const newAmount = Number(amount) + Number(sameItem.amount)
+
+    if (!Number.isNaN(newAmount)) {
+      //      await updateItem(sameItem.id, String(newAmount))
     }
   }
 }

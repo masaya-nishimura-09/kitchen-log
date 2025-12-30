@@ -26,5 +26,5 @@ export async function fetchShoppingList(): Promise<ShoppingListItem[]> {
     throw new Error("買い物リストの取得に失敗しました。")
   }
 
-  return data?.map(shoppingListItemConverter)
+  return data.map(shoppingListItemConverter)
 }
