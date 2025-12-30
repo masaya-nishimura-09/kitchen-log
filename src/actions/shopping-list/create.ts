@@ -86,7 +86,7 @@ export async function createItem(
       }
     }
 
-    const newAmount = Number(amount) + Number(sameItem.amount)
+    const newAmount = Number(convertedAmount) + Number(sameItem.amount)
     if (!Number.isNaN(newAmount)) {
       const supabase = createClient(cookies())
       const { error } = await supabase

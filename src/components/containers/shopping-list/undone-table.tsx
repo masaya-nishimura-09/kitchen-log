@@ -142,14 +142,8 @@ export default function UndoneTable({ items }: { items: ShoppingListItem[] }) {
     fd.append("shoppingListItemData", JSON.stringify(originalData))
 
     startTransition(async () => {
-      try {
-        await updateItem(fd)
-        window.location.reload()
-      } catch (error) {
-        if (error instanceof Error) {
-          throw new Error(error.message)
-        }
-      }
+      await updateItem(fd)
+      window.location.reload()
     })
   }
   return (

@@ -15,7 +15,8 @@ import {
   useReactTable,
 } from "@tanstack/react-table"
 import { MoreHorizontal } from "lucide-react"
-import { useState } from "react"
+import { useState, useTransition } from "react"
+import { updateItem } from "@/actions/shopping-list/update"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import {
@@ -26,6 +27,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { Spinner } from "@/components/ui/spinner"
 import {
   Table,
   TableBody,
@@ -126,6 +128,24 @@ export default function DoneTable({ items }: { items: ShoppingListItem[] }) {
       rowSelection,
     },
   })
+
+  const [isPending, startTransition] = useTransition()
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+
+    const originalData = table
+      .getFilteredSelectedRowModel()
+      .rows.map((i) => i.original)
+
+    const fd = new FormData()
+
+    fd.append("shoppingListItemData", JSON.stringify(originalData))
+
+    startTransition(async () => {
+      await updateItem(fd)
+      window.location.reload()
+    })
+  }
   return (
     <div className="w-full">
       <div className="overflow-hidden rounded-md border">
@@ -181,9 +201,15 @@ export default function DoneTable({ items }: { items: ShoppingListItem[] }) {
       <div className="flex items-center justify-end space-x-2 py-4">
         <div className="text-muted-foreground flex-1 text-sm">
           {table.getFilteredSelectedRowModel().rows.length > 0 && (
-            <Button variant="outline">
-              {table.getFilteredSelectedRowModel().rows.length}
-              個のステータスを変更
+            <Button
+              variant="outline"
+              onClick={handleSubmit}
+              disabled={isPending}
+            >
+              {isPending && <Spinner />}
+              {isPending
+                ? "変更中..."
+                : `${table.getFilteredSelectedRowModel().rows.length}個のステータスを変更`}
             </Button>
           )}
         </div>
