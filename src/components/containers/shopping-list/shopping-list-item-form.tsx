@@ -48,7 +48,7 @@ export default function ShoppingListItemForm() {
     const fd = new FormData()
 
     fd.append(
-      "recipeData",
+      "shoppingListItemData",
       JSON.stringify({
         id: formData.id,
         name: formData.name,
@@ -62,6 +62,8 @@ export default function ShoppingListItemForm() {
       const result = await createItem(fd)
       if (!result.success) {
         setState(result)
+      } else {
+        window.location.reload()
       }
     })
   }

@@ -14,8 +14,8 @@ export default function Error({ reset }: { reset: () => void }) {
     <div className="flex min-h-screen items-center justify-center">
       <Card className="w-md">
         <CardHeader>
-          <CardTitle>500 - Page Not Found</CardTitle>
-          <CardDescription>ご指定のページが見つかりません。</CardDescription>
+          <CardTitle>500 - Internal Server Error</CardTitle>
+          <CardDescription>アプリ側で問題が発生しました。</CardDescription>
         </CardHeader>
         <CardFooter>
           <Button onClick={() => reset()}>戻る</Button>

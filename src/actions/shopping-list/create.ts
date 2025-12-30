@@ -47,6 +47,7 @@ export async function createItem(
     name: itemData.name,
     amount: itemData.amount,
     unit: itemData.unit,
+    status: itemData.status,
   })
 
   if (!validatedFields.success) {
@@ -92,6 +93,7 @@ export async function createItem(
         success: true,
       }
     } else {
+      console.error("Failed")
       return {
         success: false,
         message: "アイテムの登録に失敗しました。",
