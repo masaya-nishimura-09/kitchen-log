@@ -25,7 +25,7 @@ export interface Ingredient {
   recipeId: number
   userId: string
   name: string
-  amount: string
+  amount: string | null
   unit: string
   order: number
   updatedAt: string

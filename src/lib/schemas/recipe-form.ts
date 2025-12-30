@@ -38,7 +38,7 @@ export const RecipeFormSchema = z.object({
     .array(
       z.object({
         name: z.string().min(1, { message: "材料名を入力してください。" }),
-        amount: z.string().min(1, { message: "量を入力してください。" }),
+        amount: z.string().transform((val) => (val === "" ? null : val)),
         unit: z.string(),
         order: z.number(),
       }),

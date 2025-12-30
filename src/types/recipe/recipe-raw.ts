@@ -19,7 +19,7 @@ export interface RecipeRaw {
     recipe_id: number
     user_id: string
     name: string
-    amount: string
+    amount: string | null
     unit: string
     order: number
     updated_at: string

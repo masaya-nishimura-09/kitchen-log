@@ -144,7 +144,7 @@ export default function IngredientInput({
     const trimmedName = inputValue.name.trim()
     const trimmedAmount = inputValue.amount.trim()
 
-    if (!trimmedName || !trimmedAmount) return
+    if (!trimmedName) return
 
     if (formData.ingredient.some((i) => i.name === trimmedName)) return
 
