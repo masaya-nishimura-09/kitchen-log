@@ -4,6 +4,8 @@ import { revalidatePath } from "next/cache"
 import { cookies } from "next/headers"
 import { redirect } from "next/navigation"
 import { getUserId } from "@/actions/auth"
+import { fetchShoppingList } from "@/actions/shopping-list/fetch"
+import { zenkakuToHankaku } from "@/lib/recipe/zenkaku-to-hankaku"
 import { ShoppingListItemFormSchema } from "@/lib/schemas/shopping-list-item-form"
 import { createClient } from "@/lib/supabase/server"
 import type {
@@ -72,24 +74,24 @@ export async function createItem(
     }
   }
 
-  const list = await fetchShoppingList(false)
-
-  if (!list || list.length === 0) {
-    try {
-      await insertItem(userId, hankakuName, hankakuAmount, unit)
-      revalidatePath("/", "layout")
-      redirect(`/dashboard/shopping-list`)
-    } catch (error) {
-      console.error(error)
-      return {
-        success: false,
-        message: "データベースへの保存に失敗しました。",
+  try {
+    const list = await fetchShoppingList()
+    if (!list || list.length === 0) {
+      try {
+        await insertItem(userId, hankakuName, hankakuAmount, unit)
+        revalidatePath("/", "layout")
+        redirect(`/dashboard/shopping-list`)
+      } catch (error) {
+        console.error(error)
+        return {
+          success: false,
+          message: "データベースへの保存に失敗しました。",
+        }
       }
-    }
-  } else {
-    const sameItem = list.find(
-      (item) => item.name === hankakuName && item.unit === unit,
-    )
+    } else {
+      const sameItem = list.find(
+        (item) => item.name === hankakuName && item.unit === unit,
+      )
 
       if (!sameItem) {
         try {
@@ -107,8 +109,15 @@ export async function createItem(
 
       const newAmount = Number(amount) + Number(sameItem.amount)
 
-    if (!Number.isNaN(newAmount)) {
-//      await updateItem(sameItem.id, String(newAmount))
+      if (!Number.isNaN(newAmount)) {
+        //      await updateItem(sameItem.id, String(newAmount))
+      }
+    }
+  } catch (error) {
+    console.error(error)
+    return {
+      success: false,
+      message: "データベースへの保存に失敗しました。",
     }
   }
 }

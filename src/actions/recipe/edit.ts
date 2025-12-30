@@ -46,15 +46,16 @@ export async function editRecipe(formData: FormData): Promise<RecipeState> {
 
   if (image) {
     if (imageUrl) {
-      const error = await deleteImage(imageUrl)
-      if (error) {
+      try {
+        await deleteImage(imageUrl)
+      } catch (error) {
         console.warn("画像の更新に失敗しましたが処理を続行します:", error)
       }
     }
 
-    const { url, error } = await uploadImage(image, userId)
-    imageUrl = url
-    if (error) {
+    try {
+      imageUrl = await uploadImage(image, userId)
+    } catch (error) {
       console.warn("画像アップロードに失敗しましたが処理を続行します:", error)
     }
   }

@@ -5,9 +5,12 @@ import ShoppingListItems from "@/components/containers/shopping-list/shopping-li
 export default async function Page() {
   try {
     const shoppingList = await fetchShoppingList()
+    if (!shoppingList) {
+      notFound()
+    }
     return <ShoppingListItems shoppingList={shoppingList} />
   } catch (error) {
     console.error("Shopping list fetch error:", error)
-    notFound()
+    throw error
   }
 }

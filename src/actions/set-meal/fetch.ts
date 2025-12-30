@@ -79,14 +79,7 @@ export async function fetchSetMeal(setMealId: number): Promise<SetMeal> {
     console.error("Recipe Fetch Failed:", error)
     throw new Error("献立の取得に失敗しました。")
   }
-
-  if (!data) {
-    throw new Error("献立の取得に失敗しました。")
-  } else {
-    const convertedData = setMealConverter(data)
-
-    return convertedData
-  }
+  return setMealConverter(data)
 }
 
 export async function fetchSetMeals(
@@ -167,7 +160,7 @@ export async function fetchSetMeals(
     throw new Error("献立の取得に失敗しました。")
   }
 
-  return data?.map(setMealConverter) ?? []
+  return data.map(setMealConverter)
 }
 
 export async function fetchSetMealInput(
@@ -244,17 +237,13 @@ export async function fetchSetMealInput(
     throw new Error("献立の取得に失敗しました。")
   }
 
-  if (!data) {
-    throw new Error("献立の取得に失敗しました。")
-  } else {
-    const convertedData = setMealConverter(data)
-    const setMealInput = {
-      id: convertedData.id,
-      title: convertedData.title,
-      memo: convertedData.memo || "",
-      recipes: convertedData.recipes,
-    } as SetMealInput
+  const convertedData = setMealConverter(data)
+  const setMealInput = {
+    id: convertedData.id,
+    title: convertedData.title,
+    memo: convertedData.memo || "",
+    recipes: convertedData.recipes,
+  } as SetMealInput
 
-    return setMealInput
-  }
+  return setMealInput
 }

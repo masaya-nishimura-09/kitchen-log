@@ -16,10 +16,13 @@ export default async function Page(props: {
 
   try {
     const setMeals = await fetchSetMeals(searchParams)
+    if (!setMeals) {
+      notFound()
+    }
     return <SetMealsPage setMeals={setMeals} />
   } catch (error) {
     console.error("Set meals fetch error:", error)
-    notFound()
+    throw error
   }
 }
 

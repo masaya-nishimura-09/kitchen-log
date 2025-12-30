@@ -66,13 +66,7 @@ export async function fetchRecipe(recipeId: number): Promise<Recipe> {
     throw new Error("レシピの取得に失敗しました。")
   }
 
-  if (!data) {
-    throw new Error("レシピの取得に失敗しました。")
-  } else {
-    const convertedData = recipeConverter(data)
-
-    return convertedData
-  }
+  return recipeConverter(data)
 }
 
 export async function fetchRecipes(
@@ -137,7 +131,7 @@ export async function fetchRecipes(
     throw new Error("レシピの取得に失敗しました。")
   }
 
-  return data?.map(recipeConverter) ?? []
+  return data?.map(recipeConverter)
 }
 
 export async function fetchRecipeInput(recipeId: number): Promise<RecipeInput> {
@@ -198,31 +192,27 @@ export async function fetchRecipeInput(recipeId: number): Promise<RecipeInput> {
     throw new Error("レシピの取得に失敗しました。")
   }
 
-  if (!data) {
-    throw new Error("レシピの取得に失敗しました。")
-  } else {
-    const convertedData = recipeConverter(data)
-    const recipeInput = {
-      id: convertedData.id,
-      image: null,
-      imageUrl: convertedData.imageUrl,
-      title: convertedData.title,
-      memo: convertedData.memo || "",
-      tag: convertedData.tag.map((t) => ({ name: t.name })),
-      ingredient: convertedData.ingredient.map((i) => ({
-        id: crypto.randomUUID(),
-        name: i.name,
-        amount: i.amount,
-        unit: i.unit,
-        order: i.order,
-      })),
-      step: convertedData.step.map((s) => ({
-        id: crypto.randomUUID(),
-        text: s.text,
-        order: s.order,
-      })),
-    } as RecipeInput
+  const convertedData = recipeConverter(data)
+  const recipeInput = {
+    id: convertedData.id,
+    image: null,
+    imageUrl: convertedData.imageUrl,
+    title: convertedData.title,
+    memo: convertedData.memo || "",
+    tag: convertedData.tag.map((t) => ({ name: t.name })),
+    ingredient: convertedData.ingredient.map((i) => ({
+      id: crypto.randomUUID(),
+      name: i.name,
+      amount: i.amount,
+      unit: i.unit,
+      order: i.order,
+    })),
+    step: convertedData.step.map((s) => ({
+      id: crypto.randomUUID(),
+      text: s.text,
+      order: s.order,
+    })),
+  } as RecipeInput
 
-    return recipeInput
-  }
+  return recipeInput
 }

@@ -14,7 +14,6 @@ export async function fetchShoppingList(): Promise<ShoppingListItem[]> {
     )
   }
 
-
   const supabase = createClient(cookies())
   const { data, error } = await supabase
     .from("shopping_list")
@@ -27,5 +26,5 @@ export async function fetchShoppingList(): Promise<ShoppingListItem[]> {
     throw new Error("買い物リストの取得に失敗しました。")
   }
 
-  return data?.map(shoppingListItemConverter) ?? []
+  return data?.map(shoppingListItemConverter)
 }

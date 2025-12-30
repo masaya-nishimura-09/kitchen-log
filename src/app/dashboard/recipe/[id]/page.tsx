@@ -25,10 +25,13 @@ export default async function Page({ params }: { params: { id: string } }) {
 
   try {
     const recipe = await fetchRecipe(Number(id))
+    if (!recipe) {
+      notFound()
+    }
     return <RecipePage recipe={recipe} />
   } catch (error) {
     console.error("Recipe fetch error:", error)
-    notFound()
+    throw error
   }
 }
 

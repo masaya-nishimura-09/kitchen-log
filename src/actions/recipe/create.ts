@@ -45,9 +45,9 @@ export async function createRecipe(formData: FormData): Promise<RecipeState> {
 
   let imageUrl: string | null = null
   if (image) {
-    const { url, error } = await uploadImage(image, userId)
-    imageUrl = url
-    if (error) {
+    try {
+      imageUrl = await uploadImage(image, userId)
+    } catch (error) {
       console.warn("画像アップロードに失敗しましたが処理を続行します:", error)
     }
   }
