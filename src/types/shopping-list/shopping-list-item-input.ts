@@ -3,6 +3,7 @@ export interface ShoppingListItemInput {
   name: string
   amount: string
   unit: string
+  status: boolean
 }
 
 export interface ShoppingListItemState {
@@ -11,6 +12,7 @@ export interface ShoppingListItemState {
     name?: string[]
     amount?: string[]
     unit?: string[]
+    status?: string[]
   }
   message?: string | null
 }

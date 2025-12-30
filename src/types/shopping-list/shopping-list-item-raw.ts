@@ -4,6 +4,7 @@ export interface ShoppingListItemRaw {
   name: string
   amount: string | null
   unit: string
+  status: boolean
   updated_at: string
   created_at: string
 }

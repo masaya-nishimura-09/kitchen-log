@@ -4,6 +4,7 @@ export interface ShoppingListItem {
   name: string
   amount: string | null
   unit: string
+  status: boolean
   updatedAt: string
   createdAt: string
 }
