@@ -1,3 +1,12 @@
+import Link from "next/link"
+import { Button } from "@/components/ui/button"
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
 import {
   Table,
   TableBody,
@@ -6,20 +15,15 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
 import type { ShoppingListItem } from "@/types/shopping-list/shopping-list-item"
 
-export default function LatestShoppingList({ shoppingList }: { shoppingList: ShoppingListItem[] }) {
+export default function LatestShoppingList({
+  shoppingList,
+}: {
+  shoppingList: ShoppingListItem[]
+}) {
   return (
-    <Card>
+    <Card className="size-full">
       <CardHeader>
         <CardTitle>最近の買い物リスト</CardTitle>
       </CardHeader>
@@ -43,11 +47,11 @@ export default function LatestShoppingList({ shoppingList }: { shoppingList: Sho
           </TableBody>
         </Table>
       </CardContent>
-      <CardFooter>
+      <CardFooter className="mt-auto">
         <Button variant="default">
           <Link href="/dashboard/shopping-list">もっと見る</Link>
         </Button>
       </CardFooter>
     </Card>
-  ) 
+  )
 }

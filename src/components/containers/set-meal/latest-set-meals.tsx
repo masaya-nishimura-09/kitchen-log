@@ -27,7 +27,7 @@ export default function LatestSetMeals({ setMeals }: { setMeals: SetMeal[] }) {
           <p>献立がありません</p>
         )}
       </CardContent>
-      <CardFooter>
+      <CardFooter className="mt-auto">
         <Button variant="default">
           <Link href="/dashboard/set-meal">もっと見る</Link>
         </Button>

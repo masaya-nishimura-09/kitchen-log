@@ -27,7 +27,7 @@ export default function LatestRecipes({ recipes }: { recipes: Recipe[] }) {
           <p>レシピがありません</p>
         )}
       </CardContent>
-      <CardFooter>
+      <CardFooter className="mt-auto">
         <Button variant="default">
           <Link href="/dashboard/recipe">もっと見る</Link>
         </Button>
