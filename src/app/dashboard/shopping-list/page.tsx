@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation"
 import { fetchShoppingList } from "@/actions/shopping-list/fetch"
-import ShoppingListItems from "@/components/containers/shopping-list/shopping-list-items"
+import ShoppingList from "@/components/containers/shopping-list/shopping-list"
 
 export default async function Page() {
   try {
@@ -8,7 +8,7 @@ export default async function Page() {
     if (!shoppingList) {
       notFound()
     }
-    return <ShoppingListItems shoppingList={shoppingList} />
+    return <ShoppingList shoppingList={shoppingList} />
   } catch (error) {
     console.error("Shopping list fetch error:", error)
     throw error

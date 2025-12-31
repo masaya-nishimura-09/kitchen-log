@@ -1,5 +1,16 @@
 "use client"
 
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import type {
   ColumnDef,
   ColumnFiltersState,
@@ -17,6 +28,7 @@ import {
 import { MoreHorizontal } from "lucide-react"
 import { useState, useTransition } from "react"
 import { updateItem } from "@/actions/shopping-list/update"
+import { deleteItem } from "@/actions/shopping-list/delete"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import {
@@ -24,7 +36,6 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Spinner } from "@/components/ui/spinner"
@@ -80,8 +91,17 @@ export const columns: ColumnDef<ShoppingListItem>[] = [
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {
+      const [isPending, startTransition] = useTransition()
       const item = row.original
-      console.log(item)
+      async function handleDeleteItem() {
+        startTransition(async () => {
+          try {
+            await deleteItem(item.id)
+          } catch (_error) {
+            throw new Error("Internal Server Error")
+          }
+        })
+      }
 
       return (
         <DropdownMenu>
@@ -93,10 +113,28 @@ export const columns: ColumnDef<ShoppingListItem>[] = [
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem>Copy payment ID</DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>View customer</DropdownMenuItem>
-            <DropdownMenuItem>View payment details</DropdownMenuItem>
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <DropdownMenuItem onSelect={(e) => e.preventDefault()}>削除</DropdownMenuItem>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>アイテムの削除</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    このアイテムを本当に削除してもよろしいですか？ この操作は元に戻せません。
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>キャンセル</AlertDialogCancel>
+                  <AlertDialogAction
+                    onClick={handleDeleteItem}
+                  >
+                    {isPending && <Spinner />}
+                    OK
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
           </DropdownMenuContent>
         </DropdownMenu>
       )
@@ -104,7 +142,7 @@ export const columns: ColumnDef<ShoppingListItem>[] = [
   },
 ]
 
-export default function DoneTable({ items }: { items: ShoppingListItem[] }) {
+export default function ShoppingListTable({ items }: { items: ShoppingListItem[] }) {
   const [sorting, setSorting] = useState<SortingState>([])
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
@@ -134,8 +172,8 @@ export default function DoneTable({ items }: { items: ShoppingListItem[] }) {
     e.preventDefault()
 
     const originalData = table
-      .getFilteredSelectedRowModel()
-      .rows.map((i) => i.original)
+    .getFilteredSelectedRowModel()
+    .rows.map((i) => i.original)
 
     const fd = new FormData()
 
@@ -159,9 +197,9 @@ export default function DoneTable({ items }: { items: ShoppingListItem[] }) {
                       {header.isPlaceholder
                         ? null
                         : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext(),
-                          )}
+                          header.column.columnDef.header,
+                          header.getContext(),
+                        )}
                     </TableHead>
                   )
                 })}

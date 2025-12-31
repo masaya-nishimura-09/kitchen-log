@@ -26,7 +26,7 @@ import type {
   ShoppingListItemState,
 } from "@/types/shopping-list/shopping-list-item-input"
 
-export default function ShoppingListItemForm() {
+export default function ShoppingListForm() {
   const [isPending, startTransition] = useTransition()
   const [state, setState] = useState<ShoppingListItemState>({
     success: true,
