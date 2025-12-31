@@ -4,6 +4,7 @@ import { fetchLatestSetMeals } from "@/actions/set-meal/fetch"
 import { fetchLatestShoppingList } from "@/actions/shopping-list/fetch"
 import { cookies } from "next/headers"
 import { createClient } from "@/lib/supabase/server"
+import LatestRecipes from "@/components/containers/recipe/latest-recipes"
 
 export default async function Page() {
   try {
@@ -25,8 +26,7 @@ export default async function Page() {
       <div className="size-full flex flex-col gap-2">
         <div>
           <p>おかえりなさい、{user.user_metadata.name}さん</p>
-          <Recipes recipes={latestRecipes} />
-          <SetMeals recipes={latestSetMeals} />
+          <LatestRecipes recipes={latestRecipes} />
         </div>
       </div>
     )
