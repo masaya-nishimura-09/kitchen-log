@@ -5,6 +5,7 @@ import { fetchLatestSetMeals } from "@/actions/set-meal/fetch"
 import { fetchLatestShoppingList } from "@/actions/shopping-list/fetch"
 import LatestRecipes from "@/components/containers/recipe/latest-recipes"
 import LatestSetMeals from "@/components/containers/set-meal/latest-set-meals"
+import LatestShoppingList from "@/components/containers/shopping-list/latest-shopping-list"
 import { createClient } from "@/lib/supabase/server"
 
 export default async function Page() {
@@ -32,6 +33,7 @@ export default async function Page() {
           <p>おかえりなさい、{user.user_metadata.name}さん</p>
           <LatestRecipes recipes={latestRecipes} />
           <LatestSetMeals setMeals={latestSetMeals} />
+          <LatestShoppingList shoppingList={latestShoppingList} />
         </div>
       </div>
     )

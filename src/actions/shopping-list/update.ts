@@ -11,8 +11,6 @@ export async function updateItem(formData: FormData) {
     formData.get("shoppingListItemData") as string,
   ) as ShoppingListItemInput
 
-  console.log(itemData)
-
   const validatedFields = ShoppingListItemUpdateFormSchema.safeParse(itemData)
 
   if (!validatedFields.success) {
