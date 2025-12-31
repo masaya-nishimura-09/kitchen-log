@@ -17,11 +17,14 @@ export default function LatestRecipes({ recipes }: { recipes: Recipe[] }) {
         <CardTitle>最近のレシピ</CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="size-full grid grid-cols-[repeat(auto-fill,minmax(140px,1fr))] gap-2">
-          {recipes.map((recipe) => (
-            <RecipeCard key={recipe.id} recipe={recipe} />
-          ))}
-        </div>
+        {recipes.length > 0 ? (
+          <div className="size-full grid grid-cols-[repeat(auto-fill,minmax(140px,1fr))] gap-2">
+            {recipes.map((recipe) => (
+              <RecipeCard key={recipe.id} recipe={recipe} />
+            ))}
+          </div>
+        ): <p>レシピがありません</p>
+        }
       </CardContent>
       <CardFooter>
         <Button variant="default"> 

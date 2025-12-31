@@ -10,7 +10,6 @@ import SetMealCard from "@/components/containers/set-meal/set-meal-card"
 import { Button } from "@/components/ui/button"
 import type { SetMeal } from "@/types/set-meal/set-meal"
 
-
 export default function LatestSetMeals({ setMeals }: { setMeals: SetMeal[] }) {
   return (
     <Card>
