@@ -248,7 +248,7 @@ export async function fetchSetMealInput(
   return setMealInput
 }
 
-export async function fetchLatestSetMeals( limit: number): Promise<SetMeal[]> {
+export async function fetchLatestSetMeals(limit: number): Promise<SetMeal[]> {
   const userId = await getUserId()
   if (!userId) {
     throw new Error(

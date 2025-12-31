@@ -3,11 +3,11 @@ import Link from "next/link"
 import { notFound } from "next/navigation"
 import { fetchRecipes } from "@/actions/recipe/fetch"
 import NoRecipes from "@/components/containers/recipe/no-recipes"
+import RecipeCard from "@/components/containers/recipe/recipe-card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import type { Recipe } from "@/types/recipe/recipe"
 import type { SearchParams } from "@/types/recipe/search-params"
-import RecipeCard from "@/components/containers/recipe/recipe-card"
 
 export default async function Page(props: {
   searchParams?: Promise<SearchParams>
@@ -49,8 +49,9 @@ function RecipesPage({ recipes }: { recipes: Recipe[] }) {
             <RecipeCard key={recipe.id} recipe={recipe} />
           ))}
         </div>
-      ) : <NoRecipes />
-      }
+      ) : (
+        <NoRecipes />
+      )}
     </div>
   )
 }

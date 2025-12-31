@@ -1,16 +1,19 @@
+import { cookies } from "next/headers"
 import { notFound } from "next/navigation"
 import { fetchLatestRecipes } from "@/actions/recipe/fetch"
 import { fetchLatestSetMeals } from "@/actions/set-meal/fetch"
 import { fetchLatestShoppingList } from "@/actions/shopping-list/fetch"
-import { cookies } from "next/headers"
-import { createClient } from "@/lib/supabase/server"
 import LatestRecipes from "@/components/containers/recipe/latest-recipes"
 import LatestSetMeals from "@/components/containers/set-meal/latest-set-meals"
+import { createClient } from "@/lib/supabase/server"
 
 export default async function Page() {
   try {
     const supabase = createClient(cookies())
-    const { data: { user }, error } = await supabase.auth.getUser()
+    const {
+      data: { user },
+      error,
+    } = await supabase.auth.getUser()
     if (error || !user?.user_metadata.name) {
       notFound()
     }

@@ -1,7 +1,6 @@
-import { Button } from "@/components/ui/button"
 import Link from "next/link"
-import type { Recipe } from "@/types/recipe/recipe"
 import RecipeCard from "@/components/containers/recipe/recipe-card"
+import { Button } from "@/components/ui/button"
 import {
   Card,
   CardContent,
@@ -9,6 +8,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
+import type { Recipe } from "@/types/recipe/recipe"
 
 export default function LatestRecipes({ recipes }: { recipes: Recipe[] }) {
   return (
@@ -23,14 +23,13 @@ export default function LatestRecipes({ recipes }: { recipes: Recipe[] }) {
               <RecipeCard key={recipe.id} recipe={recipe} />
             ))}
           </div>
-        ): <p>レシピがありません</p>
-        }
+        ) : (
+          <p>レシピがありません</p>
+        )}
       </CardContent>
       <CardFooter>
-        <Button variant="default"> 
-          <Link href="/dashboard/recipe">
-            もっと見る
-          </Link>
+        <Button variant="default">
+          <Link href="/dashboard/recipe">もっと見る</Link>
         </Button>
       </CardFooter>
     </Card>

@@ -49,8 +49,9 @@ function SetMealsPage({ setMeals }: { setMeals: SetMeal[] }) {
             <SetMealCard key={setMeal.id} setMeal={setMeal} />
           ))}
         </div>
-      ) : <NoSetMeals />
-      }
+      ) : (
+        <NoSetMeals />
+      )}
     </div>
   )
 }

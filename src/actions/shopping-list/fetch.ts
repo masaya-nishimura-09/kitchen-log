@@ -29,7 +29,9 @@ export async function fetchShoppingList(): Promise<ShoppingListItem[]> {
   return data.map(shoppingListItemConverter)
 }
 
-export async function fetchLatestShoppingList(limit: number): Promise<ShoppingListItem[]> {
+export async function fetchLatestShoppingList(
+  limit: number,
+): Promise<ShoppingListItem[]> {
   const userId = await getUserId()
   if (!userId) {
     throw new Error(

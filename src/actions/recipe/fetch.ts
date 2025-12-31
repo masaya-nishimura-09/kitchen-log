@@ -217,7 +217,7 @@ export async function fetchRecipeInput(recipeId: number): Promise<RecipeInput> {
   return recipeInput
 }
 
-export async function fetchLatestRecipes( limit: number): Promise<Recipe[]> {
+export async function fetchLatestRecipes(limit: number): Promise<Recipe[]> {
   const userId = await getUserId()
   if (!userId) {
     throw new Error(
