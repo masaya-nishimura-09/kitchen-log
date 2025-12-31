@@ -18,11 +18,14 @@ export default function LatestSetMeals({ setMeals }: { setMeals: SetMeal[] }) {
         <CardTitle>最近の献立</CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="size-full grid grid-cols-[repeat(auto-fill,minmax(140px,1fr))] gap-2">
-          {setMeals.map((setMeal) => (
-            <SetMealCard key={setMeal.id} setMeal={setMeal} />
-          ))}
-        </div>
+        {setMeals.length > 0 ? (
+          <div className="size-full grid grid-cols-[repeat(auto-fill,minmax(140px,1fr))] gap-2">
+            {setMeals.map((setMeal) => (
+              <SetMealCard key={setMeal.id} setMeal={setMeal} />
+            ))}
+          </div>
+        ): <p>献立がありません</p>
+        }
       </CardContent>
       <CardFooter>
         <Button variant="default"> 
