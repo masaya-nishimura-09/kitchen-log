@@ -3,7 +3,7 @@ import Link from "next/link"
 import { notFound } from "next/navigation"
 import { fetchSetMeals } from "@/actions/set-meal/fetch"
 import NoSetMeals from "@/components/containers/set-meal/no-set-meals"
-import SetMeals from "@/components/containers/set-meal/set-meals"
+import SetMealCard from "@/components/containers/set-meal/set-meal-card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import type { SearchParams } from "@/types/recipe/search-params"
@@ -43,7 +43,14 @@ function SetMealsPage({ setMeals }: { setMeals: SetMeal[] }) {
           <Link href="/dashboard/set-meal/new">新規追加</Link>
         </Button>
       </div>
-      {setMeals.length > 0 ? <SetMeals setMeals={setMeals} /> : <NoSetMeals />}
+      {setMeals.length > 0 ? (
+        <div className="size-full grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))] gap-2">
+          {setMeals.map((setMeal) => (
+            <SetMealCard key={setMeal.id} setMeal={setMeal} />
+          ))}
+        </div>
+      ) : <NoSetMeals />
+      }
     </div>
   )
 }

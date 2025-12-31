@@ -216,3 +216,64 @@ export async function fetchRecipeInput(recipeId: number): Promise<RecipeInput> {
 
   return recipeInput
 }
+
+export async function fetchLatestRecipes( limit: number): Promise<Recipe[]> {
+  const userId = await getUserId()
+  if (!userId) {
+    throw new Error(
+      "認証情報が取得できませんでした。再度ログインしてください。",
+    )
+  }
+
+  const supabase = createClient(cookies())
+  const { data, error } = await supabase
+    .from("recipes")
+    .select(
+      `
+      id,
+      user_id,
+      title,
+      image_url,
+      memo,
+      updated_at,
+      created_at,
+      tags (
+        id,
+        recipe_id,
+        user_id,
+        name,
+        updated_at,
+        created_at
+      ),
+      ingredients (
+        id,
+        recipe_id,
+        user_id,
+        name,
+        amount,
+        unit,
+        order,
+        updated_at,
+        created_at
+      ),
+      steps (
+        id,
+        recipe_id,
+        user_id,
+        text,
+        order,
+        updated_at,
+        created_at
+      )`,
+    )
+    .eq("user_id", userId)
+    .order("updated_at", { ascending: false })
+    .limit(limit)
+
+  if (error) {
+    console.error("Recipe Fetch Failed:", error)
+    throw new Error("レシピの取得に失敗しました。")
+  }
+
+  return data?.map(recipeConverter)
+}
