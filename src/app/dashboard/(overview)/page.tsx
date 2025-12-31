@@ -5,6 +5,7 @@ import { fetchLatestShoppingList } from "@/actions/shopping-list/fetch"
 import { cookies } from "next/headers"
 import { createClient } from "@/lib/supabase/server"
 import LatestRecipes from "@/components/containers/recipe/latest-recipes"
+import LatestSetMeals from "@/components/containers/set-meal/latest-set-meals"
 
 export default async function Page() {
   try {
@@ -27,6 +28,7 @@ export default async function Page() {
         <div>
           <p>おかえりなさい、{user.user_metadata.name}さん</p>
           <LatestRecipes recipes={latestRecipes} />
+          <LatestSetMeals setMeals={latestSetMeals} />
         </div>
       </div>
     )
