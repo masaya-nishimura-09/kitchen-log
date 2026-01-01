@@ -1,10 +1,10 @@
 "use client"
 
+import { IconCircleX } from "@tabler/icons-react"
 import Image from "next/image"
 import type { Dispatch, SetStateAction } from "react"
 import { useState } from "react"
 import { AccordionContent } from "@/components/ui/accordion"
-import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Item, ItemActions, ItemContent, ItemTitle } from "@/components/ui/item"
 import { ScrollArea } from "@/components/ui/scroll-area"
@@ -111,14 +111,13 @@ export default function RecipesInput({
               </ItemTitle>
             </ItemContent>
             <ItemActions>
-              <Button
-                variant="outline"
+              <button
                 type="button"
-                className="block ml-auto"
+                className="rounded-full shrink-0"
                 onClick={() => handleRemoveRecipe(recipe.id)}
               >
-                削除
-              </Button>
+                <IconCircleX size={18} />
+              </button>
             </ItemActions>
           </Item>
         ))}
