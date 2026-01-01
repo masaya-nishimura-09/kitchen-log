@@ -44,7 +44,7 @@ function SetMealsPage({ setMeals }: { setMeals: SetMeal[] }) {
         </Button>
       </div>
       {setMeals.length > 0 ? (
-        <div className="size-full grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))] gap-2">
+        <div className="size-full grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))] gap-4">
           {setMeals.map((setMeal) => (
             <SetMealCard key={setMeal.id} setMeal={setMeal} />
           ))}

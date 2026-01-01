@@ -23,7 +23,7 @@ export default function LatestRecipes({ recipes }: { recipes: Recipe[] }) {
       </CardHeader>
       <CardContent>
         {recipes.length > 0 ? (
-          <div className="size-full grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-2">
+          <div className="size-full grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-4">
             {recipes.map((recipe) => (
               <RecipeCard key={recipe.id} recipe={recipe} />
             ))}
