@@ -8,7 +8,7 @@ export default function SetMealCard({ setMeal }: { setMeal: SetMeal }) {
     <Link
       key={setMeal.id}
       href={`/dashboard/set-meal/${setMeal.id}`}
-      className="aspect-video flex flex-col gap-2"
+      className="aspect-video flex flex-col gap-2 rounded-lg bg-popover hover:bg-muted transition-colors p-2"
     >
       <AspectRatio
         className="grid grid-cols-2 grid-rows-2 gap-0 bg-muted rounded-lg overflow-hidden"

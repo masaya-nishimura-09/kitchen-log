@@ -48,7 +48,7 @@ function SetMealPage({ setMeal }: { setMeal: SetMeal }) {
         <CardContent>
           <Separator className="my-6" />
           {setMeal.recipes.length > 0 ? (
-            <div className="size-full grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))] gap-2">
+            <div className="size-full grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))]">
               {setMeal.recipes.map((recipe) => (
                 <RecipeCard key={recipe.id} recipe={recipe} />
               ))}

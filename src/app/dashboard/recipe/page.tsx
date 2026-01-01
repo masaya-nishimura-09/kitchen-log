@@ -55,7 +55,7 @@ function RecipesPage({ recipes }: { recipes: Recipe[] }) {
       </CardHeader>
       <CardContent>
         {recipes.length > 0 ? (
-          <div className="size-full grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))] gap-4">
+          <div className="size-full grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))]">
             {recipes.map((recipe) => (
               <RecipeCard key={recipe.id} recipe={recipe} />
             ))}

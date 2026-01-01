@@ -8,7 +8,7 @@ export default function RecipeCard({ recipe }: { recipe: Recipe }) {
     <Link
       key={recipe.id}
       href={`/dashboard/recipe/${recipe.id}`}
-      className="aspect-video flex flex-col gap-2"
+      className="aspect-video flex flex-col gap-2 rounded-lg bg-popover hover:bg-muted transition-colors p-2"
     >
       <AspectRatio ratio={16 / 9} className="bg-muted rounded-lg">
         <Image
