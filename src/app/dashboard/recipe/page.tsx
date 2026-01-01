@@ -5,6 +5,13 @@ import { fetchRecipes } from "@/actions/recipe/fetch"
 import NoRecipes from "@/components/containers/recipe/no-recipes"
 import RecipeCard from "@/components/containers/recipe/recipe-card"
 import { Button } from "@/components/ui/button"
+import {
+  Card,
+  CardAction,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import type { Recipe } from "@/types/recipe/recipe"
 import type { SearchParams } from "@/types/recipe/search-params"
@@ -28,30 +35,35 @@ export default async function Page(props: {
 
 function RecipesPage({ recipes }: { recipes: Recipe[] }) {
   return (
-    <div className="size-full flex flex-col gap-2">
-      <div className="flex w-full justify-end items-center gap-2">
-        <form method="GET" className="relative max-w-lg">
-          <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-          <Input
-            type="search"
-            name="title"
-            placeholder="検索..."
-            className="pl-8 w-full"
-          />
-        </form>
-        <Button type="button">
-          <Link href="/dashboard/recipe/new">新規追加</Link>
-        </Button>
-      </div>
-      {recipes.length > 0 ? (
-        <div className="size-full grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))] gap-4">
-          {recipes.map((recipe) => (
-            <RecipeCard key={recipe.id} recipe={recipe} />
-          ))}
-        </div>
-      ) : (
-        <NoRecipes />
-      )}
-    </div>
+    <Card className="size-full">
+      <CardHeader>
+        <CardTitle>レシピ</CardTitle>
+        <CardAction className="flex w-full justify-end items-center gap-2">
+          <form method="GET" className="relative max-w-lg">
+            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+            <Input
+              type="search"
+              name="title"
+              placeholder="検索..."
+              className="pl-8 w-full"
+            />
+          </form>
+          <Button type="button">
+            <Link href="/dashboard/recipe/new">新規追加</Link>
+          </Button>
+        </CardAction>
+      </CardHeader>
+      <CardContent>
+        {recipes.length > 0 ? (
+          <div className="size-full grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))] gap-4">
+            {recipes.map((recipe) => (
+              <RecipeCard key={recipe.id} recipe={recipe} />
+            ))}
+          </div>
+        ) : (
+          <NoRecipes />
+        )}
+      </CardContent>
+    </Card>
   )
 }
