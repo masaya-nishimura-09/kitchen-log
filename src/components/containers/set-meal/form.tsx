@@ -148,7 +148,7 @@ export default function SetMealForm({
             >
               <AccordionItem value="title">
                 <AccordionTrigger>タイトル</AccordionTrigger>
-                <AccordionContent className="grid gap-2 max-w-xl">
+                <AccordionContent className="grid gap-2 max-w-lg">
                   <Input
                     id="title"
                     name="title"
@@ -171,7 +171,7 @@ export default function SetMealForm({
 
               <AccordionItem value="memo">
                 <AccordionTrigger>メモ</AccordionTrigger>
-                <AccordionContent className="grid gap-2 max-w-xl">
+                <AccordionContent className="grid gap-2 max-w-lg">
                   <Textarea
                     id="memo"
                     name="memo"
