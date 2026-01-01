@@ -41,7 +41,6 @@ function RecipePage({ recipe }: { recipe: Recipe }) {
       <Card className="h-full">
         <CardHeader>
           <CardTitle className="text-xl"> {recipe.title}</CardTitle>
-          {recipe.memo && <CardDescription>{recipe.memo}</CardDescription>}
           <CardAction>
             <Button>
               <Link href={`/dashboard/recipe/${recipe.id}/edit`}>編集する</Link>
@@ -72,12 +71,15 @@ function RecipePage({ recipe }: { recipe: Recipe }) {
             </AspectRatio>
           )}
         </CardContent>
-        <CardFooter className="flex flex-wrap gap-2">
-          {recipe.tag.map((t, index) => (
-            <Badge key={`${t.name}-${index}`} variant="secondary">
-              {t.name}
-            </Badge>
-          ))}
+        <CardFooter className="flex flex-col items-start gap-4">
+          <div className="flex flex-wrap gap-2">
+            {recipe.tag.map((t, index) => (
+              <Badge key={`${t.name}-${index}`} variant="secondary">
+                {t.name}
+              </Badge>
+            ))}
+          </div>
+          {recipe.memo && <CardDescription>{recipe.memo}</CardDescription>}
         </CardFooter>
       </Card>
 
