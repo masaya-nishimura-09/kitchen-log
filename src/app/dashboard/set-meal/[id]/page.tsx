@@ -1,7 +1,7 @@
 import Link from "next/link"
 import { notFound } from "next/navigation"
 import { fetchSetMeal } from "@/actions/set-meal/fetch"
-import Recipes from "@/components/containers/recipe/recipes"
+import RecipeCard from "@/components/containers/recipe/recipe-card"
 import { Button } from "@/components/ui/button"
 import {
   Card,
@@ -46,7 +46,11 @@ function SetMealPage({ setMeal }: { setMeal: SetMeal }) {
         </CardHeader>
         <CardContent>
           {setMeal.recipes.length > 0 ? (
-            <Recipes recipes={setMeal.recipes} />
+            <div className="size-full grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))] gap-2">
+              {setMeal.recipes.map((recipe) => (
+                <RecipeCard key={recipe.id} recipe={recipe} />
+              ))}
+            </div>
           ) : (
             <p>レシピがありません。</p>
           )}
