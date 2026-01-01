@@ -2,8 +2,8 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import {
   Card,
+  CardAction,
   CardContent,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
@@ -26,12 +26,17 @@ export default function LatestShoppingList({
     <Card className="size-full">
       <CardHeader>
         <CardTitle>最近の買い物リスト</CardTitle>
+        <CardAction>
+          <Button variant="default">
+            <Link href="/dashboard/shopping-list">もっと見る</Link>
+          </Button>
+        </CardAction>
       </CardHeader>
       <CardContent>
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead className="w-[100px]">名前</TableHead>
+              <TableHead className="w-25">名前</TableHead>
               <TableHead>量</TableHead>
               <TableHead>単位</TableHead>
             </TableRow>
@@ -47,11 +52,6 @@ export default function LatestShoppingList({
           </TableBody>
         </Table>
       </CardContent>
-      <CardFooter className="mt-auto">
-        <Button variant="default">
-          <Link href="/dashboard/shopping-list">もっと見る</Link>
-        </Button>
-      </CardFooter>
     </Card>
   )
 }

@@ -29,15 +29,11 @@ export default async function Page() {
     }
 
     return (
-      <div className="size-full grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className="flex flex-col gap-8">
-          <Information username={user.user_metadata.name} />
-          <LatestShoppingList shoppingList={latestShoppingList} />
-        </div>
-        <div className="grid grid-cols-1 grid-rows-2 gap-4">
-          <LatestRecipes recipes={latestRecipes} />
-          <LatestSetMeals setMeals={latestSetMeals} />
-        </div>
+      <div className="size-full flex flex-col gap-4">
+        <Information username={user.user_metadata.name} />
+        <LatestRecipes recipes={latestRecipes} />
+        <LatestSetMeals setMeals={latestSetMeals} />
+        <LatestShoppingList shoppingList={latestShoppingList} />
       </div>
     )
   } catch (error) {

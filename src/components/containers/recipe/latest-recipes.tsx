@@ -3,8 +3,8 @@ import RecipeCard from "@/components/containers/recipe/recipe-card"
 import { Button } from "@/components/ui/button"
 import {
   Card,
+  CardAction,
   CardContent,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
@@ -15,10 +15,15 @@ export default function LatestRecipes({ recipes }: { recipes: Recipe[] }) {
     <Card>
       <CardHeader>
         <CardTitle>最近のレシピ</CardTitle>
+        <CardAction>
+          <Button variant="default">
+            <Link href="/dashboard/recipe">もっと見る</Link>
+          </Button>
+        </CardAction>
       </CardHeader>
       <CardContent>
         {recipes.length > 0 ? (
-          <div className="size-full grid grid-cols-[repeat(auto-fill,minmax(140px,1fr))] gap-2">
+          <div className="size-full grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-2">
             {recipes.map((recipe) => (
               <RecipeCard key={recipe.id} recipe={recipe} />
             ))}
@@ -27,11 +32,6 @@ export default function LatestRecipes({ recipes }: { recipes: Recipe[] }) {
           <p>レシピがありません</p>
         )}
       </CardContent>
-      <CardFooter className="mt-auto">
-        <Button variant="default">
-          <Link href="/dashboard/recipe">もっと見る</Link>
-        </Button>
-      </CardFooter>
     </Card>
   )
 }
