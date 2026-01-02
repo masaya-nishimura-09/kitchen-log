@@ -2,6 +2,7 @@ import { cookies } from "next/headers"
 import { notFound } from "next/navigation"
 import EmailForm from "@/components/containers/setting/email-form"
 import PasswordForm from "@/components/containers/setting/password-form"
+import SignOutForm from "@/components/containers/setting/sign-out"
 import UsernameForm from "@/components/containers/setting/username-form"
 import {
   Card,
@@ -36,6 +37,8 @@ export default async function Page() {
           <EmailForm email={user.email} />
           <Separator className="my-2" />
           <PasswordForm />
+          <Separator className="my-2" />
+          <SignOutForm />
         </CardContent>
       </Card>
     )
