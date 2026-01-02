@@ -1,5 +1,6 @@
 import { cookies } from "next/headers"
 import { notFound } from "next/navigation"
+import DeleteUserForm from "@/components/containers/setting/delete-user"
 import EmailForm from "@/components/containers/setting/email-form"
 import PasswordForm from "@/components/containers/setting/password-form"
 import SignOutForm from "@/components/containers/setting/sign-out"
@@ -31,14 +32,15 @@ export default async function Page() {
           <CardTitle>設定</CardTitle>
           <CardDescription>ユーザー情報を変更できます。</CardDescription>
         </CardHeader>
-        <CardContent className="flex flex-col gap-6">
+        <CardContent className="flex flex-col gap-2">
           <UsernameForm username={user.user_metadata.name} />
-          <Separator className="my-2" />
+          <Separator className="my-6" />
           <EmailForm email={user.email} />
-          <Separator className="my-2" />
+          <Separator className="my-6" />
           <PasswordForm />
-          <Separator className="my-2" />
+          <Separator className="my-6" />
           <SignOutForm />
+          <DeleteUserForm />
         </CardContent>
       </Card>
     )
