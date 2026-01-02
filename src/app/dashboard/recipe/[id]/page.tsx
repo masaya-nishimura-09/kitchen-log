@@ -1,3 +1,4 @@
+import { IconDots } from "@tabler/icons-react"
 import Image from "next/image"
 import Link from "next/link"
 import { notFound } from "next/navigation"
@@ -5,7 +6,6 @@ import React from "react"
 import { fetchRecipe } from "@/actions/recipe/fetch"
 import { AspectRatio } from "@/components/ui/aspect-ratio"
 import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
 import {
   Card,
   CardAction,
@@ -15,6 +15,12 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Separator } from "@/components/ui/separator"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -42,9 +48,19 @@ function RecipePage({ recipe }: { recipe: Recipe }) {
         <CardHeader>
           <CardTitle className="text-xl"> {recipe.title}</CardTitle>
           <CardAction>
-            <Button>
-              <Link href={`/dashboard/recipe/${recipe.id}/edit`}>編集する</Link>
-            </Button>
+            <DropdownMenu>
+              <DropdownMenuTrigger>
+                <IconDots />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                <DropdownMenuItem>
+                  <Link href={`/dashboard/recipe/${recipe.id}/edit`}>
+                    編集する
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem>買い物リストに追加</DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </CardAction>
         </CardHeader>
         <CardContent>
