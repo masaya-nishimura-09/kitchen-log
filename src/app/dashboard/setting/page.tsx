@@ -16,36 +16,31 @@ import { Separator } from "@/components/ui/separator"
 import { createClient } from "@/lib/supabase/server"
 
 export default async function Page() {
-  try {
-    const supabase = createClient(cookies())
-    const {
-      data: { user },
-      error,
-    } = await supabase.auth.getUser()
-    if (error || !user?.user_metadata.name || !user?.email) {
-      notFound()
-    }
-
-    return (
-      <Card className="size-full">
-        <CardHeader>
-          <CardTitle>設定</CardTitle>
-          <CardDescription>ユーザー情報を変更できます。</CardDescription>
-        </CardHeader>
-        <CardContent className="flex flex-col gap-2">
-          <UsernameForm username={user.user_metadata.name} />
-          <Separator className="my-6" />
-          <EmailForm email={user.email} />
-          <Separator className="my-6" />
-          <PasswordForm />
-          <Separator className="my-6" />
-          <SignOutForm />
-          <DeleteUserForm />
-        </CardContent>
-      </Card>
-    )
-  } catch (error) {
-    console.error("User data fetch error:", error)
-    throw error
+  const supabase = createClient(cookies())
+  const {
+    data: { user },
+    error,
+  } = await supabase.auth.getUser()
+  if (error || !user?.user_metadata.name || !user?.email) {
+    notFound()
   }
+
+  return (
+    <Card className="size-full">
+      <CardHeader>
+        <CardTitle>設定</CardTitle>
+        <CardDescription>ユーザー情報を変更できます。</CardDescription>
+      </CardHeader>
+      <CardContent className="flex flex-col gap-2">
+        <UsernameForm username={user.user_metadata.name} />
+        <Separator className="my-6" />
+        <EmailForm email={user.email} />
+        <Separator className="my-6" />
+        <PasswordForm />
+        <Separator className="my-6" />
+        <SignOutForm />
+        <DeleteUserForm />
+      </CardContent>
+    </Card>
+  )
 }

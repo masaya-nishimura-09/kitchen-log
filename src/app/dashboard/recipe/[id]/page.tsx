@@ -17,24 +17,15 @@ import {
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Separator } from "@/components/ui/separator"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import type { Recipe } from "@/types/recipe/recipe"
 
 export default async function Page({ params }: { params: { id: string } }) {
   const { id } = await params
 
-  try {
-    const recipe = await fetchRecipe(Number(id))
-    if (!recipe) {
-      notFound()
-    }
-    return <RecipePage recipe={recipe} />
-  } catch (error) {
-    console.error("Recipe fetch error:", error)
-    throw error
+  const recipe = await fetchRecipe(Number(id))
+  if (!recipe) {
+    notFound()
   }
-}
 
-function RecipePage({ recipe }: { recipe: Recipe }) {
   return (
     <div className="size-full grid grid-cols-1 md:grid-cols-2 gap-4">
       <Card className="h-full">

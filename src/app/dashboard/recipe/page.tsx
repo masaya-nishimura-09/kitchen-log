@@ -13,7 +13,6 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
-import type { Recipe } from "@/types/recipe/recipe"
 import type { SearchParams } from "@/types/recipe/search-params"
 
 export default async function Page(props: {
@@ -21,19 +20,11 @@ export default async function Page(props: {
 }) {
   const searchParams = await props.searchParams
 
-  try {
-    const recipes = await fetchRecipes(searchParams)
-    if (!recipes) {
-      notFound()
-    }
-    return <RecipesPage recipes={recipes} />
-  } catch (error) {
-    console.error("Recipes fetch error:", error)
-    throw error
+  const recipes = await fetchRecipes(searchParams)
+  if (!recipes) {
+    notFound()
   }
-}
 
-function RecipesPage({ recipes }: { recipes: Recipe[] }) {
   return (
     <Card className="size-full">
       <CardHeader>

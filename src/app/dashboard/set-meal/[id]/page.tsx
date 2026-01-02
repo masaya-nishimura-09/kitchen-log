@@ -12,24 +12,15 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
-import type { SetMeal } from "@/types/set-meal/set-meal"
 
 export default async function Page({ params }: { params: { id: string } }) {
   const { id } = await params
 
-  try {
-    const setMeal = await fetchSetMeal(Number(id))
-    if (!setMeal) {
-      notFound()
-    }
-    return <SetMealPage setMeal={setMeal} />
-  } catch (error) {
-    console.error("Set meal fetch error:", error)
-    throw error
+  const setMeal = await fetchSetMeal(Number(id))
+  if (!setMeal) {
+    notFound()
   }
-}
 
-function SetMealPage({ setMeal }: { setMeal: SetMeal }) {
   return (
     <div className="size-full">
       <Card className="size-full">

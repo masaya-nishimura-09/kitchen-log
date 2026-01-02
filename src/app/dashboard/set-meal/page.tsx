@@ -14,26 +14,16 @@ import {
 } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import type { SearchParams } from "@/types/recipe/search-params"
-import type { SetMeal } from "@/types/set-meal/set-meal"
 
 export default async function Page(props: {
   searchParams?: Promise<SearchParams>
 }) {
   const searchParams = await props.searchParams
-
-  try {
-    const setMeals = await fetchSetMeals(searchParams)
-    if (!setMeals) {
-      notFound()
-    }
-    return <SetMealsPage setMeals={setMeals} />
-  } catch (error) {
-    console.error("Set meals fetch error:", error)
-    throw error
+  const setMeals = await fetchSetMeals(searchParams)
+  if (!setMeals) {
+    notFound()
   }
-}
 
-function SetMealsPage({ setMeals }: { setMeals: SetMeal[] }) {
   return (
     <Card className="size-full">
       <CardHeader>
