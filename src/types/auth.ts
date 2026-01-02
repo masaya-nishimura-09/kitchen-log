@@ -22,3 +22,18 @@ export type UsernameState = {
   }
   message?: string | null
 }
+
+export type EmailState = {
+  errors?: {
+    email?: string[]
+  }
+  message?: string | null
+}
+
+export type PasswordState = {
+  errors?: {
+    password?: string[]
+    confirmedPassword?: string[]
+  }
+  message?: string | null
+}

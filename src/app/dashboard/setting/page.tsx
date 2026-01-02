@@ -1,5 +1,7 @@
 import { cookies } from "next/headers"
 import { notFound } from "next/navigation"
+import EmailForm from "@/components/containers/setting/email-form"
+import PasswordForm from "@/components/containers/setting/password-form"
 import UsernameForm from "@/components/containers/setting/username-form"
 import {
   Card,
@@ -18,7 +20,7 @@ export default async function Page() {
       data: { user },
       error,
     } = await supabase.auth.getUser()
-    if (error || !user?.user_metadata.name) {
+    if (error || !user?.user_metadata.name || !user?.email) {
       notFound()
     }
 
@@ -31,6 +33,9 @@ export default async function Page() {
         <CardContent className="flex flex-col gap-6">
           <UsernameForm username={user.user_metadata.name} />
           <Separator className="my-2" />
+          <EmailForm email={user.email} />
+          <Separator className="my-2" />
+          <PasswordForm />
         </CardContent>
       </Card>
     )
