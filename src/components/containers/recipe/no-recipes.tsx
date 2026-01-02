@@ -10,7 +10,7 @@ import {
 
 export default function NoRecipes() {
   return (
-    <Card className="w-xs md:w-md m-auto">
+    <Card className="w-xs md:w-md">
       <CardHeader>
         <CardTitle>レシピがまだ登録されていません</CardTitle>
         <CardDescription>最初のレシピを作成してみましょう。</CardDescription>
