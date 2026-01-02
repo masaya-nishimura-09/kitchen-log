@@ -1,8 +1,7 @@
-import Link from "next/link"
 import { notFound } from "next/navigation"
 import { fetchSetMeal } from "@/actions/set-meal/fetch"
 import RecipeCard from "@/components/containers/recipe/recipe-card"
-import { Button } from "@/components/ui/button"
+import SetMealMenu from "@/components/containers/set-meal/set-meal-menu"
 import {
   Card,
   CardAction,
@@ -38,11 +37,7 @@ function SetMealPage({ setMeal }: { setMeal: SetMeal }) {
           <CardTitle className="text-xl"> {setMeal.title}</CardTitle>
           {setMeal.memo && <CardDescription>{setMeal.memo}</CardDescription>}
           <CardAction>
-            <Button>
-              <Link href={`/dashboard/set-meal/${setMeal.id}/edit`}>
-                編集する
-              </Link>
-            </Button>
+            <SetMealMenu setMeal={setMeal} />
           </CardAction>
         </CardHeader>
         <CardContent>
