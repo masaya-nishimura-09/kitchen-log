@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache"
 import { cookies } from "next/headers"
 import { redirect } from "next/navigation"
-import { getUserId } from "@/actions/auth"
+import { getUserId } from "@/actions/auth/auth"
 import { zenkakuToHankaku } from "@/lib/recipe/zenkaku-to-hankaku"
 import { RecipeFormSchema } from "@/lib/schemas/recipe-form"
 import { createClient } from "@/lib/supabase/server"

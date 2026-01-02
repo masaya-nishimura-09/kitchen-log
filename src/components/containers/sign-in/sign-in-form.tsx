@@ -3,7 +3,7 @@
 import Image from "next/image"
 import Link from "next/link"
 import { useActionState } from "react"
-import { signIn } from "@/actions/auth"
+import { signIn } from "@/actions/auth/auth"
 import { Button } from "@/components/ui/button"
 import {
   Card,

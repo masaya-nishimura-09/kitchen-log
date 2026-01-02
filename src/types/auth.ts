@@ -15,3 +15,10 @@ export type SignInState = {
   }
   message?: string | null
 }
+
+export type UsernameState = {
+  errors?: {
+    username?: string[]
+  }
+  message?: string | null
+}

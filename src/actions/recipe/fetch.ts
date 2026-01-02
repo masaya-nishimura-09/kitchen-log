@@ -1,7 +1,7 @@
 "use server"
 
 import { cookies } from "next/headers"
-import { getUserId } from "@/actions/auth"
+import { getUserId } from "@/actions/auth/auth"
 import { recipeConverter } from "@/lib/recipe/recipe-converter"
 import { createClient } from "@/lib/supabase/server"
 import type { Recipe } from "@/types/recipe/recipe"

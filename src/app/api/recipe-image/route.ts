@@ -1,5 +1,5 @@
 import { cookies } from "next/headers"
-import { getUserId } from "@/actions/auth"
+import { getUserId } from "@/actions/auth/auth"
 import { createClient } from "@/lib/supabase/server"
 
 export async function GET(request: Request) {

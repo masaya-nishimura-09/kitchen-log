@@ -1,7 +1,7 @@
 "use server"
 
 import { cookies } from "next/headers"
-import { getUserId } from "@/actions/auth"
+import { getUserId } from "@/actions/auth/auth"
 import { ShoppingListItemUpdateFormSchema } from "@/lib/schemas/shopping-list-item-update-form"
 import { createClient } from "@/lib/supabase/server"
 import type { ShoppingListItemInput } from "@/types/shopping-list/shopping-list-item-input"

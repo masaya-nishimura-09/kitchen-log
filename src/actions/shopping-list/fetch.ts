@@ -1,7 +1,7 @@
 "use server"
 
 import { cookies } from "next/headers"
-import { getUserId } from "@/actions/auth"
+import { getUserId } from "@/actions/auth/auth"
 import { shoppingListItemConverter } from "@/lib/shopping-list/shopping-list-item-converter"
 import { createClient } from "@/lib/supabase/server"
 import type { ShoppingListItem } from "@/types/shopping-list/shopping-list-item"

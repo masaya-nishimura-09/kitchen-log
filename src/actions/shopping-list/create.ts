@@ -1,7 +1,7 @@
 "use server"
 
 import { cookies } from "next/headers"
-import { getUserId } from "@/actions/auth"
+import { getUserId } from "@/actions/auth/auth"
 import { fetchShoppingList } from "@/actions/shopping-list/fetch"
 import { zenkakuToHankaku } from "@/lib/recipe/zenkaku-to-hankaku"
 import { ShoppingListItemFormSchema } from "@/lib/schemas/shopping-list-item-form"
