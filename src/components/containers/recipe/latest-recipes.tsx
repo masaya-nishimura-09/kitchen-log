@@ -14,7 +14,7 @@ export default function LatestRecipes({ recipes }: { recipes: Recipe[] }) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>最近のレシピ</CardTitle>
+        <CardTitle>最近追加したレシピ</CardTitle>
         <CardAction>
           <Button variant="default">
             <Link href="/dashboard/recipe">もっと見る</Link>

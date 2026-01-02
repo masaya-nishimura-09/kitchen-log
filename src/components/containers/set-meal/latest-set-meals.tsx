@@ -14,7 +14,7 @@ export default function LatestSetMeals({ setMeals }: { setMeals: SetMeal[] }) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>最近の献立</CardTitle>
+        <CardTitle>最近追加した献立</CardTitle>
         <CardAction>
           <Button variant="default">
             <Link href="/dashboard/set-meal">もっと見る</Link>

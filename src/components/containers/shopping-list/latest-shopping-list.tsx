@@ -25,7 +25,7 @@ export default function LatestShoppingList({
   return (
     <Card className="size-full">
       <CardHeader>
-        <CardTitle>最近の買い物リスト</CardTitle>
+        <CardTitle>最近買い物リストに追加した材料</CardTitle>
         <CardAction>
           <Button variant="default">
             <Link href="/dashboard/shopping-list">もっと見る</Link>
