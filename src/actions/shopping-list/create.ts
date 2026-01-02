@@ -6,6 +6,7 @@ import { fetchShoppingList } from "@/actions/shopping-list/fetch"
 import { zenkakuToHankaku } from "@/lib/recipe/zenkaku-to-hankaku"
 import { ShoppingListItemFormSchema } from "@/lib/schemas/shopping-list-item-form"
 import { createClient } from "@/lib/supabase/server"
+import type { Recipe } from "@/types/recipe/recipe"
 import type {
   ShoppingListItemInput,
   ShoppingListItemState,
@@ -77,8 +78,6 @@ export async function createItem(
       (item) => item.name === convertedName && item.unit === unit,
     )
 
-    // if there are no items  in the shopping list then insert it
-    // if there are no same items in the shopping list then insert it
     if (list.length < 1 || !sameItem) {
       await insertItem(userId, convertedName, convertedAmount, unit)
       return {
@@ -119,6 +118,33 @@ export async function createItem(
     return {
       success: false,
       message: "アイテムの登録に失敗しました。",
+    }
+  }
+}
+
+export async function createFromRecipe(recipes: Recipe[]) {
+  const ingredients = []
+  for (const recipe of recipes) {
+    ingredients.push(...recipe.ingredient)
+  }
+
+  for (const ingredient of ingredients) {
+    const fd = new FormData()
+
+    fd.append(
+      "shoppingListItemData",
+      JSON.stringify({
+        id: ingredient.id,
+        name: ingredient.name,
+        amount: ingredient.amount,
+        unit: ingredient.unit,
+        status: false,
+      }),
+    )
+
+    const result = await createItem(fd)
+    if (!result.success) {
+      throw new Error("アイテムの登録に失敗しました。")
     }
   }
 }
