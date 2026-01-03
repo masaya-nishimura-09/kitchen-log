@@ -1,7 +1,6 @@
 export interface EventInput {
   recipeId: number | null
   date: string
-  memo: string
 }
 
 export interface EventState {
@@ -9,7 +8,6 @@ export interface EventState {
   errors?: {
     recipeId?: string[]
     date?: string[]
-    memo?: string[]
   }
   message?: string | null
 }

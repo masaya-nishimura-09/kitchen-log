@@ -21,7 +21,6 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 import { Spinner } from "@/components/ui/spinner"
-import { Textarea } from "@/components/ui/textarea"
 import type { EventInput, EventState } from "@/types/calendar/event-input"
 import type { Recipe } from "@/types/recipe/recipe"
 import {
@@ -45,7 +44,6 @@ export default function EventForm({ recipes }: { recipes: Recipe[] }) {
   const [formData, setFormDataAction] = useState<EventInput>({
     recipeId: null,
     date: formatDateToYYYYMMDD(today),
-    memo: "",
   })
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -58,7 +56,6 @@ export default function EventForm({ recipes }: { recipes: Recipe[] }) {
       JSON.stringify({
         recipeId: formData.recipeId,
         date: formData.date,
-        memo: formData.memo,
       }),
     )
 
@@ -120,28 +117,6 @@ export default function EventForm({ recipes }: { recipes: Recipe[] }) {
             </Popover>
             <div aria-live="polite" aria-atomic="true">
               {state?.errors?.date?.map((error: string) => (
-                <p className="mt-2 text-red-500 text-sm" key={error}>
-                  {error}
-                </p>
-              ))}
-            </div>
-          </div>
-
-          <div className="grid gap-2">
-            <Label htmlFor="memo" className="px-1">
-              メモ
-            </Label>
-            <Textarea
-              id="memo"
-              name="memo"
-              placeholder="メモすることがある場合入力してください"
-              value={formData.memo}
-              onChange={(e) =>
-                setFormDataAction({ ...formData, memo: e.target.value })
-              }
-            />
-            <div aria-live="polite" aria-atomic="true">
-              {state?.errors?.memo?.map((error: string) => (
                 <p className="mt-2 text-red-500 text-sm" key={error}>
                   {error}
                 </p>
