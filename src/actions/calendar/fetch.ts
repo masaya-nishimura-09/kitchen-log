@@ -23,6 +23,7 @@ export async function fetchEvents(): Promise<CalendarEvent[]> {
       user_id,
       recipe_id,
       date,
+      memo,
       updated_at,
       created_at,
       recipes (

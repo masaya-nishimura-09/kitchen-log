@@ -5,6 +5,7 @@ export interface CalendarEventRaw {
   user_id: string
   recipe_id: number
   date: string
+  memo: string | null
   updated_at: string
   created_at: string
   recipes: RecipeRaw | RecipeRaw[]

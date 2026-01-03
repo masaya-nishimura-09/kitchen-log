@@ -7,6 +7,7 @@ export function calendarEventConverter(data: CalendarEventRaw): CalendarEvent {
     id: data.id as number,
     userId: data.user_id as string,
     date: data.date as string,
+    memo: data.memo as string | null,
     updatedAt: data.updated_at as string,
     createdAt: data.created_at as string,
     recipe: recipeConverter(

@@ -16,6 +16,7 @@ export async function createEvent(formData: FormData) {
   const validatedFields = EventFormSchema.safeParse({
     recipeId: eventData.recipeId,
     date: eventData.date,
+    memo: eventData.memo,
   })
 
   if (!validatedFields.success) {
@@ -26,7 +27,7 @@ export async function createEvent(formData: FormData) {
       message: "入力内容に誤りがあります。",
     }
   }
-  const { recipeId, date } = validatedFields.data
+  const { recipeId, date, memo } = validatedFields.data
 
   const userId = await getUserId()
   if (!userId) {
@@ -42,6 +43,7 @@ export async function createEvent(formData: FormData) {
     user_id: userId,
     recipe_id: recipeId,
     date: date,
+    memo: memo,
   })
 
   if (error) {
