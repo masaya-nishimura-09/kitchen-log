@@ -9,6 +9,8 @@ export function calendarEventConverter(data: CalendarEventRaw): CalendarEvent {
     date: data.date as string,
     updatedAt: data.updated_at as string,
     createdAt: data.created_at as string,
-    recipe: recipeConverter(data.recipes),
+    recipe: recipeConverter(
+      Array.isArray(data.recipes) ? data.recipes[0] : data.recipes,
+    ),
   }
 }
