@@ -87,8 +87,8 @@ export async function createEvents(formData: FormData) {
     }
 
     insertData.push({
-      userId: userId,
-      recipeId: validatedFields.data.recipeId,
+      user_id: userId,
+      recipe_id: validatedFields.data.recipeId,
       date: validatedFields.data.date,
     })
   }

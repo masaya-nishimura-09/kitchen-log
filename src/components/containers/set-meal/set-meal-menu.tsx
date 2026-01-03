@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Spinner } from "@/components/ui/spinner"
 import type { SetMeal } from "@/types/set-meal/set-meal"
+import EventForm from "./event-form"
 
 export default function SetMealMenu({ setMeal }: { setMeal: SetMeal }) {
   const [isPending, startTransition] = useTransition()
@@ -40,6 +41,7 @@ export default function SetMealMenu({ setMeal }: { setMeal: SetMeal }) {
           {isPending && <Spinner />}
           {isPending ? "買い物リストに追加中..." : "買い物リストに追加"}
         </DropdownMenuItem>
+        <EventForm recipes={setMeal.recipes} />
       </DropdownMenuContent>
     </DropdownMenu>
   )
