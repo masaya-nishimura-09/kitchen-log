@@ -1,5 +1,5 @@
 import {
-  // IconCalendarEvent,
+  IconCalendarEvent,
   IconFile,
   IconFolder,
   IconHome,
@@ -28,11 +28,11 @@ export const items = [
     url: "/dashboard/shopping-list",
     icon: IconShoppingCart,
   },
-  // {
-  //   title: "カレンダー",
-  //   url: "/dashboard/calendar",
-  //   icon: IconCalendarEvent,
-  // },
+  {
+    title: "カレンダー",
+    url: "/dashboard/calendar",
+    icon: IconCalendarEvent,
+  },
   {
     title: "設定",
     url: "/dashboard/setting",
