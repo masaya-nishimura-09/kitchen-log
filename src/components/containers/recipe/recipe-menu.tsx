@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Spinner } from "@/components/ui/spinner"
 import type { Recipe } from "@/types/recipe/recipe"
+import EventForm from "./event-form"
 
 export default function RecipeMenu({ recipe }: { recipe: Recipe }) {
   const [isPending, startTransition] = useTransition()
@@ -40,6 +41,7 @@ export default function RecipeMenu({ recipe }: { recipe: Recipe }) {
           {isPending && <Spinner />}
           {isPending ? "買い物リストに追加中..." : "買い物リストに追加"}
         </DropdownMenuItem>
+        <EventForm id={recipe.id} />
       </DropdownMenuContent>
     </DropdownMenu>
   )
