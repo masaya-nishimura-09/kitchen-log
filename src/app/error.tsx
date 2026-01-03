@@ -9,7 +9,7 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 
-export default function Error({ reset }: { reset: () => void }) {
+export default function ErrorPage({ reset }: { reset: () => void }) {
   return (
     <div className="flex min-h-screen items-center justify-center">
       <Card className="w-md">
