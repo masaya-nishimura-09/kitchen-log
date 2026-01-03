@@ -17,7 +17,6 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
-import { Separator } from "@/components/ui/separator"
 import type { CalendarEvent } from "@/types/calendar/calendar-event"
 import type { Recipe } from "@/types/recipe/recipe"
 import {
@@ -52,7 +51,7 @@ export default function MainCalendar({
           <EventForm recipes={recipes} />
         </CardAction>
       </CardHeader>
-      <CardContent>
+      <CardContent className="flex flex-col gap-4">
         <Popover open={open} onOpenChange={setOpen}>
           <PopoverTrigger asChild>
             <Button
@@ -81,16 +80,17 @@ export default function MainCalendar({
           </PopoverContent>
         </Popover>
 
-        <Separator className="my-6" />
-        {selectedEvents.length > 0 ? (
-          <div className="size-full grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))]">
-            {selectedEvents.map((e) => (
-              <RecipeCard key={e.id} recipe={e.recipe} />
-            ))}
-          </div>
-        ) : (
-          <p>レシピがありません。</p>
-        )}
+        <div>
+          {selectedEvents.length > 0 ? (
+            <div className="size-full grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))]">
+              {selectedEvents.map((e) => (
+                <RecipeCard key={e.id} recipe={e.recipe} />
+              ))}
+            </div>
+          ) : (
+            <p>レシピがありません。</p>
+          )}
+        </div>
       </CardContent>
     </Card>
   )
