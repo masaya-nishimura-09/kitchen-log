@@ -70,7 +70,7 @@ export default function EventForm({ recipes }: { recipes: Recipe[] }) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="outline">追加</Button>
+        <Button variant="default">新規追加</Button>
       </DialogTrigger>
       <DialogContent className="flex flex-col gap-6">
         <DialogHeader>
