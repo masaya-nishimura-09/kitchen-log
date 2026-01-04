@@ -1,5 +1,6 @@
 "use client"
 
+import { IconAdjustmentsSearch } from "@tabler/icons-react"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
@@ -58,7 +59,15 @@ export default function RecipeSearchForm({
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogTrigger onClick={() => setIsOpen(true)}>詳細検索</DialogTrigger>
+      <DialogTrigger
+        onClick={() => setIsOpen(true)}
+        className="flex gap-2 items-center"
+      >
+        <Button variant="outline">
+          <IconAdjustmentsSearch />
+          詳細検索
+        </Button>
+      </DialogTrigger>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>詳細検索</DialogTitle>

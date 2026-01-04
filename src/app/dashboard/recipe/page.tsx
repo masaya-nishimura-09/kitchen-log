@@ -1,3 +1,4 @@
+import { IconPlus } from "@tabler/icons-react"
 import Link from "next/link"
 import { notFound } from "next/navigation"
 import {
@@ -31,10 +32,16 @@ export default async function Page({
     <Card className="size-full">
       <CardHeader className="flex flex-col md:flex-row justify-between gap-2">
         <CardTitle>レシピ</CardTitle>
-        <div className="flex justify-end items-center gap-2">
+        <div className="flex justify-end items-center gap-4">
           <RecipeSearch ingredients={ingredients} tags={tags} />
           <Button type="button">
-            <Link href="/dashboard/recipe/new">新規追加</Link>
+            <Link
+              href="/dashboard/recipe/new"
+              className="flex items-center gap-2"
+            >
+              <IconPlus />
+              作成
+            </Link>
           </Button>
         </div>
       </CardHeader>

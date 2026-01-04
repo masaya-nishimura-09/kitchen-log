@@ -33,7 +33,7 @@ export default async function Page(props: {
             />
           </form>
           <Button type="button">
-            <Link href="/dashboard/set-meal/new">新規追加</Link>
+            <Link href="/dashboard/set-meal/new">作成</Link>
           </Button>
         </div>
       </CardHeader>
