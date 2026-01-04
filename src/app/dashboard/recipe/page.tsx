@@ -6,8 +6,7 @@ import {
   fetchRecipes,
   fetchTags,
 } from "@/actions/recipe/fetch"
-import NoRecipes from "@/components/containers/recipe/no-recipes"
-import RecipeCard from "@/components/containers/recipe/recipe-card"
+import Recipes from "@/components/containers/recipe/recipes"
 import RecipeSearch from "@/components/containers/recipe/search/recipe-search"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -46,15 +45,7 @@ export default async function Page({
         </div>
       </CardHeader>
       <CardContent>
-        {recipes.length > 0 ? (
-          <div className="size-full grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))]">
-            {recipes.map((recipe) => (
-              <RecipeCard key={recipe.id} recipe={recipe} />
-            ))}
-          </div>
-        ) : (
-          <NoRecipes />
-        )}
+        <Recipes recipes={recipes} size="280" />
       </CardContent>
     </Card>
   )

@@ -1,4 +1,3 @@
-import RecipeCard from "@/components/containers/recipe/recipe-card"
 import {
   Card,
   CardAction,
@@ -8,6 +7,7 @@ import {
 } from "@/components/ui/card"
 import type { Recipe } from "@/types/recipe/recipe"
 import SeeMoreButton from "../buttons/see-more-button"
+import Recipes from "./recipes"
 
 export default function LatestRecipes({ recipes }: { recipes: Recipe[] }) {
   return (
@@ -19,15 +19,7 @@ export default function LatestRecipes({ recipes }: { recipes: Recipe[] }) {
         </CardAction>
       </CardHeader>
       <CardContent>
-        {recipes.length > 0 ? (
-          <div className="size-full grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))]">
-            {recipes.map((recipe) => (
-              <RecipeCard key={recipe.id} recipe={recipe} />
-            ))}
-          </div>
-        ) : (
-          <p>レシピがありません</p>
-        )}
+        <Recipes recipes={recipes} size="200" />
       </CardContent>
     </Card>
   )
