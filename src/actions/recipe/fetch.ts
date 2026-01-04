@@ -81,52 +81,25 @@ export async function fetchRecipes(
     )
   }
 
-  const titleParam = searchParams?.title || ""
+  const titleParam = searchParams?.title || null
+
+  let ingredientParam = searchParams?.ingredients || []
+  if (!Array.isArray(ingredientParam)) {
+    ingredientParam = [ingredientParam]
+  }
+
+  let tagParam = searchParams?.tags || []
+  if (!Array.isArray(tagParam)) {
+    tagParam = [tagParam]
+  }
 
   const supabase = createClient(cookies())
-  const { data, error } = await supabase
-    .from("recipes")
-    .select(
-      `
-      id,
-      user_id,
-      title,
-      image_url,
-      memo,
-      updated_at,
-      created_at,
-      tags (
-        id,
-        recipe_id,
-        user_id,
-        name,
-        updated_at,
-        created_at
-      ),
-      ingredients (
-        id,
-        recipe_id,
-        user_id,
-        name,
-        amount,
-        unit,
-        order,
-        updated_at,
-        created_at
-      ),
-      steps (
-        id,
-        recipe_id,
-        user_id,
-        text,
-        order,
-        updated_at,
-        created_at
-      )`,
-    )
-    .eq("user_id", userId)
-    .like("title", `%${titleParam}%`)
-    .order("updated_at", { ascending: false })
+  const { data, error } = await supabase.rpc("search_recipes", {
+    p_user_id: userId,
+    p_title: titleParam,
+    p_ingredients: ingredientParam,
+    p_tags: tagParam,
+  })
 
   if (error) {
     console.error("Recipe Fetch Failed:", error)

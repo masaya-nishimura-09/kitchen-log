@@ -25,14 +25,17 @@ export default function RecipeSearchForm({
   tags: Tag[]
 }) {
   const router = useRouter()
+  const [isOpen, setIsOpen] = useState(false)
 
   const [formData, setFormDataAction] = useState<RecipeSearch>({
-    title: [],
+    title: "",
     ingredients: [],
     tags: [],
   })
 
-  const handleSubmit = () => {
+  const handleSearch = (e: React.FormEvent<HTMLButtonElement>) => {
+    e.preventDefault()
+
     const query = {
       title: formData.title,
       ingredients: formData.ingredients.map((i) => i.name),
@@ -41,21 +44,21 @@ export default function RecipeSearchForm({
 
     const params = new URLSearchParams()
 
-    query.title.forEach((t) => {
-      params.append("title", t)
-    })
+    params.append("title", query.title)
     query.ingredients.forEach((i) => {
       params.append("ingredients", i)
     })
     query.tags.forEach((t) => {
       params.append("tags", t)
     })
+
     router.push(`/dashboard/recipe?${params.toString()}`)
+    setIsOpen(false)
   }
 
   return (
-    <Dialog>
-      <DialogTrigger>詳細検索</DialogTrigger>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+      <DialogTrigger onClick={() => setIsOpen(true)}>詳細検索</DialogTrigger>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>詳細検索</DialogTitle>
@@ -77,7 +80,7 @@ export default function RecipeSearchForm({
           />
         </form>
         <DialogFooter>
-          <Button type="button" onClick={handleSubmit}>
+          <Button type="submit" onClick={handleSearch}>
             検索
           </Button>
         </DialogFooter>

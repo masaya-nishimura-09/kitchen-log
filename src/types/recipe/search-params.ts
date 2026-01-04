@@ -1,3 +1,5 @@
 export interface SearchParams {
-  title?: string
+  title?: string[]
+  ingredients?: string[]
+  tags?: string[]
 }
