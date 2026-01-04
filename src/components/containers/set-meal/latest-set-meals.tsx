@@ -1,6 +1,4 @@
-import Link from "next/link"
 import SetMealCard from "@/components/containers/set-meal/set-meal-card"
-import { Button } from "@/components/ui/button"
 import {
   Card,
   CardAction,
@@ -9,6 +7,7 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import type { SetMeal } from "@/types/set-meal/set-meal"
+import SeeMoreButton from "../buttons/see-more-button"
 
 export default function LatestSetMeals({ setMeals }: { setMeals: SetMeal[] }) {
   return (
@@ -16,9 +15,7 @@ export default function LatestSetMeals({ setMeals }: { setMeals: SetMeal[] }) {
       <CardHeader>
         <CardTitle>最近追加した献立</CardTitle>
         <CardAction>
-          <Button variant="default">
-            <Link href="/dashboard/set-meal">もっと見る</Link>
-          </Button>
+          <SeeMoreButton link="/dashboard/set-meal" />
         </CardAction>
       </CardHeader>
       <CardContent>

@@ -1,6 +1,4 @@
-import Link from "next/link"
 import RecipeCard from "@/components/containers/recipe/recipe-card"
-import { Button } from "@/components/ui/button"
 import {
   Card,
   CardAction,
@@ -9,6 +7,7 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import type { Recipe } from "@/types/recipe/recipe"
+import SeeMoreButton from "../buttons/see-more-button"
 
 export default function LatestRecipes({ recipes }: { recipes: Recipe[] }) {
   return (
@@ -16,9 +15,7 @@ export default function LatestRecipes({ recipes }: { recipes: Recipe[] }) {
       <CardHeader>
         <CardTitle>最近追加したレシピ</CardTitle>
         <CardAction>
-          <Button variant="default">
-            <Link href="/dashboard/recipe">もっと見る</Link>
-          </Button>
+          <SeeMoreButton link="/dashboard/recipe" />
         </CardAction>
       </CardHeader>
       <CardContent>

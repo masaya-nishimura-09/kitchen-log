@@ -1,5 +1,6 @@
 "use client"
 
+import { IconTrash } from "@tabler/icons-react"
 import Link from "next/link"
 import { useState, useTransition } from "react"
 import { createRecipe } from "@/actions/recipe/create"
@@ -115,7 +116,10 @@ export default function RecipeForm({
           <CardAction>
             <AlertDialog>
               <AlertDialogTrigger asChild>
-                <Button variant="outline">レシピを削除</Button>
+                <Button variant="outline" className="flex gap-2 items-center">
+                  <IconTrash />
+                  レシピを削除
+                </Button>
               </AlertDialogTrigger>
               <AlertDialogContent>
                 <AlertDialogHeader>

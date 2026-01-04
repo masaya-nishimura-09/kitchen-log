@@ -1,5 +1,3 @@
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
 import {
   Card,
   CardAction,
@@ -16,6 +14,7 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import type { ShoppingListItem } from "@/types/shopping-list/shopping-list-item"
+import SeeMoreButton from "../buttons/see-more-button"
 
 export default function LatestShoppingList({
   shoppingList,
@@ -27,9 +26,7 @@ export default function LatestShoppingList({
       <CardHeader>
         <CardTitle>最近買い物リストに追加した材料</CardTitle>
         <CardAction>
-          <Button variant="default">
-            <Link href="/dashboard/shopping-list">もっと見る</Link>
-          </Button>
+          <SeeMoreButton link="/dashboard/shopping-list" />
         </CardAction>
       </CardHeader>
       <CardContent>
