@@ -1,9 +1,14 @@
 import { Search } from "lucide-react"
 import Link from "next/link"
 import { notFound } from "next/navigation"
-import { fetchRecipes } from "@/actions/recipe/fetch"
+import {
+  fetchIngredients,
+  fetchRecipes,
+  fetchTags,
+} from "@/actions/recipe/fetch"
 import NoRecipes from "@/components/containers/recipe/no-recipes"
 import RecipeCard from "@/components/containers/recipe/recipe-card"
+import RecipeSearch from "@/components/containers/recipe/search/recipe-search"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -15,7 +20,10 @@ export default async function Page(props: {
   const searchParams = await props.searchParams
 
   const recipes = await fetchRecipes(searchParams)
-  if (!recipes) {
+  const ingredients = await fetchIngredients()
+  const tags = await fetchTags()
+
+  if (!recipes || !ingredients || !tags) {
     notFound()
   }
 
@@ -33,6 +41,7 @@ export default async function Page(props: {
               className="pl-8 w-full"
             />
           </form>
+          <RecipeSearch ingredients={ingredients} tags={tags} />
           <Button type="button">
             <Link href="/dashboard/recipe/new">新規追加</Link>
           </Button>
