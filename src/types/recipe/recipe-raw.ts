@@ -1,3 +1,6 @@
+import type { IngredientRaw } from "./ingredient-raw"
+import type { TagRaw } from "./tag-raw"
+
 export interface RecipeRaw {
   id: number
   user_id: string
@@ -6,25 +9,8 @@ export interface RecipeRaw {
   memo: string | null
   updated_at: string
   created_at: string
-  tags: Array<{
-    id: number
-    recipe_id: number
-    user_id: string
-    name: string
-    updated_at: string
-    created_at: string
-  }>
-  ingredients: Array<{
-    id: number
-    recipe_id: number
-    user_id: string
-    name: string
-    amount: string | null
-    unit: string
-    order: number
-    updated_at: string
-    created_at: string
-  }>
+  tags: Array<TagRaw>
+  ingredients: Array<IngredientRaw>
   steps: Array<{
     id: number
     recipe_id: number

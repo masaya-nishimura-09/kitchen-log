@@ -2,9 +2,11 @@
 
 import { cookies } from "next/headers"
 import { getUserId } from "@/actions/auth/auth"
+import { ingredientConverter } from "@/lib/recipe/ingredient-converter"
 import { recipeConverter } from "@/lib/recipe/recipe-converter"
+import { tagConverter } from "@/lib/recipe/tag-converter"
 import { createClient } from "@/lib/supabase/server"
-import type { Recipe } from "@/types/recipe/recipe"
+import type { Ingredient, Recipe, Tag } from "@/types/recipe/recipe"
 import type { RecipeInput } from "@/types/recipe/recipe-input"
 import type { SearchParams } from "@/types/recipe/search-params"
 
@@ -79,52 +81,25 @@ export async function fetchRecipes(
     )
   }
 
-  const titleParam = searchParams?.title || ""
+  const titleParam = searchParams?.title || null
+
+  let ingredientParam = searchParams?.ingredients || []
+  if (!Array.isArray(ingredientParam)) {
+    ingredientParam = [ingredientParam]
+  }
+
+  let tagParam = searchParams?.tags || []
+  if (!Array.isArray(tagParam)) {
+    tagParam = [tagParam]
+  }
 
   const supabase = createClient(cookies())
-  const { data, error } = await supabase
-    .from("recipes")
-    .select(
-      `
-      id,
-      user_id,
-      title,
-      image_url,
-      memo,
-      updated_at,
-      created_at,
-      tags (
-        id,
-        recipe_id,
-        user_id,
-        name,
-        updated_at,
-        created_at
-      ),
-      ingredients (
-        id,
-        recipe_id,
-        user_id,
-        name,
-        amount,
-        unit,
-        order,
-        updated_at,
-        created_at
-      ),
-      steps (
-        id,
-        recipe_id,
-        user_id,
-        text,
-        order,
-        updated_at,
-        created_at
-      )`,
-    )
-    .eq("user_id", userId)
-    .like("title", `%${titleParam}%`)
-    .order("updated_at", { ascending: false })
+  const { data, error } = await supabase.rpc("search_recipes", {
+    p_user_id: userId,
+    p_title: titleParam,
+    p_ingredients: ingredientParam,
+    p_tags: tagParam,
+  })
 
   if (error) {
     console.error("Recipe Fetch Failed:", error)
@@ -276,4 +251,48 @@ export async function fetchLatestRecipes(limit: number): Promise<Recipe[]> {
   }
 
   return data?.map(recipeConverter)
+}
+
+export async function fetchIngredients(): Promise<Ingredient[]> {
+  const userId = await getUserId()
+  if (!userId) {
+    throw new Error(
+      "認証情報が取得できませんでした。再度ログインしてください。",
+    )
+  }
+
+  const supabase = createClient(cookies())
+  const { data, error } = await supabase
+    .from("ingredients")
+    .select()
+    .eq("user_id", userId)
+
+  if (error) {
+    console.error("Ingredients Fetch Failed:", error)
+    throw new Error("材料の取得に失敗しました。")
+  }
+
+  return data?.map(ingredientConverter)
+}
+
+export async function fetchTags(): Promise<Tag[]> {
+  const userId = await getUserId()
+  if (!userId) {
+    throw new Error(
+      "認証情報が取得できませんでした。再度ログインしてください。",
+    )
+  }
+
+  const supabase = createClient(cookies())
+  const { data, error } = await supabase
+    .from("tags")
+    .select()
+    .eq("user_id", userId)
+
+  if (error) {
+    console.error("Ingredients Fetch Failed:", error)
+    throw new Error("レシピタグの取得に失敗しました。")
+  }
+
+  return data?.map(tagConverter)
 }
