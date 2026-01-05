@@ -2,7 +2,6 @@
 
 import { IconCircleX } from "@tabler/icons-react"
 import { type Dispatch, type SetStateAction, useState } from "react"
-import { AccordionContent } from "@/components/ui/accordion"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -47,7 +46,7 @@ export default function TagInput({
   }
 
   return (
-    <AccordionContent className="grid gap-2 max-w-xl">
+    <div className="grid gap-2 w-full">
       <div className="flex w-full items-center gap-2">
         <Input
           id="tag"
@@ -87,6 +86,6 @@ export default function TagInput({
           </p>
         ))}
       </div>
-    </AccordionContent>
+    </div>
   )
 }

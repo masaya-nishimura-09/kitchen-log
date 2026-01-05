@@ -36,9 +36,9 @@ import { Input } from "@/components/ui/input"
 import { Spinner } from "@/components/ui/spinner"
 import { Textarea } from "@/components/ui/textarea"
 import type { RecipeInput, RecipeState } from "@/types/recipe/recipe-input"
-import IngredientInput from "./ingredient-input"
-import StepInput from "./step-input"
-import TagInput from "./tag-input"
+import IngredientInput from "./inputs/ingredient"
+import StepInput from "./inputs/step"
+import TagInput from "./inputs/tag"
 
 export default function RecipeForm({
   recipe,
@@ -228,29 +228,35 @@ export default function RecipeForm({
 
             <AccordionItem value="tag">
               <AccordionTrigger>タグ</AccordionTrigger>
-              <TagInput
-                formData={formData}
-                setFormDataAction={setFormDataAction}
-                state={state}
-              />
+              <AccordionContent className="max-w-xl">
+                <TagInput
+                  formData={formData}
+                  setFormDataAction={setFormDataAction}
+                  state={state}
+                />
+              </AccordionContent>
             </AccordionItem>
 
             <AccordionItem value="ingredient">
               <AccordionTrigger>材料</AccordionTrigger>
-              <IngredientInput
-                formData={formData}
-                setFormDataAction={setFormDataAction}
-                state={state}
-              />
+              <AccordionContent className="max-w-xl">
+                <IngredientInput
+                  formData={formData}
+                  setFormDataAction={setFormDataAction}
+                  state={state}
+                />
+              </AccordionContent>
             </AccordionItem>
 
             <AccordionItem value="step">
               <AccordionTrigger>手順</AccordionTrigger>
-              <StepInput
-                formData={formData}
-                setFormDataAction={setFormDataAction}
-                state={state}
-              />
+              <AccordionContent className="max-w-xl">
+                <StepInput
+                  formData={formData}
+                  setFormDataAction={setFormDataAction}
+                  state={state}
+                />
+              </AccordionContent>
             </AccordionItem>
           </Accordion>
 
