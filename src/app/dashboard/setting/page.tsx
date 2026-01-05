@@ -31,7 +31,7 @@ export default async function Page() {
         <CardTitle>設定</CardTitle>
         <CardDescription>ユーザー情報を変更できます。</CardDescription>
       </CardHeader>
-      <CardContent className="flex flex-col gap-2">
+      <CardContent className="flex flex-col gap-2 max-w-lg">
         <UsernameForm username={user.user_metadata.name} />
         <Separator className="my-6" />
         <EmailForm email={user.email} />
