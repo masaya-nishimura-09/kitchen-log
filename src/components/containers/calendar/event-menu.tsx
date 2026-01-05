@@ -2,7 +2,6 @@
 
 import { IconDotsVertical } from "@tabler/icons-react"
 import { useTransition } from "react"
-import { Toaster, toast } from "sonner"
 import { deleteEvent } from "@/actions/calendar/delete"
 import {
   DropdownMenu,
@@ -20,13 +19,11 @@ export default function EventMenu({ id }: { id: number }) {
 
     startTransition(async () => {
       await deleteEvent(id)
-      toast.success("追加に成功しました！")
     })
   }
 
   return (
     <DropdownMenu>
-      <Toaster richColors position="top-center" />
       <DropdownMenuTrigger>
         <IconDotsVertical />
       </DropdownMenuTrigger>

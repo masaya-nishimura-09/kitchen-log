@@ -12,13 +12,13 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { Spinner } from "@/components/ui/spinner"
-import { unitList } from "@/lib/recipe/ingredient-unit"
 import type {
   ShoppingListItemInput,
   ShoppingListItemState,
 } from "@/types/shopping-list/shopping-list-item-input"
+import ItemInput from "./item-input"
 
-export default function CreateForm() {
+export default function ShoppingListItemForm() {
   const [isPending, startTransition] = useTransition()
   const [state, setState] = useState<ShoppingListItemState>({
     success: true,
@@ -26,29 +26,14 @@ export default function CreateForm() {
     errors: {},
   })
 
-  const [formData, _setFormDataAction] = useState<ShoppingListItemInput>({
-    id: 0,
-    name: "",
-    amount: "",
-    unit: unitList[0].value,
-    status: false,
-  })
+  const [formData, setFormDataAction] = useState<ShoppingListItemInput[]>([])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
     const fd = new FormData()
 
-    fd.append(
-      "shoppingListItemData",
-      JSON.stringify({
-        id: formData.id,
-        name: formData.name,
-        amount: formData.amount,
-        unit: formData.unit,
-        status: formData.status,
-      }),
-    )
+    fd.append("shoppingListItemData", JSON.stringify(formData))
 
     startTransition(async () => {
       const result = await createItem(fd)
@@ -66,9 +51,14 @@ export default function CreateForm() {
       <CardContent>
         <form
           id="new-item-form"
-          className="flex flex-col gap-6"
+          className="flex flex-col gap-6 w-full"
           onSubmit={handleSubmit}
         >
+          <ItemInput
+            formData={formData}
+            setFormDataAction={setFormDataAction}
+            state={state}
+          />
           <div aria-live="polite" aria-atomic="true">
             {state?.message && (
               <p className="mt-2 text-red-500 text-sm">{state.message}</p>

@@ -1,6 +1,8 @@
 "use server"
 
+import { revalidatePath } from "next/cache"
 import { cookies } from "next/headers"
+import { redirect } from "next/navigation"
 import { getUserId } from "@/actions/auth/auth"
 import { fetchShoppingList } from "@/actions/shopping-list/fetch"
 import { zenkakuToHankaku } from "@/lib/recipe/zenkaku-to-hankaku"
@@ -41,28 +43,32 @@ export async function createItem(
 ): Promise<ShoppingListItemState> {
   const itemData = JSON.parse(
     formData.get("shoppingListItemData") as string,
-  ) as ShoppingListItemInput
+  ) as ShoppingListItemInput[]
 
-  const validatedFields = ShoppingListItemFormSchema.safeParse({
-    id: itemData.id,
-    name: itemData.name,
-    amount: itemData.amount,
-    unit: itemData.unit,
-    status: itemData.status,
-  })
+  for (const i of itemData) {
+    const validatedFields = ShoppingListItemFormSchema.safeParse({
+      id: i.id,
+      name: i.name,
+      amount: i.amount,
+      unit: i.unit,
+      status: i.status,
+    })
 
-  if (!validatedFields.success) {
-    console.error(validatedFields.error)
-    return {
-      success: false,
-      errors: validatedFields.error.flatten().fieldErrors,
-      message: "入力内容に誤りがあります。",
+    if (!validatedFields.success) {
+      console.error(validatedFields.error)
+      return {
+        success: false,
+        errors: validatedFields.error.flatten().fieldErrors,
+        message: "入力内容に誤りがあります。",
+      }
     }
   }
-  const { name, amount, unit } = validatedFields.data
 
-  const convertedName = zenkakuToHankaku(name)
-  const convertedAmount = zenkakuToHankaku(amount)
+  const convertedData = itemData.map((i) => ({
+    name: zenkakuToHankaku(i.name),
+    amount: zenkakuToHankaku(i.amount),
+    unit: i.unit,
+  }))
 
   const userId = await getUserId()
   if (!userId) {
@@ -72,20 +78,29 @@ export async function createItem(
     }
   }
 
+  let shoppingList = []
   try {
-    const list = await fetchShoppingList()
-    const sameItem = list.find(
-      (item) => item.name === convertedName && item.unit === unit,
+    const result = await fetchShoppingList()
+    shoppingList = result.filter((r) => r.status === false)
+  } catch (error) {
+    console.error(error)
+    return {
+      success: false,
+      message: "アイテムの登録に失敗しました。",
+    }
+  }
+
+  for (const data of convertedData) {
+    const sameItem = shoppingList.find(
+      (item) => item.name === data.name && item.unit === data.unit,
     )
 
-    if (list.length < 1 || !sameItem) {
-      await insertItem(userId, convertedName, convertedAmount, unit)
-      return {
-        success: true,
-      }
+    if (shoppingList.length < 1 || !sameItem) {
+      await insertItem(userId, data.name, data.amount, data.unit)
+      continue
     }
 
-    const newAmount = Number(convertedAmount) + Number(sameItem.amount)
+    const newAmount = Number(data.amount) + Number(sameItem.amount)
     if (!Number.isNaN(newAmount)) {
       const supabase = createClient(cookies())
       const { error } = await supabase
@@ -103,9 +118,6 @@ export async function createItem(
           message: "アイテムの登録に失敗しました。",
         }
       }
-      return {
-        success: true,
-      }
     } else {
       console.error("Failed")
       return {
@@ -113,13 +125,9 @@ export async function createItem(
         message: "アイテムの登録に失敗しました。",
       }
     }
-  } catch (error) {
-    console.error(error)
-    return {
-      success: false,
-      message: "アイテムの登録に失敗しました。",
-    }
   }
+  revalidatePath("/", "layout")
+  redirect(`/dashboard/shopping-list`)
 }
 
 export async function createFromRecipe(recipes: Recipe[]) {
