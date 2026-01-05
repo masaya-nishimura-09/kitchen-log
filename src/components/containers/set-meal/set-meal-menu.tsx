@@ -3,7 +3,6 @@
 import { IconDots } from "@tabler/icons-react"
 import Link from "next/link"
 import { useTransition } from "react"
-import { Toaster, toast } from "sonner"
 import { createFromRecipe } from "@/actions/shopping-list/create"
 import {
   DropdownMenu,
@@ -23,13 +22,11 @@ export default function SetMealMenu({ setMeal }: { setMeal: SetMeal }) {
 
     startTransition(async () => {
       await createFromRecipe(setMeal.recipes)
-      toast.success("追加に成功しました！")
     })
   }
 
   return (
     <DropdownMenu>
-      <Toaster richColors position="top-center" />
       <DropdownMenuTrigger>
         <IconDots />
       </DropdownMenuTrigger>
