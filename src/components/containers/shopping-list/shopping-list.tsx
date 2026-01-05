@@ -11,6 +11,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import type { ShoppingListItem } from "@/types/shopping-list/shopping-list-item"
 import ShoppingListForm from "./shopping-list-form"
 import ShoppingListTable from "./shopping-list-table"
+import CreateButton from "../button/create-button"
 
 export default function ShoppingListItems({
   shoppingList,
@@ -25,7 +26,7 @@ export default function ShoppingListItems({
       <CardHeader>
         <CardTitle>買い物リスト</CardTitle>
         <CardAction>
-          <ShoppingListForm />
+        <CreateButton link="/dashboard/shopping-list/new" />
         </CardAction>
       </CardHeader>
       <CardContent>
