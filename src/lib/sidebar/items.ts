@@ -6,6 +6,7 @@ import {
   IconSettings,
   IconShoppingCart,
 } from "@tabler/icons-react"
+import { getDateStr } from "@/lib/date/date"
 
 export const items = [
   {
@@ -30,7 +31,7 @@ export const items = [
   },
   {
     title: "カレンダー",
-    url: "/dashboard/calendar",
+    url: `/dashboard/calendar/${getDateStr()}`,
     icon: IconCalendarEvent,
   },
   {
