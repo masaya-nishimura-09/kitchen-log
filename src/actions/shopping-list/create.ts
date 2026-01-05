@@ -141,13 +141,15 @@ export async function createFromRecipe(recipes: Recipe[]) {
 
     fd.append(
       "shoppingListItemData",
-      JSON.stringify({
-        id: ingredient.id,
-        name: ingredient.name,
-        amount: ingredient.amount,
-        unit: ingredient.unit,
-        status: false,
-      }),
+      JSON.stringify([
+        {
+          id: ingredient.id,
+          name: ingredient.name,
+          amount: ingredient.amount,
+          unit: ingredient.unit,
+          status: false,
+        },
+      ]),
     )
 
     const result = await createItem(fd)
