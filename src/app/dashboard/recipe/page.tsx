@@ -1,21 +1,19 @@
-import { IconPlus } from "@tabler/icons-react"
-import Link from "next/link"
 import { notFound } from "next/navigation"
 import {
   fetchIngredients,
   fetchRecipes,
   fetchTags,
 } from "@/actions/recipe/fetch"
+import CreateButton from "@/components/containers/buttons/create-button"
 import Recipes from "@/components/containers/recipe/recipes"
-import RecipeSearch from "@/components/containers/recipe/search/recipe-search"
-import { Button } from "@/components/ui/button"
+import RecipeSearchForm from "@/components/containers/recipe/search/recipe-search-form"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import type { SearchParams } from "@/types/recipe/search-params"
+import type { RecipeSearchParams } from "@/types/recipe/recipe-search-params"
 
 export default async function Page({
   searchParams,
 }: {
-  searchParams: SearchParams
+  searchParams: RecipeSearchParams
 }) {
   const params = await searchParams
 
@@ -32,16 +30,8 @@ export default async function Page({
       <CardHeader className="flex flex-col md:flex-row justify-between gap-2">
         <CardTitle>レシピ</CardTitle>
         <div className="flex justify-end items-center gap-4">
-          <RecipeSearch ingredients={ingredients} tags={tags} />
-          <Button type="button">
-            <Link
-              href="/dashboard/recipe/new"
-              className="flex items-center gap-2"
-            >
-              <IconPlus />
-              作成
-            </Link>
-          </Button>
+          <RecipeSearchForm ingredients={ingredients} tags={tags} />
+          <CreateButton link="/dashboard/recipe/new" />
         </div>
       </CardHeader>
       <CardContent>

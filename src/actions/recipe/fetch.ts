@@ -8,7 +8,7 @@ import { tagConverter } from "@/lib/recipe/tag-converter"
 import { createClient } from "@/lib/supabase/server"
 import type { Ingredient, Recipe, Tag } from "@/types/recipe/recipe"
 import type { RecipeInput } from "@/types/recipe/recipe-input"
-import type { SearchParams } from "@/types/recipe/search-params"
+import type { RecipeSearchParams } from "@/types/recipe/recipe-search-params"
 
 export async function fetchRecipe(recipeId: number): Promise<Recipe> {
   const userId = await getUserId()
@@ -72,7 +72,7 @@ export async function fetchRecipe(recipeId: number): Promise<Recipe> {
 }
 
 export async function fetchRecipes(
-  searchParams: SearchParams | undefined,
+  searchParams: RecipeSearchParams | undefined,
 ): Promise<Recipe[]> {
   const userId = await getUserId()
   if (!userId) {

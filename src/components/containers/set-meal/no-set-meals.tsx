@@ -12,8 +12,8 @@ export default function NoSetMeals() {
   return (
     <Card className="w-xs md:w-md">
       <CardHeader>
-        <CardTitle>献立がまだ登録されていません</CardTitle>
-        <CardDescription>最初の献立を作成してみましょう。</CardDescription>
+        <CardTitle>献立がありません</CardTitle>
+        <CardDescription>献立を作成してみましょう。</CardDescription>
       </CardHeader>
       <CardFooter>
         <Button>

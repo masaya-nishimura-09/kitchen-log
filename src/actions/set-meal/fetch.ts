@@ -4,9 +4,9 @@ import { cookies } from "next/headers"
 import { getUserId } from "@/actions/auth/auth"
 import { setMealConverter } from "@/lib/set-meal/set-meal-converter"
 import { createClient } from "@/lib/supabase/server"
-import type { SearchParams } from "@/types/recipe/search-params"
 import type { SetMeal } from "@/types/set-meal/set-meal"
 import type { SetMealInput } from "@/types/set-meal/set-meal-input"
+import type { SetMealSearchParams } from "@/types/set-meal/set-meal-search-params"
 
 export async function fetchSetMeal(setMealId: number): Promise<SetMeal> {
   const userId = await getUserId()
@@ -83,7 +83,7 @@ export async function fetchSetMeal(setMealId: number): Promise<SetMeal> {
 }
 
 export async function fetchSetMeals(
-  searchParams: SearchParams | undefined,
+  searchParams: SetMealSearchParams | undefined,
 ): Promise<SetMeal[]> {
   const userId = await getUserId()
   if (!userId) {
@@ -97,8 +97,7 @@ export async function fetchSetMeals(
   const supabase = createClient(cookies())
   const { data, error } = await supabase
     .from("set_meals")
-    .select(
-      `
+    .select(`
       id, 
       user_id, 
       title, 
@@ -112,51 +111,50 @@ export async function fetchSetMeals(
         updated_at,
         created_at,
         recipes ( 
-           id,
-           user_id, 
-           title,
-           image_url,
-           memo,
-           updated_at,
+          id,
+          user_id, 
+          title,
+          image_url,
+          memo,
+          updated_at,
           created_at,
-           tags (
-              id,
-              recipe_id,
-              user_id,
-              name,
-              updated_at,
-              created_at
-            ),
-            ingredients (
-              id,
-              recipe_id,
-              user_id,
-              name,
-              amount,
-              unit,
-              order,
-              updated_at,
-              created_at
-            ),
-            steps (
-              id,
-              recipe_id,
-              user_id,
-              text,
-              order,
-              updated_at,
-              created_at
-            )
+          tags (
+            id,
+            recipe_id,
+            user_id,
+            name,
+            updated_at,
+            created_at
+          ),
+          ingredients (
+            id,
+            recipe_id,
+            user_id,
+            name,
+            amount,
+            unit,
+            order,
+            updated_at,
+            created_at
+          ),
+          steps (
+            id,
+            recipe_id,
+            user_id,
+            text,
+            order,
+            updated_at,
+            created_at
           )
+        )
       )
-      `,
-    )
+    `)
     .eq("user_id", userId)
     .like("title", `%${titleParam}%`)
     .order("updated_at", { ascending: false })
 
   if (error) {
-    console.error("Set meal Fetch Failed:", error)
+    console.error("Set Meal Fetch Failed:", error)
     throw new Error("献立の取得に失敗しました。")
   }
 

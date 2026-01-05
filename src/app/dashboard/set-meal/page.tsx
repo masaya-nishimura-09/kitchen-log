@@ -1,19 +1,20 @@
-import { Search } from "lucide-react"
-import Link from "next/link"
 import { notFound } from "next/navigation"
 import { fetchSetMeals } from "@/actions/set-meal/fetch"
+import CreateButton from "@/components/containers/buttons/create-button"
 import NoSetMeals from "@/components/containers/set-meal/no-set-meals"
+import SetMealSearchForm from "@/components/containers/set-meal/search/set-meal-search-form"
 import SetMealCard from "@/components/containers/set-meal/set-meal-card"
-import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import type { SearchParams } from "@/types/recipe/search-params"
+import type { SetMealSearchParams } from "@/types/set-meal/set-meal-search-params"
 
-export default async function Page(props: {
-  searchParams?: Promise<SearchParams>
+export default async function Page({
+  searchParams,
+}: {
+  searchParams: SetMealSearchParams
 }) {
-  const searchParams = await props.searchParams
-  const setMeals = await fetchSetMeals(searchParams)
+  const params = await searchParams
+
+  const setMeals = await fetchSetMeals(params)
   if (!setMeals) {
     notFound()
   }
@@ -23,18 +24,8 @@ export default async function Page(props: {
       <CardHeader className="flex flex-col md:flex-row justify-between gap-2">
         <CardTitle>献立</CardTitle>
         <div className="flex justify-end items-center gap-2">
-          <form method="GET" className="relative max-w-lg">
-            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-            <Input
-              type="search"
-              name="title"
-              placeholder="検索..."
-              className="pl-8 w-full"
-            />
-          </form>
-          <Button type="button">
-            <Link href="/dashboard/set-meal/new">作成</Link>
-          </Button>
+          <SetMealSearchForm />
+          <CreateButton link="/dashboard/set-meal/new" />
         </div>
       </CardHeader>
       <CardContent>
