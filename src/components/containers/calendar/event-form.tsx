@@ -27,6 +27,7 @@ import {
   formatDateToYYYYMMDD,
   getDateWithDayOfWeek,
 } from "../../../lib/date/date"
+import CreateButton from "../buttons/create-button"
 import RecipeInput from "./recipe-input"
 
 export default function EventForm({ recipes }: { recipes: Recipe[] }) {
@@ -70,7 +71,7 @@ export default function EventForm({ recipes }: { recipes: Recipe[] }) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="default">作成</Button>
+        <CreateButton link="/dashboard/shopping-list/new" />
       </DialogTrigger>
       <DialogContent className="flex flex-col gap-6">
         <DialogHeader>
