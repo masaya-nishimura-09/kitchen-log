@@ -9,9 +9,8 @@ import {
 } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import type { ShoppingListItem } from "@/types/shopping-list/shopping-list-item"
-import ShoppingListForm from "./shopping-list-form"
-import ShoppingListTable from "./shopping-list-table"
 import CreateButton from "../button/create-button"
+import ShoppingListTable from "./shopping-list-table"
 
 export default function ShoppingListItems({
   shoppingList,
@@ -26,7 +25,7 @@ export default function ShoppingListItems({
       <CardHeader>
         <CardTitle>買い物リスト</CardTitle>
         <CardAction>
-        <CreateButton link="/dashboard/shopping-list/new" />
+          <CreateButton link="/dashboard/shopping-list/new" />
         </CardAction>
       </CardHeader>
       <CardContent>
