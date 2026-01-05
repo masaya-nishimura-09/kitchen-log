@@ -27,7 +27,7 @@ import {
   formatDateToYYYYMMDD,
   getDateWithDayOfWeek,
 } from "../../../lib/date/date"
-import CreateButton from "../buttons/create-button"
+import CreateButton from "../button/create-button"
 import RecipeInput from "./recipe-input"
 
 export default function EventForm({ recipes }: { recipes: Recipe[] }) {

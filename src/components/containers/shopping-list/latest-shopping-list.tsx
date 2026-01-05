@@ -14,7 +14,7 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import type { ShoppingListItem } from "@/types/shopping-list/shopping-list-item"
-import SeeMoreButton from "../buttons/see-more-button"
+import SeeMoreButton from "../button/see-more-button"
 
 export default function LatestShoppingList({
   shoppingList,

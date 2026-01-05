@@ -7,7 +7,7 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import type { SetMeal } from "@/types/set-meal/set-meal"
-import SeeMoreButton from "../buttons/see-more-button"
+import SeeMoreButton from "../button/see-more-button"
 
 export default function LatestSetMeals({ setMeals }: { setMeals: SetMeal[] }) {
   return (

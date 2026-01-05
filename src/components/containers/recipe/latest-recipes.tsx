@@ -6,7 +6,7 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import type { Recipe } from "@/types/recipe/recipe"
-import SeeMoreButton from "../buttons/see-more-button"
+import SeeMoreButton from "../button/see-more-button"
 import Recipes from "./recipes"
 
 export default function LatestRecipes({ recipes }: { recipes: Recipe[] }) {

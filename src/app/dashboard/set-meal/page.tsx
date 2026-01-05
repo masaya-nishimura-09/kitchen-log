@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation"
 import { fetchSetMeals } from "@/actions/set-meal/fetch"
-import CreateButton from "@/components/containers/buttons/create-button"
+import CreateButton from "@/components/containers/button/create-button"
 import NoSetMeals from "@/components/containers/set-meal/no-set-meals"
 import SetMealSearchForm from "@/components/containers/set-meal/search/set-meal-search-form"
 import SetMealCard from "@/components/containers/set-meal/set-meal-card"

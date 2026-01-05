@@ -4,7 +4,7 @@ import {
   fetchRecipes,
   fetchTags,
 } from "@/actions/recipe/fetch"
-import CreateButton from "@/components/containers/buttons/create-button"
+import CreateButton from "@/components/containers/button/create-button"
 import Recipes from "@/components/containers/recipe/recipes"
 import RecipeSearchForm from "@/components/containers/recipe/search/recipe-search-form"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"

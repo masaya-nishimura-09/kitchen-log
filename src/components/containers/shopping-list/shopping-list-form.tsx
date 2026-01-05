@@ -25,7 +25,7 @@ import type {
   ShoppingListItemInput,
   ShoppingListItemState,
 } from "@/types/shopping-list/shopping-list-item-input"
-import CreateButton from "../buttons/create-button"
+import CreateButton from "../button/create-button"
 
 export default function ShoppingListForm() {
   const [isPending, startTransition] = useTransition()
