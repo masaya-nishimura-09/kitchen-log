@@ -1,5 +1,6 @@
 "use client"
 
+import { IconTrash } from "@tabler/icons-react"
 import Link from "next/link"
 import { useState, useTransition } from "react"
 import { createSetMeal } from "@/actions/set-meal/create"
@@ -39,7 +40,6 @@ import type {
   SetMealInput,
   SetMealState,
 } from "@/types/set-meal/set-meal-input"
-import DeleteButton from "../button/delete-button"
 import RecipesInput from "./recipes-input"
 
 export default function SetMealForm({
@@ -109,7 +109,10 @@ export default function SetMealForm({
             <CardAction>
               <AlertDialog>
                 <AlertDialogTrigger asChild>
-                  <DeleteButton text="献立を削除" />
+                  <Button variant="outline" className="flex gap-2 items-center">
+                    <IconTrash />
+                    献立を削除
+                  </Button>
                 </AlertDialogTrigger>
                 <AlertDialogContent>
                   <AlertDialogHeader>

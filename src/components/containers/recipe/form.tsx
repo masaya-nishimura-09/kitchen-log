@@ -1,5 +1,6 @@
 "use client"
 
+import { IconTrash } from "@tabler/icons-react"
 import Link from "next/link"
 import { useState, useTransition } from "react"
 import { createRecipe } from "@/actions/recipe/create"
@@ -35,7 +36,6 @@ import { Input } from "@/components/ui/input"
 import { Spinner } from "@/components/ui/spinner"
 import { Textarea } from "@/components/ui/textarea"
 import type { RecipeInput, RecipeState } from "@/types/recipe/recipe-input"
-import DeleteButton from "../button/delete-button"
 import IngredientInput from "./inputs/ingredient"
 import StepInput from "./inputs/step"
 import TagInput from "./inputs/tag"
@@ -116,7 +116,10 @@ export default function RecipeForm({
           <CardAction>
             <AlertDialog>
               <AlertDialogTrigger asChild>
-                <DeleteButton text="レシピを削除" />
+                <Button variant="outline" className="flex gap-2 items-center">
+                  <IconTrash />
+                  レシピを削除
+                </Button>
               </AlertDialogTrigger>
               <AlertDialogContent>
                 <AlertDialogHeader>
