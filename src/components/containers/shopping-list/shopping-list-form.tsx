@@ -25,6 +25,7 @@ import type {
   ShoppingListItemInput,
   ShoppingListItemState,
 } from "@/types/shopping-list/shopping-list-item-input"
+import CreateButton from "../buttons/create-button"
 
 export default function ShoppingListForm() {
   const [isPending, startTransition] = useTransition()
@@ -71,7 +72,7 @@ export default function ShoppingListForm() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="default">作成</Button>
+        <CreateButton link="/dashboard/shopping-list/new" />
       </DialogTrigger>
       <DialogContent className="flex flex-col gap-6">
         <DialogHeader>
