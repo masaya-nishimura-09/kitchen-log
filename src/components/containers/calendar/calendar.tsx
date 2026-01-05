@@ -32,18 +32,22 @@ import EventMenu from "./event-menu"
 export default function MainCalendar({
   recipes,
   events,
+  defaultDate,
 }: {
   recipes: Recipe[]
   events: CalendarEvent[]
+  defaultDate: string
 }) {
-  const today = new Date()
-  const [date, setDate] = useState<string>(
-    getDateWithDayOfWeek(formatDateToYYYYMMDD(today)),
+  const dD = new Date(defaultDate)
+  const [date, setDate] = useState<Date | undefined>(dD)
+
+  const [dateStr, setDateStr] = useState<string>(
+    getDateWithDayOfWeek(defaultDate),
   )
   const [open, setOpen] = useState(false)
 
   const [selectedEvents, setSelectedEvents] = useState<CalendarEvent[]>(
-    events.filter((e) => e.date === formatDateToYYYYMMDD(today)),
+    events.filter((e) => e.date === defaultDate),
   )
 
   return (
@@ -62,17 +66,18 @@ export default function MainCalendar({
               id="date"
               className="w-48 justify-between font-normal"
             >
-              {date}
+              {dateStr}
               <ChevronDownIcon />
             </Button>
           </PopoverTrigger>
           <PopoverContent className="w-auto overflow-hidden p-0" align="start">
             <Calendar
               mode="single"
-              selected={today}
+              selected={date}
               captionLayout="dropdown"
               onSelect={(date) => {
-                setDate(getDateWithDayOfWeek(formatDateToYYYYMMDD(date)))
+                setDate(date)
+                setDateStr(getDateWithDayOfWeek(formatDateToYYYYMMDD(date)))
                 setSelectedEvents(
                   events.filter((e) => e.date === formatDateToYYYYMMDD(date)),
                 )
