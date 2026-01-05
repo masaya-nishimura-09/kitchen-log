@@ -5,6 +5,7 @@ import { ChevronDownIcon } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import { useState } from "react"
+import CreateButton from "@/components/containers/button/create-button"
 import { AspectRatio } from "@/components/ui/aspect-ratio"
 import { Button } from "@/components/ui/button"
 import { Calendar } from "@/components/ui/calendar"
@@ -21,20 +22,16 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 import type { CalendarEvent } from "@/types/calendar/calendar-event"
-import type { Recipe } from "@/types/recipe/recipe"
 import {
   formatDateToYYYYMMDD,
   getDateWithDayOfWeek,
 } from "../../../lib/date/date"
-import EventForm from "./event-form"
 import EventMenu from "./event-menu"
 
 export default function MainCalendar({
-  recipes,
   events,
   defaultDate,
 }: {
-  recipes: Recipe[]
   events: CalendarEvent[]
   defaultDate: string
 }) {
@@ -55,7 +52,7 @@ export default function MainCalendar({
       <CardHeader className="flex flex-col md:flex-row justify-between gap-2">
         <CardTitle>カレンダー</CardTitle>
         <CardAction>
-          <EventForm recipes={recipes} />
+          <CreateButton link="/dashboard/calendar/new" />
         </CardAction>
       </CardHeader>
       <CardContent className="flex flex-col gap-4">
@@ -115,7 +112,7 @@ export default function MainCalendar({
                     <p className="whitespace-nowrap overflow-hidden text-ellipsis font-semibold">
                       {e.recipe.title}
                     </p>
-                    <EventMenu id={e.id} />
+                    <EventMenu event={e} />
                   </div>
                 </Link>
               ))}

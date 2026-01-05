@@ -10,15 +10,16 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Spinner } from "@/components/ui/spinner"
+import type { CalendarEvent } from "@/types/calendar/calendar-event"
 
-export default function EventMenu({ id }: { id: number }) {
+export default function EventMenu({ event }: { event: CalendarEvent }) {
   const [isPending, startTransition] = useTransition()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
     startTransition(async () => {
-      await deleteEvent(id)
+      await deleteEvent(event)
     })
   }
 

@@ -7,13 +7,12 @@ import { createEvent } from "@/actions/calendar/create"
 import { Button } from "@/components/ui/button"
 import { Calendar } from "@/components/ui/calendar"
 import {
-  Dialog,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog"
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
 import {
   Popover,
@@ -27,10 +26,9 @@ import {
   formatDateToYYYYMMDD,
   getDateWithDayOfWeek,
 } from "../../../lib/date/date"
-import CreateButton from "../button/create-button"
 import RecipeInput from "./recipe-input"
 
-export default function EventForm({ recipes }: { recipes: Recipe[] }) {
+export default function CalendarEventForm({ recipes }: { recipes: Recipe[] }) {
   const [open, setOpen] = useState(false)
 
   const today = new Date()
@@ -69,18 +67,15 @@ export default function EventForm({ recipes }: { recipes: Recipe[] }) {
   }
 
   return (
-    <Dialog>
-      <DialogTrigger asChild>
-        <CreateButton link="/dashboard/shopping-list/new" />
-      </DialogTrigger>
-      <DialogContent className="flex flex-col gap-6">
-        <DialogHeader>
-          <DialogTitle>カレンダーにレシピを追加</DialogTitle>
-        </DialogHeader>
+    <Card className="size-full">
+      <CardHeader>
+        <CardTitle>カレンダーに追加</CardTitle>
+      </CardHeader>
+      <CardContent className="flex flex-col gap-6">
         <form
           id="new-event-form"
           onSubmit={handleSubmit}
-          className="flex flex-col gap-6"
+          className="flex flex-col gap-6 w-full max-w-md"
         >
           <div className="grid gap-2">
             <Label htmlFor="date" className="px-1">
@@ -138,13 +133,13 @@ export default function EventForm({ recipes }: { recipes: Recipe[] }) {
             )}
           </div>
         </form>
-        <DialogFooter className="flex gap-2">
-          <Button type="submit" form="new-event-form" disabled={isPending}>
-            {isPending && <Spinner />}
-            {isPending ? "登録中..." : "登録"}
-          </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+      </CardContent>
+      <CardFooter className="flex gap-2">
+        <Button type="submit" form="new-event-form" disabled={isPending}>
+          {isPending && <Spinner />}
+          {isPending ? "登録中..." : "登録"}
+        </Button>
+      </CardFooter>
+    </Card>
   )
 }

@@ -53,7 +53,7 @@ export async function createEvent(formData: FormData) {
   }
 
   revalidatePath("/", "layout")
-  redirect(`/dashboard/calendar`)
+  redirect(`/dashboard/calendar/${date}`)
 }
 
 export async function createEvents(formData: FormData) {
@@ -106,5 +106,5 @@ export async function createEvents(formData: FormData) {
   }
 
   revalidatePath("/", "layout")
-  redirect(`/dashboard/calendar`)
+  redirect(`/dashboard/calendar/${insertData[0].date}`)
 }

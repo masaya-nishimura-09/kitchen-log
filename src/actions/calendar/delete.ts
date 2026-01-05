@@ -5,8 +5,9 @@ import { cookies } from "next/headers"
 import { redirect } from "next/navigation"
 import { getUserId } from "@/actions/auth/auth"
 import { createClient } from "@/lib/supabase/server"
+import type { CalendarEvent } from "@/types/calendar/calendar-event"
 
-export async function deleteEvent(id: number) {
+export async function deleteEvent(event: CalendarEvent) {
   const userId = await getUserId()
   if (!userId) {
     throw new Error(
@@ -15,7 +16,7 @@ export async function deleteEvent(id: number) {
   }
 
   const supabase = createClient(cookies())
-  const { error } = await supabase.from("calendar").delete().eq("id", id)
+  const { error } = await supabase.from("calendar").delete().eq("id", event.id)
 
   if (error) {
     console.error("Event delete failed:", error)
@@ -23,5 +24,5 @@ export async function deleteEvent(id: number) {
   }
 
   revalidatePath("/", "layout")
-  redirect(`/dashboard/calendar`)
+  redirect(`/dashboard/calendar/${event.date}`)
 }
