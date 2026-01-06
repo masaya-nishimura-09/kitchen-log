@@ -1,11 +1,11 @@
 "use client"
 
-import { ja } from "date-fns/locale"
-import { ChevronDownIcon } from "lucide-react"
-import { useState, useTransition } from "react"
-import { createEvents } from "@/actions/calendar/create"
-import { Button } from "@/components/ui/button"
-import { Calendar } from "@/components/ui/calendar"
+import {ja} from "date-fns/locale"
+import {ChevronDownIcon} from "lucide-react"
+import {useState, useTransition} from "react"
+import {createEvents} from "@/actions/calendar/create"
+import {Button} from "@/components/ui/button"
+import {Calendar} from "@/components/ui/calendar"
 import {
   Dialog,
   DialogContent,
@@ -14,22 +14,22 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
-import { DropdownMenuItem } from "@/components/ui/dropdown-menu"
-import { Label } from "@/components/ui/label"
+import {DropdownMenuItem} from "@/components/ui/dropdown-menu"
+import {Label} from "@/components/ui/label"
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
-import { Spinner } from "@/components/ui/spinner"
-import type { EventInput, EventState } from "@/types/calendar/event-input"
-import type { Recipe } from "@/types/recipe/recipe"
+import {Spinner} from "@/components/ui/spinner"
+import type {EventInput, EventState} from "@/types/calendar/event-input"
+import type {Recipe} from "@/types/recipe/recipe"
 import {
   formatDateToYYYYMMDD,
   getDateWithDayOfWeek,
-} from "../../../lib/date/date"
+} from "@/lib/date/date"
 
-export default function EventForm({ recipes }: { recipes: Recipe[] }) {
+export default function EventForm({recipes}: {recipes: Recipe[]}) {
   const [open, setOpen] = useState(false)
 
   const today = new Date()

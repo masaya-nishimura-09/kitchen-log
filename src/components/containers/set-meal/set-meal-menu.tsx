@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import {Spinner} from "@/components/ui/spinner"
 import type {SetMeal} from "@/types/set-meal/set-meal"
-import EventForm from "./event-form"
+import EventForm from "@/components/containers/set-meal/form/event-form"
 
 export default function SetMealMenu({setMeal}: {setMeal: SetMeal}) {
   const [isPending, startTransition] = useTransition()
