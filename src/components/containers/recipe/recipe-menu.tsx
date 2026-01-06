@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import {Spinner} from "@/components/ui/spinner"
 import type {Recipe} from "@/types/recipe/recipe"
-import EventForm from "./event-form"
+import EventForm from "./form/event-form"
 
 export default function RecipeMenu({recipe}: {recipe: Recipe}) {
   const [isPending, startTransition] = useTransition()
