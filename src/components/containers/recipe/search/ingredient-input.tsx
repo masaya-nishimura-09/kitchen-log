@@ -1,14 +1,14 @@
 "use client"
 
-import {IconCircleX} from "@tabler/icons-react"
-import type {Dispatch, SetStateAction} from "react"
-import {useState} from "react"
-import {Badge} from "@/components/ui/badge"
-import {Input} from "@/components/ui/input"
-import {Label} from "@/components/ui/label"
-import {ScrollArea} from "@/components/ui/scroll-area"
-import type {Ingredient} from "@/types/recipe/recipe"
-import type {RecipeSearch} from "@/types/recipe/recipe-search"
+import { IconCircleX } from "@tabler/icons-react"
+import type { Dispatch, SetStateAction } from "react"
+import { useState } from "react"
+import { Badge } from "@/components/ui/badge"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { ScrollArea } from "@/components/ui/scroll-area"
+import type { Ingredient } from "@/types/recipe/recipe"
+import type { RecipeSearch } from "@/types/recipe/recipe-search"
 
 export default function IngredientInput({
   formData,

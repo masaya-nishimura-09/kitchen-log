@@ -1,5 +1,5 @@
-import {notFound} from "next/navigation"
-import {fetchRecipes} from "@/actions/recipe/fetch"
+import { notFound } from "next/navigation"
+import { fetchRecipes } from "@/actions/recipe/fetch"
 import SetMealForm from "@/components/containers/set-meal/form/set-meal-form"
 
 export default async function Page() {

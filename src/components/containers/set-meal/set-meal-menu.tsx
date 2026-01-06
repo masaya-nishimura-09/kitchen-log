@@ -1,20 +1,20 @@
 "use client"
 
-import {IconDots} from "@tabler/icons-react"
+import { IconDots } from "@tabler/icons-react"
 import Link from "next/link"
-import {useTransition} from "react"
-import {createFromRecipe} from "@/actions/shopping-list/create"
+import { useTransition } from "react"
+import { createFromRecipe } from "@/actions/shopping-list/create"
+import EventForm from "@/components/containers/set-meal/form/event-form"
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import {Spinner} from "@/components/ui/spinner"
-import type {SetMeal} from "@/types/set-meal/set-meal"
-import EventForm from "@/components/containers/set-meal/form/event-form"
+import { Spinner } from "@/components/ui/spinner"
+import type { SetMeal } from "@/types/set-meal/set-meal"
 
-export default function SetMealMenu({setMeal}: {setMeal: SetMeal}) {
+export default function SetMealMenu({ setMeal }: { setMeal: SetMeal }) {
   const [isPending, startTransition] = useTransition()
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -32,7 +32,12 @@ export default function SetMealMenu({setMeal}: {setMeal: SetMeal}) {
       </DropdownMenuTrigger>
       <DropdownMenuContent>
         <DropdownMenuItem>
-          <Link href={`/dashboard/set-meal/${setMeal.id}/edit`} className="size-full">編集する</Link>
+          <Link
+            href={`/dashboard/set-meal/${setMeal.id}/edit`}
+            className="size-full"
+          >
+            編集する
+          </Link>
         </DropdownMenuItem>
         <DropdownMenuItem onClick={(e) => handleSubmit(e)} disabled={isPending}>
           {isPending && <Spinner />}
