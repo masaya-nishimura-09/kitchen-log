@@ -9,6 +9,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
+import CreateButton from "../button/create-button"
 
 export default function Groups() {
   return (
@@ -16,7 +17,9 @@ export default function Groups() {
       <CardHeader>
         <CardTitle>グループ</CardTitle>
         <CardDescription>Card Description</CardDescription>
-        <CardAction>Card Action</CardAction>
+        <CardAction>
+          <CreateButton link="/dashboard/group/new" />
+        </CardAction>
       </CardHeader>
       <CardContent>
         <p>Card Content</p>

@@ -1,14 +1,14 @@
 "use server"
 
-import { revalidatePath } from "next/cache"
-import { cookies } from "next/headers"
-import { redirect } from "next/navigation"
-import { getUserId } from "@/actions/auth/auth"
-import { zenkakuToHankaku } from "@/lib/recipe/zenkaku-to-hankaku"
-import { RecipeFormSchema } from "@/lib/schemas/recipe-form"
-import { createClient } from "@/lib/supabase/server"
-import type { RecipeInput, RecipeState } from "@/types/recipe/recipe-input"
-import { uploadImage } from "./image"
+import {revalidatePath} from "next/cache"
+import {cookies} from "next/headers"
+import {redirect} from "next/navigation"
+import {getUserId} from "@/actions/auth/auth"
+import {zenkakuToHankaku} from "@/lib/recipe/zenkaku-to-hankaku"
+import {RecipeFormSchema} from "@/lib/schemas/recipe-form"
+import {createClient} from "@/lib/supabase/server"
+import type {RecipeInput, RecipeState} from "@/types/recipe/recipe-input"
+import {uploadImage} from "./image"
 
 export async function createRecipe(formData: FormData): Promise<RecipeState> {
   const recipeData = JSON.parse(
@@ -34,7 +34,7 @@ export async function createRecipe(formData: FormData): Promise<RecipeState> {
       message: "入力内容に誤りがあります。",
     }
   }
-  const { image, title, memo, tag, ingredient, step } = validatedFields.data
+  const {image, title, memo, tag, ingredient, step} = validatedFields.data
   const userId = await getUserId()
   if (!userId) {
     return {
@@ -59,7 +59,7 @@ export async function createRecipe(formData: FormData): Promise<RecipeState> {
 
   const supabase = createClient(cookies())
 
-  const { data, error } = await supabase
+  const {data, error} = await supabase
     .rpc("add_recipe_with_details", {
       p_user_id: userId,
       p_title: title,
@@ -69,7 +69,7 @@ export async function createRecipe(formData: FormData): Promise<RecipeState> {
       p_ingredients: convertedIngredients,
       p_steps: step,
     })
-    .single<{ id: number }>()
+    .single<{id: number}>()
 
   if (error || !data) {
     console.error("Recipe insert failed:", error)
