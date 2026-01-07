@@ -7,6 +7,7 @@ import { SignInFormSchema } from "@/lib/schemas/sign-in-form"
 import { SignUpFormSchema } from "@/lib/schemas/sign-up-form"
 import { createClient } from "@/lib/supabase/server"
 import type { SignInState, SignUpState } from "@/types/auth"
+import { createProfile } from "./create"
 
 export async function getUserId() {
   const supabase = createClient(cookies())
@@ -46,7 +47,7 @@ export async function signUp(
   const { name, email, password } = validatedFields.data
 
   const supabase = createClient(cookies())
-  const { error } = await supabase.auth.signUp({
+  const { data, error } = await supabase.auth.signUp({
     email: email,
     password: password,
     options: {
@@ -72,6 +73,20 @@ export async function signUp(
         return {
           message: "会員登録に失敗しました。しばらくしてからお試しください。",
         }
+    }
+  }
+
+  if (!data || !data.user) {
+    return {
+      message: "会員登録に失敗しました。",
+    }
+  }
+
+  try {
+    await createProfile(data.user.id, name)
+  } catch {
+    return {
+      message: "会員登録に失敗しました。",
     }
   }
   revalidatePath("/", "layout")

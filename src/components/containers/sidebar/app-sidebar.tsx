@@ -9,7 +9,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
-import { items } from "@/lib/sidebar/items"
+import {items} from "@/lib/sidebar/items"
 
 export function AppSidebar() {
   return (
