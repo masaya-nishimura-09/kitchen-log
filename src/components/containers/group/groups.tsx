@@ -4,7 +4,6 @@ import {
   Card,
   CardAction,
   CardContent,
-  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
@@ -16,7 +15,6 @@ export default function Groups() {
     <Card className="size-full">
       <CardHeader>
         <CardTitle>グループ</CardTitle>
-        <CardDescription>Card Description</CardDescription>
         <CardAction>
           <CreateButton link="/dashboard/group/new" />
         </CardAction>

@@ -1,12 +1,12 @@
 "use server"
 
-import {revalidatePath} from "next/cache"
-import {cookies} from "next/headers"
-import {redirect} from "next/navigation"
-import {getUserId} from "@/actions/auth/auth"
-import {GroupFormSchema} from "@/lib/schemas/group-form"
-import {createClient} from "@/lib/supabase/server"
-import type {GroupFormInput, GroupFormState} from "@/types/group/group-form"
+import { revalidatePath } from "next/cache"
+import { cookies } from "next/headers"
+import { redirect } from "next/navigation"
+import { getUserId } from "@/actions/auth/auth"
+import { GroupFormSchema } from "@/lib/schemas/group-form"
+import { createClient } from "@/lib/supabase/server"
+import type { GroupFormInput, GroupFormState } from "@/types/group/group-form"
 
 export async function createGroup(formData: FormData): Promise<GroupFormState> {
   const groupData = JSON.parse(
@@ -26,7 +26,7 @@ export async function createGroup(formData: FormData): Promise<GroupFormState> {
     }
   }
 
-  const {name} = validatedFields.data
+  const { name } = validatedFields.data
 
   const userId = await getUserId()
   if (!userId) {
@@ -37,7 +37,19 @@ export async function createGroup(formData: FormData): Promise<GroupFormState> {
   }
 
   const supabase = createClient(cookies())
-  const {data, error: groupInsertError} = await supabase
+
+  const {
+    data: { user },
+    error: fetchUserDataError,
+  } = await supabase.auth.getUser()
+  if (fetchUserDataError || !user?.user_metadata.name) {
+    return {
+      success: false,
+      message: "認証情報が取得できませんでした。再度ログインしてください。",
+    }
+  }
+
+  const { data, error: groupInsertError } = await supabase
     .from("groups")
     .insert({
       name: name,
@@ -62,10 +74,11 @@ export async function createGroup(formData: FormData): Promise<GroupFormState> {
     }
   }
 
-  const {error: groupMembersInsertError} = await supabase
+  const { error: groupMembersInsertError } = await supabase
     .from("group_members")
     .insert({
       user_id: userId,
+      username: user.user_metadata.name,
       group_id: data.id,
       role: "admin",
     })

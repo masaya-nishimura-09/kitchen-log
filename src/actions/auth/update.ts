@@ -8,6 +8,7 @@ import { PasswordFormSchema } from "@/lib/schemas/password-form"
 import { UsernameFormSchema } from "@/lib/schemas/username-form"
 import { createClient } from "@/lib/supabase/server"
 import type { EmailState, PasswordState, UsernameState } from "@/types/auth"
+import { getUserId } from "./auth"
 
 export async function updateUsername(
   _prevState: UsernameState | undefined,
@@ -33,6 +34,15 @@ export async function updateUsername(
 
   if (error) {
     console.error("Username update failed:", error)
+    return {
+      success: false,
+      message: "ユーザーネームの変更に失敗しました。",
+    }
+  }
+
+  try {
+    await updateProfile(username)
+  } catch {
     return {
       success: false,
       message: "ユーザーネームの変更に失敗しました。",
@@ -109,4 +119,23 @@ export async function updatePassword(
 
   revalidatePath("/", "layout")
   redirect("/dashboard/setting")
+}
+
+export async function updateProfile(username: string) {
+  const userId = await getUserId()
+  if (!userId) {
+    throw new Error("認証情報が取得できませんでした。")
+  }
+
+  const supabase = createClient(cookies())
+
+  const { error } = await supabase
+    .from("profiles")
+    .update({ display_name: username })
+    .eq("id", userId)
+
+  if (error) {
+    console.error("Profile display name update failed:", error)
+    throw new Error(error.message)
+  }
 }
