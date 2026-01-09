@@ -3,7 +3,13 @@ import Link from "next/link"
 import { AspectRatio } from "@/components/ui/aspect-ratio"
 import type { Recipe } from "@/types/recipe/recipe"
 
-export default function RecipeCard({ recipe }: { recipe: Recipe }) {
+export default function RecipeCard({
+  recipe,
+  menuButton,
+}: {
+  recipe: Recipe
+  menuButton: React.ReactNode
+}) {
   return (
     <Link
       key={recipe.id}
@@ -24,9 +30,12 @@ export default function RecipeCard({ recipe }: { recipe: Recipe }) {
           unoptimized
         />
       </AspectRatio>
-      <p className="whitespace-nowrap overflow-hidden text-ellipsis font-semibold px-1">
-        {recipe.title}
-      </p>
+      <div className="flex gap-2 justify-between items-center px-1">
+        <p className="whitespace-nowrap overflow-hidden text-ellipsis font-semibold">
+          {recipe.title}
+        </p>
+        {menuButton}
+      </div>
     </Link>
   )
 }

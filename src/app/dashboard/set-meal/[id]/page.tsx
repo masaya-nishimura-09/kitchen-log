@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation"
 import { fetchSetMeal } from "@/actions/set-meal/fetch"
 import RecipeCard from "@/components/containers/recipe/recipe-card"
+import RecipeMenu from "@/components/containers/recipe/recipe-menu"
 import SetMealMenu from "@/components/containers/set-meal/set-meal-menu"
 import {
   Card,
@@ -36,7 +37,11 @@ export default async function Page({ params }: { params: { id: string } }) {
           {setMeal.recipes.length > 0 ? (
             <div className="size-full grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))]">
               {setMeal.recipes.map((recipe) => (
-                <RecipeCard key={recipe.id} recipe={recipe} />
+                <RecipeCard
+                  key={recipe.id}
+                  menuButton={<RecipeMenu recipe={recipe} />}
+                  recipe={recipe}
+                />
               ))}
             </div>
           ) : (
