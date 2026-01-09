@@ -24,7 +24,7 @@ export default function RecipeCard({ recipe }: { recipe: Recipe }) {
           unoptimized
         />
       </AspectRatio>
-      <p className="whitespace-nowrap overflow-hidden text-ellipsis font-semibold">
+      <p className="whitespace-nowrap overflow-hidden text-ellipsis font-semibold px-1">
         {recipe.title}
       </p>
     </Link>

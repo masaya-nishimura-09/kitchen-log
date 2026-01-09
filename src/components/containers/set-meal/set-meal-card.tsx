@@ -31,7 +31,7 @@ export default function SetMealCard({ setMeal }: { setMeal: SetMeal }) {
           </AspectRatio>
         ))}
       </AspectRatio>
-      <p className="whitespace-nowrap overflow-hidden text-ellipsis font-semibold">
+      <p className="whitespace-nowrap overflow-hidden text-ellipsis font-semibold px-1">
         {setMeal.title}
       </p>
     </Link>

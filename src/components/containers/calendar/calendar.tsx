@@ -108,7 +108,7 @@ export default function MainCalendar({
                       unoptimized
                     />
                   </AspectRatio>
-                  <div className="flex gap-2 justify-between items-center">
+                  <div className="flex gap-2 justify-between items-center px-1">
                     <p className="whitespace-nowrap overflow-hidden text-ellipsis font-semibold">
                       {e.recipe.title}
                     </p>
