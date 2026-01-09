@@ -7,7 +7,6 @@ import {
   CardAction,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
@@ -32,7 +31,6 @@ export default async function Page({ params }: { params: { id: string } }) {
       <CardContent>
         <Recipes recipes={setMeal.recipes} size={"280"} />
       </CardContent>
-      <CardFooter className="flex flex-wrap gap-2" />
     </Card>
   )
 }
