@@ -49,7 +49,7 @@ export default function MainCalendar({
 
   return (
     <Card className="size-full">
-      <CardHeader className="flex flex-col md:flex-row justify-between gap-2">
+      <CardHeader>
         <CardTitle>カレンダー</CardTitle>
         <CardAction>
           <CreateButton link="/dashboard/calendar/new" />
