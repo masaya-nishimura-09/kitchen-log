@@ -11,7 +11,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import { Separator } from "@/components/ui/separator"
 
 export default async function Page({ params }: { params: { id: string } }) {
   const { id } = await params
@@ -31,7 +30,6 @@ export default async function Page({ params }: { params: { id: string } }) {
         </CardAction>
       </CardHeader>
       <CardContent>
-        <Separator className="my-6" />
         <Recipes recipes={setMeal.recipes} size={"280"} />
       </CardContent>
       <CardFooter className="flex flex-wrap gap-2" />
