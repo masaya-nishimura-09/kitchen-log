@@ -3,7 +3,6 @@ import { notFound } from "next/navigation"
 import { fetchLatestRecipes } from "@/actions/recipe/fetch"
 import { fetchLatestSetMeals } from "@/actions/set-meal/fetch"
 import { fetchLatestShoppingList } from "@/actions/shopping-list/fetch"
-import Information from "@/components/containers/home/information"
 import LatestRecipes from "@/components/containers/recipe/latest-recipes"
 import LatestSetMeals from "@/components/containers/set-meal/latest-set-meals"
 import LatestShoppingList from "@/components/containers/shopping-list/latest-shopping-list"
@@ -29,7 +28,11 @@ export default async function Page() {
 
   return (
     <div className="size-full flex flex-col gap-4">
-      <Information username={user.user_metadata.name} />
+      <div>
+        <p className="text-md md:text-2xl font-bold">
+          おかえりなさい、{user.user_metadata.name}さん
+        </p>
+      </div>
       <LatestRecipes recipes={latestRecipes} />
       <LatestSetMeals setMeals={latestSetMeals} />
       <LatestShoppingList shoppingList={latestShoppingList} />
