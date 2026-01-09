@@ -33,7 +33,7 @@ export default async function Page({
 
   return (
     <Card className="size-full">
-      <CardHeader className="">
+      <CardHeader>
         <CardTitle>レシピ</CardTitle>
         <CardAction className="flex justify-end items-center gap-4">
           <RecipeSearchForm ingredients={ingredients} tags={tags} />
