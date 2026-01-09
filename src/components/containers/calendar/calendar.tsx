@@ -19,12 +19,12 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 import type { CalendarEvent } from "@/types/calendar/calendar-event"
+import type { Recipe } from "@/types/recipe/recipe"
 import {
   formatDateToYYYYMMDD,
   getDateWithDayOfWeek,
 } from "../../../lib/date/date"
-import RecipeCard from "../recipe/recipe-card"
-import EventMenu from "./event-menu"
+import Recipes from "../recipe/recipes"
 
 export default function MainCalendar({
   events,
@@ -39,9 +39,16 @@ export default function MainCalendar({
 
   const [open, setOpen] = useState(false)
 
-  const [selectedEvents, setSelectedEvents] = useState<CalendarEvent[]>(
-    events.filter((e) => e.date === defaultDateStr),
+  const [recipes, setRecipes] = useState<Recipe[]>(
+    events.filter((e) => e.date === defaultDateStr).map((e) => e.recipe),
   )
+
+  const handleSelect = (date: Date | undefined) => {
+    const selectedRecipes = events
+      .filter((e) => e.date === formatDateToYYYYMMDD(date))
+      .map((e) => e.recipe)
+    setRecipes(selectedRecipes)
+  }
 
   return (
     <Card className="size-full">
@@ -71,11 +78,8 @@ export default function MainCalendar({
               selected={date}
               captionLayout="dropdown"
               onSelect={(date) => {
-                console.log(date)
                 setDate(date)
-                setSelectedEvents(
-                  events.filter((e) => e.date === formatDateToYYYYMMDD(date)),
-                )
+                handleSelect(date)
                 setOpen(false)
               }}
               locale={ja}
@@ -83,21 +87,7 @@ export default function MainCalendar({
           </PopoverContent>
         </Popover>
 
-        <div>
-          {selectedEvents.length > 0 ? (
-            <div className="size-full grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))]">
-              {selectedEvents.map((e) => (
-                <RecipeCard
-                  key={e.id}
-                  menuButton={<EventMenu event={e} />}
-                  recipe={e.recipe}
-                />
-              ))}
-            </div>
-          ) : (
-            <p>レシピがありません。</p>
-          )}
-        </div>
+        <Recipes recipes={recipes} size={"280"} />
       </CardContent>
     </Card>
   )
