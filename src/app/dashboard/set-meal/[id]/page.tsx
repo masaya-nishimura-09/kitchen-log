@@ -22,21 +22,19 @@ export default async function Page({ params }: { params: { id: string } }) {
   }
 
   return (
-    <div className="size-full">
-      <Card className="size-full">
-        <CardHeader>
-          <CardTitle className="text-xl"> {setMeal.title}</CardTitle>
-          {setMeal.memo && <CardDescription>{setMeal.memo}</CardDescription>}
-          <CardAction>
-            <SetMealMenu setMeal={setMeal} />
-          </CardAction>
-        </CardHeader>
-        <CardContent>
-          <Separator className="my-6" />
-          <Recipes recipes={setMeal.recipes} size={"280"} />
-        </CardContent>
-        <CardFooter className="flex flex-wrap gap-2" />
-      </Card>
-    </div>
+    <Card className="size-full">
+      <CardHeader>
+        <CardTitle className="text-xl"> {setMeal.title}</CardTitle>
+        {setMeal.memo && <CardDescription>{setMeal.memo}</CardDescription>}
+        <CardAction>
+          <SetMealMenu setMeal={setMeal} />
+        </CardAction>
+      </CardHeader>
+      <CardContent>
+        <Separator className="my-6" />
+        <Recipes recipes={setMeal.recipes} size={"280"} />
+      </CardContent>
+      <CardFooter className="flex flex-wrap gap-2" />
+    </Card>
   )
 }
