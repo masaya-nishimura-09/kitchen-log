@@ -30,21 +30,19 @@ import EventMenu from "./event-menu"
 
 export default function MainCalendar({
   events,
-  defaultDate,
+  defaultDateStr,
 }: {
   events: CalendarEvent[]
-  defaultDate: string
+  defaultDateStr: string
 }) {
-  const dD = new Date(defaultDate)
-  const [date, setDate] = useState<Date | undefined>(dD)
+  const defaultDate = new Date(defaultDateStr)
 
-  const [dateStr, setDateStr] = useState<string>(
-    getDateWithDayOfWeek(defaultDate),
-  )
+  const [date, setDate] = useState<Date | undefined>(defaultDate)
+
   const [open, setOpen] = useState(false)
 
   const [selectedEvents, setSelectedEvents] = useState<CalendarEvent[]>(
-    events.filter((e) => e.date === defaultDate),
+    events.filter((e) => e.date === defaultDateStr),
   )
 
   return (
@@ -63,7 +61,9 @@ export default function MainCalendar({
               id="date"
               className="w-48 justify-between font-normal"
             >
-              {dateStr}
+              {date
+                ? getDateWithDayOfWeek(formatDateToYYYYMMDD(date))
+                : "日付を選択"}
               <ChevronDownIcon />
             </Button>
           </PopoverTrigger>
@@ -73,8 +73,8 @@ export default function MainCalendar({
               selected={date}
               captionLayout="dropdown"
               onSelect={(date) => {
+                console.log(date)
                 setDate(date)
-                setDateStr(getDateWithDayOfWeek(formatDateToYYYYMMDD(date)))
                 setSelectedEvents(
                   events.filter((e) => e.date === formatDateToYYYYMMDD(date)),
                 )

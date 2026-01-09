@@ -9,5 +9,5 @@ export default async function Page({ params }: { params: { date: string } }) {
   if (!events) {
     notFound()
   }
-  return <MainCalendar events={events} defaultDate={date} />
+  return <MainCalendar events={events} defaultDateStr={date} />
 }

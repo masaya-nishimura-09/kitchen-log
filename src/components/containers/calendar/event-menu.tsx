@@ -1,6 +1,6 @@
 "use client"
 
-import { IconDotsVertical } from "@tabler/icons-react"
+import { IconDots } from "@tabler/icons-react"
 import { useTransition } from "react"
 import { deleteEvent } from "@/actions/calendar/delete"
 import {
@@ -26,7 +26,7 @@ export default function EventMenu({ event }: { event: CalendarEvent }) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
-        <IconDotsVertical />
+        <IconDots size={20} />
       </DropdownMenuTrigger>
       <DropdownMenuContent>
         <DropdownMenuItem onClick={(e) => handleSubmit(e)} disabled={isPending}>
