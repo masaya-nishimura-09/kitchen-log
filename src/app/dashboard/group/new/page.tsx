@@ -1,4 +1,4 @@
-import GroupForm from "@/components/containers/group/form";
+import GroupForm from "@/components/containers/group/form"
 
 export default async function Page() {
   return (

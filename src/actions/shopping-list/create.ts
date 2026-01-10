@@ -46,9 +46,7 @@ async function insertItem(
   }
 }
 
-export async function createItem(
-  formData: FormData,
-): Promise<AppActionResult> {
+export async function createItem(formData: FormData): Promise<AppActionResult> {
   const itemData = JSON.parse(
     formData.get("shoppingListItemData") as string,
   ) as ShoppingListItemInput[]
@@ -102,7 +100,12 @@ export async function createItem(
     )
 
     if (shoppingList.length < 1 || !sameItem) {
-      const insertResult = await insertItem(userId, data.name, data.amount, data.unit)
+      const insertResult = await insertItem(
+        userId,
+        data.name,
+        data.amount,
+        data.unit,
+      )
       if (!insertResult.success) {
         return insertResult
       }

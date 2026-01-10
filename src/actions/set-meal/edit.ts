@@ -9,7 +9,9 @@ import { createClient } from "@/lib/supabase/server"
 import type { AppActionResult } from "@/types/app-action-result"
 import type { SetMealInput } from "@/types/set-meal/set-meal-input"
 
-export async function editSetMeal(formData: FormData): Promise<AppActionResult> {
+export async function editSetMeal(
+  formData: FormData,
+): Promise<AppActionResult> {
   const setMealData = JSON.parse(
     formData.get("setMealData") as string,
   ) as SetMealInput
