@@ -5,36 +5,42 @@ import { cookies } from "next/headers"
 import { redirect } from "next/navigation"
 import { getUserId } from "@/actions/auth/auth"
 import { createClient } from "@/lib/supabase/server"
-import type { RecipeState } from "@/types/recipe/recipe-input"
+import type { AppActionResult } from "@/types/app-action-result"
 import { deleteImage } from "./image"
 
-export async function deleteRecipe(id: number): Promise<RecipeState> {
-  const userId = await getUserId()
-  if (!userId) {
-    throw new Error(
-      "認証情報が取得できませんでした。再度ログインしてください。",
-    )
+export async function deleteRecipe(id: number): Promise<AppActionResult> {
+  const getUserIdResult = await getUserId()
+  if (!getUserIdResult.success || !getUserIdResult.data) {
+    return {
+      success: false,
+      message: "認証情報が取得できませんでした。再度ログインしてください。",
+    }
   }
+  const userId = getUserIdResult.data
 
   const supabase = createClient(cookies())
   const { data, error: deleteRecipeError } = await supabase
     .from("recipes")
     .delete()
     .eq("id", id)
+    .eq("user_id", userId)
     .select()
     .single()
 
   if (deleteRecipeError) {
-    console.error("Recipe delete failed:", deleteRecipeError)
-    throw new Error("レシピの削除に失敗しました。")
+    return {
+      success: false,
+      message: "レシピの削除に失敗しました。",
+    }
   }
 
   if (data.imageUrl) {
-    try {
-      await deleteImage(data.imageUrl)
-    } catch (error) {
-      console.warn("画像の削除に失敗しました:", error)
-      throw new Error("画像の削除に失敗しました")
+    const result = await deleteImage(data.imageUrl)
+    if (!result.success) {
+      return {
+        success: false,
+        message: "画像の削除に失敗しました",
+      }
     }
   }
 

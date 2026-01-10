@@ -6,17 +6,22 @@ import { ingredientConverter } from "@/lib/recipe/ingredient-converter"
 import { recipeConverter } from "@/lib/recipe/recipe-converter"
 import { tagConverter } from "@/lib/recipe/tag-converter"
 import { createClient } from "@/lib/supabase/server"
+import type { AppActionResult } from "@/types/app-action-result"
 import type { Ingredient, Recipe, Tag } from "@/types/recipe/recipe"
 import type { RecipeInput } from "@/types/recipe/recipe-input"
 import type { RecipeSearchParams } from "@/types/recipe/recipe-search-params"
 
-export async function fetchRecipe(recipeId: number): Promise<Recipe> {
-  const userId = await getUserId()
-  if (!userId) {
-    throw new Error(
-      "認証情報が取得できませんでした。再度ログインしてください。",
-    )
+export async function fetchRecipe(
+  recipeId: number,
+): Promise<AppActionResult<Recipe>> {
+  const getUserIdResult = await getUserId()
+  if (!getUserIdResult.success || !getUserIdResult.data) {
+    return {
+      success: false,
+      message: "認証情報が取得できませんでした。再度ログインしてください。",
+    }
   }
+  const userId = getUserIdResult.data
 
   const supabase = createClient(cookies())
   const { data, error } = await supabase
@@ -64,22 +69,29 @@ export async function fetchRecipe(recipeId: number): Promise<Recipe> {
     .single()
 
   if (error) {
-    console.error("Recipe Fetch Failed:", error)
-    throw new Error("レシピの取得に失敗しました。")
+    return {
+      success: false,
+      message: "レシピの取得に失敗しました。",
+    }
   }
 
-  return recipeConverter(data)
+  return {
+    success: true,
+    data: recipeConverter(data),
+  }
 }
 
 export async function fetchRecipes(
   searchParams: RecipeSearchParams | undefined,
-): Promise<Recipe[]> {
-  const userId = await getUserId()
-  if (!userId) {
-    throw new Error(
-      "認証情報が取得できませんでした。再度ログインしてください。",
-    )
+): Promise<AppActionResult<Recipe[]>> {
+  const getUserIdResult = await getUserId()
+  if (!getUserIdResult.success || !getUserIdResult.data) {
+    return {
+      success: false,
+      message: "認証情報が取得できませんでした。再度ログインしてください。",
+    }
   }
+  const userId = getUserIdResult.data
 
   const titleParam = searchParams?.title || null
 
@@ -102,20 +114,29 @@ export async function fetchRecipes(
   })
 
   if (error) {
-    console.error("Recipe Fetch Failed:", error)
-    throw new Error("レシピの取得に失敗しました。")
+    return {
+      success: false,
+      message: "レシピの取得に失敗しました。",
+    }
   }
 
-  return data?.map(recipeConverter)
+  return {
+    success: true,
+    data: data?.map(recipeConverter),
+  }
 }
 
-export async function fetchRecipeInput(recipeId: number): Promise<RecipeInput> {
-  const userId = await getUserId()
-  if (!userId) {
-    throw new Error(
-      "認証情報が取得できませんでした。再度ログインしてください。",
-    )
+export async function fetchRecipeInput(
+  recipeId: number,
+): Promise<AppActionResult<RecipeInput>> {
+  const getUserIdResult = await getUserId()
+  if (!getUserIdResult.success || !getUserIdResult.data) {
+    return {
+      success: false,
+      message: "認証情報が取得できませんでした。再度ログインしてください。",
+    }
   }
+  const userId = getUserIdResult.data
 
   const supabase = createClient(cookies())
   const { data, error } = await supabase
@@ -163,8 +184,10 @@ export async function fetchRecipeInput(recipeId: number): Promise<RecipeInput> {
     .single()
 
   if (error) {
-    console.error("Recipe Fetch Failed:", error)
-    throw new Error("レシピの取得に失敗しました。")
+    return {
+      success: false,
+      message: "レシピの取得に失敗しました。",
+    }
   }
 
   const convertedData = recipeConverter(data)
@@ -189,16 +212,23 @@ export async function fetchRecipeInput(recipeId: number): Promise<RecipeInput> {
     })),
   } as RecipeInput
 
-  return recipeInput
+  return {
+    success: true,
+    data: recipeInput,
+  }
 }
 
-export async function fetchLatestRecipes(limit: number): Promise<Recipe[]> {
-  const userId = await getUserId()
-  if (!userId) {
-    throw new Error(
-      "認証情報が取得できませんでした。再度ログインしてください。",
-    )
+export async function fetchLatestRecipes(
+  limit: number,
+): Promise<AppActionResult<Recipe[]>> {
+  const getUserIdResult = await getUserId()
+  if (!getUserIdResult.success || !getUserIdResult.data) {
+    return {
+      success: false,
+      message: "認証情報が取得できませんでした。再度ログインしてください。",
+    }
   }
+  const userId = getUserIdResult.data
 
   const supabase = createClient(cookies())
   const { data, error } = await supabase
@@ -246,20 +276,29 @@ export async function fetchLatestRecipes(limit: number): Promise<Recipe[]> {
     .limit(limit)
 
   if (error) {
-    console.error("Recipe Fetch Failed:", error)
-    throw new Error("レシピの取得に失敗しました。")
+    return {
+      success: false,
+      message: "レシピの取得に失敗しました。",
+    }
   }
 
-  return data?.map(recipeConverter)
+  return {
+    success: true,
+    data: data?.map(recipeConverter),
+  }
 }
 
-export async function fetchIngredients(): Promise<Ingredient[]> {
-  const userId = await getUserId()
-  if (!userId) {
-    throw new Error(
-      "認証情報が取得できませんでした。再度ログインしてください。",
-    )
+export async function fetchIngredients(): Promise<
+  AppActionResult<Ingredient[]>
+> {
+  const getUserIdResult = await getUserId()
+  if (!getUserIdResult.success || !getUserIdResult.data) {
+    return {
+      success: false,
+      message: "認証情報が取得できませんでした。再度ログインしてください。",
+    }
   }
+  const userId = getUserIdResult.data
 
   const supabase = createClient(cookies())
   const { data, error } = await supabase
@@ -268,20 +307,27 @@ export async function fetchIngredients(): Promise<Ingredient[]> {
     .eq("user_id", userId)
 
   if (error) {
-    console.error("Ingredients Fetch Failed:", error)
-    throw new Error("材料の取得に失敗しました。")
+    return {
+      success: false,
+      message: "材料の取得に失敗しました。",
+    }
   }
 
-  return data?.map(ingredientConverter)
+  return {
+    success: false,
+    data: data?.map(ingredientConverter),
+  }
 }
 
-export async function fetchTags(): Promise<Tag[]> {
-  const userId = await getUserId()
-  if (!userId) {
-    throw new Error(
-      "認証情報が取得できませんでした。再度ログインしてください。",
-    )
+export async function fetchTags(): Promise<AppActionResult<Tag[]>> {
+  const getUserIdResult = await getUserId()
+  if (!getUserIdResult.success || !getUserIdResult.data) {
+    return {
+      success: false,
+      message: "認証情報が取得できませんでした。再度ログインしてください。",
+    }
   }
+  const userId = getUserIdResult.data
 
   const supabase = createClient(cookies())
   const { data, error } = await supabase
@@ -290,9 +336,14 @@ export async function fetchTags(): Promise<Tag[]> {
     .eq("user_id", userId)
 
   if (error) {
-    console.error("Ingredients Fetch Failed:", error)
-    throw new Error("レシピタグの取得に失敗しました。")
+    return {
+      success: false,
+      message: "レシピタグの取得に失敗しました。",
+    }
   }
 
-  return data?.map(tagConverter)
+  return {
+    success: true,
+    data: data?.map(tagConverter),
+  }
 }

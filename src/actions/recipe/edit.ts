@@ -7,10 +7,11 @@ import { getUserId } from "@/actions/auth/auth"
 import { zenkakuToHankaku } from "@/lib/recipe/zenkaku-to-hankaku"
 import { RecipeFormSchema } from "@/lib/schemas/recipe-form"
 import { createClient } from "@/lib/supabase/server"
-import type { RecipeInput, RecipeState } from "@/types/recipe/recipe-input"
+import type { AppActionResult } from "@/types/app-action-result"
+import type { RecipeInput } from "@/types/recipe/recipe-input"
 import { deleteImage, uploadImage } from "./image"
 
-export async function editRecipe(formData: FormData): Promise<RecipeState> {
+export async function editRecipe(formData: FormData): Promise<AppActionResult> {
   const recipeData = JSON.parse(
     formData.get("recipeData") as string,
   ) as RecipeInput
@@ -36,28 +37,34 @@ export async function editRecipe(formData: FormData): Promise<RecipeState> {
   const { id, image, title, memo, tag, ingredient, step } = validatedFields.data
   let { imageUrl } = validatedFields.data
 
-  const userId = await getUserId()
-  if (!userId) {
+  const getUserIdResult = await getUserId()
+  if (!getUserIdResult.success || !getUserIdResult.data) {
     return {
       success: false,
       message: "認証情報が取得できませんでした。再度ログインしてください。",
     }
   }
+  const userId = getUserIdResult.data
 
   if (image) {
     if (imageUrl) {
-      try {
-        await deleteImage(imageUrl)
-      } catch (error) {
-        console.warn("画像の更新に失敗しましたが処理を続行します:", error)
+      const result = await deleteImage(imageUrl)
+      if (!result.success) {
+        return {
+          success: false,
+          message: "画像の削除に失敗しました",
+        }
       }
     }
 
-    try {
-      imageUrl = await uploadImage(image, userId)
-    } catch (error) {
-      console.warn("画像アップロードに失敗しましたが処理を続行します:", error)
+    const result = await uploadImage(image, userId)
+    if (!result.success || !result.data) {
+      return {
+        success: false,
+        message: "画像アップロードに失敗しました。",
+      }
     }
+    imageUrl = result.data
   }
 
   const convertedIngredients = ingredient.map((i) => ({
@@ -81,7 +88,6 @@ export async function editRecipe(formData: FormData): Promise<RecipeState> {
     .single<{ id: number }>()
 
   if (error) {
-    console.error("Recipe update failed:", error)
     return {
       success: false,
       message: "データベースの更新に失敗しました。",

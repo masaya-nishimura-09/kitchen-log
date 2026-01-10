@@ -2,8 +2,12 @@
 
 import { cookies } from "next/headers"
 import { createClient } from "@/lib/supabase/server"
+import type { AppActionResult } from "@/types/app-action-result"
 
-export async function uploadImage(file: File, userId: string): Promise<string> {
+export async function uploadImage(
+  file: File,
+  userId: string,
+): Promise<AppActionResult<string>> {
   const supabase = createClient(cookies())
 
   const { data: uploadData, error: uploadError } = await supabase.storage
@@ -11,14 +15,19 @@ export async function uploadImage(file: File, userId: string): Promise<string> {
     .upload(`${userId}/${Date.now()}-${file.name}`, file)
 
   if (uploadError) {
-    console.error("Supabase upload error:", uploadError)
-    throw new Error(uploadError.message)
+    return {
+      success: false,
+      message: "画像のアップロードに失敗しました。",
+    }
   }
 
-  return uploadData.path
+  return {
+    success: true,
+    data: uploadData.path,
+  }
 }
 
-export async function deleteImage(imageUrl: string) {
+export async function deleteImage(imageUrl: string): Promise<AppActionResult> {
   const supabase = createClient(cookies())
 
   const { error: removeError } = await supabase.storage
@@ -26,7 +35,13 @@ export async function deleteImage(imageUrl: string) {
     .remove([imageUrl])
 
   if (removeError) {
-    console.error("Supabase file delete error:", removeError)
-    throw new Error(removeError.message)
+    return {
+      success: false,
+      message: "画像の削除に失敗しました。",
+    }
+  }
+
+  return {
+    success: true,
   }
 }
