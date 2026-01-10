@@ -1,23 +1,30 @@
 "use client"
 
-import { useActionState } from "react"
+import { useState, useTransition } from "react"
 import { updateEmail } from "@/actions/auth/update"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Spinner } from "@/components/ui/spinner"
-import type { EmailState } from "@/types/auth"
+import type { AppActionResult } from "@/types/app-action-result"
 
 export default function EmailForm({ email }: { email: string }) {
-  const initialState: EmailState = { message: null, errors: {} }
+  const [isPending, startTransition] = useTransition()
+  const [state, setState] = useState<AppActionResult>({
+    success: false,
+  })
 
-  const [state, formAction, isPending] = useActionState(
-    updateEmail,
-    initialState,
-  )
+  const handleSubmit = async (formData: FormData) => {
+    startTransition(async () => {
+      const result = await updateEmail(formData)
+      if (!result.success) {
+        setState(result)
+      }
+    })
+  }
 
   return (
-    <form className="grid gap-2" id="email-form" action={formAction}>
+    <form className="grid gap-2" id="email-form" action={handleSubmit}>
       <Label htmlFor="email">メールアドレス</Label>
       <Input
         id="email"

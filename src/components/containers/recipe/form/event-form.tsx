@@ -23,7 +23,8 @@ import {
 } from "@/components/ui/popover"
 import { Spinner } from "@/components/ui/spinner"
 import { formatDateToYYYYMMDD, getDateWithDayOfWeek } from "@/lib/date/date"
-import type { EventInput, EventState } from "@/types/calendar/event-input"
+import type { AppActionResult } from "@/types/app-action-result"
+import type { EventInput } from "@/types/calendar/event-input"
 
 export default function EventForm({ id }: { id: number }) {
   const [open, setOpen] = useState(false)
@@ -31,10 +32,8 @@ export default function EventForm({ id }: { id: number }) {
   const today = new Date()
 
   const [isPending, startTransition] = useTransition()
-  const [state, setState] = useState<EventState>({
-    success: true,
-    message: null,
-    errors: {},
+  const [state, setState] = useState<AppActionResult>({
+    success: false,
   })
 
   const [formData, setFormDataAction] = useState<EventInput>({

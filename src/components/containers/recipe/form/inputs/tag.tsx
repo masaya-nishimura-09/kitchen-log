@@ -5,7 +5,8 @@ import { type Dispatch, type SetStateAction, useState } from "react"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import type { RecipeInput, RecipeState } from "@/types/recipe/recipe-input"
+import type { AppActionResult } from "@/types/app-action-result"
+import type { RecipeInput } from "@/types/recipe/recipe-input"
 
 export default function TagInput({
   formData,
@@ -14,7 +15,7 @@ export default function TagInput({
 }: {
   formData: RecipeInput
   setFormDataAction: Dispatch<SetStateAction<RecipeInput>>
-  state: RecipeState | undefined
+  state: AppActionResult | undefined
 }) {
   const [inputValue, setInputValue] = useState("")
 

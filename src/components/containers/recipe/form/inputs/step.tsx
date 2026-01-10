@@ -28,7 +28,8 @@ import {
   ItemTitle,
 } from "@/components/ui/item"
 import { Textarea } from "@/components/ui/textarea"
-import type { RecipeInput, RecipeState } from "@/types/recipe/recipe-input"
+import type { AppActionResult } from "@/types/app-action-result"
+import type { RecipeInput } from "@/types/recipe/recipe-input"
 
 function SortableStepItem({
   step,
@@ -85,7 +86,7 @@ export default function StepInput({
 }: {
   formData: RecipeInput
   setFormDataAction: Dispatch<SetStateAction<RecipeInput>>
-  state: RecipeState | undefined
+  state: AppActionResult | undefined
 }) {
   const [inputValue, setInputValue] = useState({
     text: "",

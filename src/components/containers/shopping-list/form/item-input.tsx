@@ -16,10 +16,8 @@ import {
 } from "@/components/ui/select"
 import { Separator } from "@/components/ui/separator"
 import { unitList } from "@/lib/recipe/ingredient-unit"
-import type {
-  ShoppingListItemInput,
-  ShoppingListItemState,
-} from "@/types/shopping-list/shopping-list-item-input"
+import type { AppActionResult } from "@/types/app-action-result"
+import type { ShoppingListItemInput } from "@/types/shopping-list/shopping-list-item-input"
 
 export default function ItemInput({
   formData,
@@ -27,7 +25,7 @@ export default function ItemInput({
 }: {
   formData: ShoppingListItemInput[]
   setFormDataAction: Dispatch<SetStateAction<ShoppingListItemInput[]>>
-  state: ShoppingListItemState | undefined
+  state: AppActionResult | undefined
 }) {
   const [inputValue, setInputValue] = useState({
     name: "",

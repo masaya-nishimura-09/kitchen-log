@@ -31,7 +31,8 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { unitList } from "@/lib/recipe/ingredient-unit"
-import type { RecipeInput, RecipeState } from "@/types/recipe/recipe-input"
+import type { AppActionResult } from "@/types/app-action-result"
+import type { RecipeInput } from "@/types/recipe/recipe-input"
 
 function SortableStepItem({
   ingredient,
@@ -99,7 +100,7 @@ export default function IngredientInput({
 }: {
   formData: RecipeInput
   setFormDataAction: Dispatch<SetStateAction<RecipeInput>>
-  state: RecipeState | undefined
+  state: AppActionResult | undefined
 }) {
   const [inputValue, setInputValue] = useState({
     name: "",

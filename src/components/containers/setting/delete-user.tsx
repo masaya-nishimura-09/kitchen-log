@@ -24,9 +24,8 @@ export default function DeleteUserForm() {
     e.preventDefault()
 
     startTransition(async () => {
-      try {
-        await deleteUser()
-      } catch {
+      const result = await deleteUser()
+      if (!result.success) {
         toast.error("アカウントの削除に失敗しました。")
       }
     })

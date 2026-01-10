@@ -21,10 +21,7 @@ export default function RecipeMenu({ recipe }: { recipe: Recipe }) {
     e.preventDefault()
 
     startTransition(async () => {
-      const result = await createFromRecipe([recipe])
-      if (!result.success) {
-        console.error(result.message)
-      }
+      await createFromRecipe([recipe])
     })
   }
 

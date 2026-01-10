@@ -7,7 +7,8 @@ import { Input } from "@/components/ui/input"
 import { Item, ItemContent, ItemTitle } from "@/components/ui/item"
 import { Label } from "@/components/ui/label"
 import { ScrollArea } from "@/components/ui/scroll-area"
-import type { EventInput, EventState } from "@/types/calendar/event-input"
+import type { AppActionResult } from "@/types/app-action-result"
+import type { EventInput } from "@/types/calendar/event-input"
 import type { Recipe } from "@/types/recipe/recipe"
 
 export default function RecipeInput({
@@ -18,7 +19,7 @@ export default function RecipeInput({
 }: {
   formData: EventInput
   setFormDataAction: Dispatch<SetStateAction<EventInput>>
-  state: EventState | undefined
+  state: AppActionResult | undefined
   recipes: Recipe[]
 }) {
   const [recipeSuggestions, setRecipeSuggestions] = useState<Recipe[]>([])

@@ -12,18 +12,14 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { Spinner } from "@/components/ui/spinner"
-import type {
-  ShoppingListItemInput,
-  ShoppingListItemState,
-} from "@/types/shopping-list/shopping-list-item-input"
+import type { AppActionResult } from "@/types/app-action-result"
+import type { ShoppingListItemInput } from "@/types/shopping-list/shopping-list-item-input"
 import ItemInput from "./item-input"
 
 export default function ShoppingListItemForm() {
   const [isPending, startTransition] = useTransition()
-  const [state, setState] = useState<ShoppingListItemState>({
+  const [state, setState] = useState<AppActionResult>({
     success: true,
-    message: null,
-    errors: {},
   })
 
   const [formData, setFormDataAction] = useState<ShoppingListItemInput[]>([])

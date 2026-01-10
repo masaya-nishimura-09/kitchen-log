@@ -11,7 +11,6 @@ import type { AppActionResult } from "@/types/app-action-result"
 import { getUserId } from "./auth"
 
 export async function updateUsername(
-  _prevState: AppActionResult | undefined,
   formData: FormData,
 ): Promise<AppActionResult> {
   const validatedFields = UsernameFormSchema.safeParse({
@@ -53,7 +52,6 @@ export async function updateUsername(
 }
 
 export async function updateEmail(
-  _prevState: AppActionResult | undefined,
   formData: FormData,
 ): Promise<AppActionResult> {
   const validatedFields = EmailFormSchema.safeParse({
@@ -87,7 +85,6 @@ export async function updateEmail(
 }
 
 export async function updatePassword(
-  _prevState: AppActionResult | undefined,
   formData: FormData,
 ): Promise<AppActionResult> {
   const validatedFields = PasswordFormSchema.safeParse({

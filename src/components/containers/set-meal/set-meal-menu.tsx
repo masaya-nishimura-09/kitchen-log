@@ -21,10 +21,7 @@ export default function SetMealMenu({ setMeal }: { setMeal: SetMeal }) {
     e.preventDefault()
 
     startTransition(async () => {
-      const result = await createFromRecipe(setMeal.recipes)
-      if (!result.success) {
-        console.error(result.message)
-      }
+      await createFromRecipe(setMeal.recipes)
     })
   }
 

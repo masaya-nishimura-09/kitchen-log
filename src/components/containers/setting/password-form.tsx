@@ -1,23 +1,30 @@
 "use client"
 
-import { useActionState } from "react"
+import { useState, useTransition } from "react"
 import { updatePassword } from "@/actions/auth/update"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Spinner } from "@/components/ui/spinner"
-import type { PasswordState } from "@/types/auth"
+import type { AppActionResult } from "@/types/app-action-result"
 
 export default function PasswordForm() {
-  const initialState: PasswordState = { message: null, errors: {} }
+  const [isPending, startTransition] = useTransition()
+  const [state, setState] = useState<AppActionResult>({
+    success: false,
+  })
 
-  const [state, formAction, isPending] = useActionState(
-    updatePassword,
-    initialState,
-  )
+  const handleSubmit = async (formData: FormData) => {
+    startTransition(async () => {
+      const result = await updatePassword(formData)
+      if (!result.success) {
+        setState(result)
+      }
+    })
+  }
 
   return (
-    <form className="grid gap-2" id="password-form" action={formAction}>
+    <form className="grid gap-2" id="password-form" action={handleSubmit}>
       <div className="grid gap-2">
         <Label htmlFor="password">パスワード</Label>
         <Input id="password" name="password" type="password" />

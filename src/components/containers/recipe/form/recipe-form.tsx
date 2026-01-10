@@ -35,7 +35,8 @@ import {
 import { Input } from "@/components/ui/input"
 import { Spinner } from "@/components/ui/spinner"
 import { Textarea } from "@/components/ui/textarea"
-import type { RecipeInput, RecipeState } from "@/types/recipe/recipe-input"
+import type { AppActionResult } from "@/types/app-action-result"
+import type { RecipeInput } from "@/types/recipe/recipe-input"
 import IngredientInput from "./inputs/ingredient"
 import StepInput from "./inputs/step"
 import TagInput from "./inputs/tag"
@@ -48,10 +49,8 @@ export default function RecipeForm({
   mode: string
 }) {
   const [isPending, startTransition] = useTransition()
-  const [state, setState] = useState<RecipeState>({
-    success: true,
-    message: null,
-    errors: {},
+  const [state, setState] = useState<AppActionResult>({
+    success: false,
   })
 
   const [formData, setFormDataAction] = useState<RecipeInput>({

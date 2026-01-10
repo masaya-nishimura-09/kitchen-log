@@ -35,11 +35,9 @@ import {
 import { Input } from "@/components/ui/input"
 import { Spinner } from "@/components/ui/spinner"
 import { Textarea } from "@/components/ui/textarea"
+import type { AppActionResult } from "@/types/app-action-result"
 import type { Recipe } from "@/types/recipe/recipe"
-import type {
-  SetMealInput,
-  SetMealState,
-} from "@/types/set-meal/set-meal-input"
+import type { SetMealInput } from "@/types/set-meal/set-meal-input"
 import RecipesInput from "./recipes-input"
 
 export default function SetMealForm({
@@ -52,10 +50,8 @@ export default function SetMealForm({
   recipes: Recipe[]
 }) {
   const [isPending, startTransition] = useTransition()
-  const [state, setState] = useState<SetMealState>({
-    success: true,
-    message: null,
-    errors: {},
+  const [state, setState] = useState<AppActionResult>({
+    success: false,
   })
 
   const [formData, setFormDataAction] = useState<SetMealInput>({

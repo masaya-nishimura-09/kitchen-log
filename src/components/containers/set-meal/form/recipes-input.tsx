@@ -8,11 +8,9 @@ import { AccordionContent } from "@/components/ui/accordion"
 import { Input } from "@/components/ui/input"
 import { Item, ItemActions, ItemContent, ItemTitle } from "@/components/ui/item"
 import { ScrollArea } from "@/components/ui/scroll-area"
+import type { AppActionResult } from "@/types/app-action-result"
 import type { Recipe } from "@/types/recipe/recipe"
-import type {
-  SetMealInput,
-  SetMealState,
-} from "@/types/set-meal/set-meal-input"
+import type { SetMealInput } from "@/types/set-meal/set-meal-input"
 
 export default function RecipesInput({
   formData,
@@ -22,7 +20,7 @@ export default function RecipesInput({
 }: {
   formData: SetMealInput
   setFormDataAction: Dispatch<SetStateAction<SetMealInput>>
-  state: SetMealState | undefined
+  state: AppActionResult | undefined
   recipes: Recipe[]
 }) {
   const [recipeSuggestions, setRecipeSuggestions] = useState<Recipe[]>([])

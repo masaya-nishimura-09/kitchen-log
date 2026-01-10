@@ -1,4 +1,3 @@
-import SetMealCard from "@/components/containers/set-meal/set-meal-card"
 import {
   Card,
   CardAction,
@@ -8,6 +7,7 @@ import {
 } from "@/components/ui/card"
 import type { SetMeal } from "@/types/set-meal/set-meal"
 import SeeMoreButton from "../button/see-more-button"
+import SetMeals from "./set-meals"
 
 export default function LatestSetMeals({ setMeals }: { setMeals: SetMeal[] }) {
   return (
@@ -19,15 +19,7 @@ export default function LatestSetMeals({ setMeals }: { setMeals: SetMeal[] }) {
         </CardAction>
       </CardHeader>
       <CardContent>
-        {setMeals.length > 0 ? (
-          <div className="size-full grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))]">
-            {setMeals.map((setMeal) => (
-              <SetMealCard key={setMeal.id} setMeal={setMeal} />
-            ))}
-          </div>
-        ) : (
-          <p>献立がありません</p>
-        )}
+        <SetMeals setMeals={setMeals} size="sm" />
       </CardContent>
     </Card>
   )

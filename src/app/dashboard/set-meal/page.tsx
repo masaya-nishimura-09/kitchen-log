@@ -35,7 +35,7 @@ export default async function Page({
         </CardAction>
       </CardHeader>
       <CardContent>
-        <SetMeals setMeals={setMeals} size="280" />
+        <SetMeals setMeals={setMeals} size="md" />
       </CardContent>
     </Card>
   )

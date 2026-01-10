@@ -1,7 +1,8 @@
 "use client"
 
-import {useState, useTransition} from "react"
-import {Button} from "@/components/ui/button"
+import { useState, useTransition } from "react"
+import { createGroup } from "@/actions/group/create"
+import { Button } from "@/components/ui/button"
 import {
   Card,
   CardContent,
@@ -9,18 +10,16 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import {Label} from "@/components/ui/label"
-import {Spinner} from "@/components/ui/spinner"
-import type {GroupFormInput, GroupFormState} from "@/types/group/group-form"
-import {createGroup} from "@/actions/group/create"
-import {Input} from "@/components/ui/input"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Spinner } from "@/components/ui/spinner"
+import type { AppActionResult } from "@/types/app-action-result"
+import type { GroupFormInput } from "@/types/group/group-form"
 
 export default function GroupForm() {
   const [isPending, startTransition] = useTransition()
-  const [state, setState] = useState<GroupFormState>({
-    success: true,
-    message: null,
-    errors: {},
+  const [state, setState] = useState<AppActionResult>({
+    success: false,
   })
 
   const [formData, setFormDataAction] = useState<GroupFormInput>({
@@ -67,7 +66,7 @@ export default function GroupForm() {
               placeholder="名前を入力してください"
               value={formData.name}
               onChange={(e) =>
-                setFormDataAction({...formData, name: e.target.value})
+                setFormDataAction({ ...formData, name: e.target.value })
               }
             />
             <div aria-live="polite" aria-atomic="true">

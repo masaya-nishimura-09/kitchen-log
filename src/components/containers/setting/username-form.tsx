@@ -1,23 +1,30 @@
 "use client"
 
-import { useActionState } from "react"
+import { useState, useTransition } from "react"
 import { updateUsername } from "@/actions/auth/update"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Spinner } from "@/components/ui/spinner"
-import type { UsernameState } from "@/types/auth"
+import type { AppActionResult } from "@/types/app-action-result"
 
 export default function UsernameForm({ username }: { username: string }) {
-  const initialState: UsernameState = { message: null, errors: {} }
+  const [isPending, startTransition] = useTransition()
+  const [state, setState] = useState<AppActionResult>({
+    success: false,
+  })
 
-  const [state, formAction, isPending] = useActionState(
-    updateUsername,
-    initialState,
-  )
+  const handleSubmit = async (formData: FormData) => {
+    startTransition(async () => {
+      const result = await updateUsername(formData)
+      if (!result.success) {
+        setState(result)
+      }
+    })
+  }
 
   return (
-    <form className="grid gap-2" id="username-form" action={formAction}>
+    <form className="grid gap-2" id="username-form" action={handleSubmit}>
       <Label htmlFor="username">ユーザーネーム</Label>
       <Input
         id="username"
