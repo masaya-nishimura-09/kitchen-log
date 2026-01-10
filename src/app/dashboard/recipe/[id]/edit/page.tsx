@@ -5,9 +5,10 @@ import RecipeForm from "@/components/containers/recipe/form/recipe-form"
 export default async function Page({ params }: { params: { id: string } }) {
   const { id } = await params
 
-  const recipe = await fetchRecipeInput(Number(id))
-  if (!recipe) {
+  const result = await fetchRecipeInput(Number(id))
+  if (!result.success || !result.data) {
     notFound()
   }
+  const recipe = result.data
   return <RecipeForm recipe={recipe} mode="edit" />
 }

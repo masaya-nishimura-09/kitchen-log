@@ -133,7 +133,12 @@ export default function RecipeForm({
                   <AlertDialogCancel>キャンセル</AlertDialogCancel>
                   <AlertDialogAction
                     onClick={() => {
-                      deleteRecipe(formData.id)
+                      startTransition(async () => {
+                        const result = await deleteRecipe(formData.id)
+                        if (!result.success) {
+                          console.error(result.message)
+                        }
+                      })
                     }}
                   >
                     {isPending && <Spinner />}

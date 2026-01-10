@@ -21,10 +21,11 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 export default async function Page({ params }: { params: { id: string } }) {
   const { id } = await params
 
-  const recipe = await fetchRecipe(Number(id))
-  if (!recipe) {
+  const result = await fetchRecipe(Number(id))
+  if (!result.success || !result.data) {
     notFound()
   }
+  const recipe = result.data
 
   return (
     <div className="size-full grid grid-cols-1 md:grid-cols-2 gap-4">

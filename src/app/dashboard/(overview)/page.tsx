@@ -18,13 +18,24 @@ export default async function Page() {
     notFound()
   }
 
-  const latestRecipes = await fetchLatestRecipes(4)
-  const latestSetMeals = await fetchLatestSetMeals(4)
-  const latestShoppingList = await fetchLatestShoppingList(8)
+  const latestRecipesResult = await fetchLatestRecipes(4)
+  const latestSetMealsResult = await fetchLatestSetMeals(4)
+  const latestShoppingListResult = await fetchLatestShoppingList(8)
 
-  if (!latestRecipes || !latestSetMeals || !latestShoppingList) {
+  if (
+    !latestRecipesResult.success ||
+    !latestRecipesResult.data ||
+    !latestSetMealsResult.success ||
+    !latestSetMealsResult.data ||
+    !latestShoppingListResult.success ||
+    !latestShoppingListResult.data
+  ) {
     notFound()
   }
+
+  const latestRecipes = latestRecipesResult.data
+  const latestSetMeals = latestSetMealsResult.data
+  const latestShoppingList = latestShoppingListResult.data
 
   return (
     <div className="size-full flex flex-col gap-4">

@@ -6,10 +6,11 @@ export async function GET(request: Request) {
   const { searchParams } = new URL(request.url)
   const path = searchParams.get("path")
 
-  const userId = await getUserId()
-  if (!userId) {
+  const getUserIdResult = await getUserId()
+  if (!getUserIdResult.success || !getUserIdResult.data) {
     return new Response("Unauthorized", { status: 401 })
   }
+  const userId = getUserIdResult.data
 
   if (!path?.startsWith(userId)) {
     return new Response("Forbidden", { status: 403 })

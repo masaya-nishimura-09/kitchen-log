@@ -23,13 +23,24 @@ export default async function Page({
 }) {
   const params = await searchParams
 
-  const recipes = await fetchRecipes(params)
-  const ingredients = await fetchIngredients()
-  const tags = await fetchTags()
+  const recipesResult = await fetchRecipes(params)
+  const ingredientsResult = await fetchIngredients()
+  const tagsResult = await fetchTags()
 
-  if (!recipes || !ingredients || !tags) {
+  if (
+    !recipesResult.success ||
+    !recipesResult.data ||
+    !ingredientsResult.success ||
+    !ingredientsResult.data ||
+    !tagsResult.success ||
+    !tagsResult.data
+  ) {
     notFound()
   }
+
+  const recipes = recipesResult.data
+  const ingredients = ingredientsResult.data
+  const tags = tagsResult.data
 
   return (
     <Card className="size-full">

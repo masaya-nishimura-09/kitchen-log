@@ -19,7 +19,10 @@ export default function EventMenu({ event }: { event: CalendarEvent }) {
     e.preventDefault()
 
     startTransition(async () => {
-      await deleteEvent(event)
+      const result = await deleteEvent(event)
+      if (!result.success) {
+        console.error(result.message)
+      }
     })
   }
 
