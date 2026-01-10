@@ -8,20 +8,21 @@ import { fetchShoppingList } from "@/actions/shopping-list/fetch"
 import { zenkakuToHankaku } from "@/lib/recipe/zenkaku-to-hankaku"
 import { ShoppingListItemFormSchema } from "@/lib/schemas/shopping-list-item-form"
 import { createClient } from "@/lib/supabase/server"
+import type { AppActionResult } from "@/types/app-action-result"
 import type { Recipe } from "@/types/recipe/recipe"
-import type {
-  ShoppingListItemInput,
-  ShoppingListItemState,
-} from "@/types/shopping-list/shopping-list-item-input"
+import type { ShoppingListItemInput } from "@/types/shopping-list/shopping-list-item-input"
 
 async function insertItem(
   userId: string,
   name: string | null,
   amount: string | null,
   unit: string,
-) {
+): Promise<AppActionResult> {
   if (!name) {
-    throw new Error("アイテム名がありません。")
+    return {
+      success: false,
+      message: "アイテム名がありません。",
+    }
   }
 
   const supabase = createClient(cookies())
@@ -34,13 +35,20 @@ async function insertItem(
 
   if (error) {
     console.error(error)
-    throw new Error("アイテムの登録に失敗しました。")
+    return {
+      success: false,
+      message: "アイテムの登録に失敗しました。",
+    }
+  }
+
+  return {
+    success: true,
   }
 }
 
 export async function createItem(
   formData: FormData,
-): Promise<ShoppingListItemState> {
+): Promise<AppActionResult> {
   const itemData = JSON.parse(
     formData.get("shoppingListItemData") as string,
   ) as ShoppingListItemInput[]
@@ -70,25 +78,23 @@ export async function createItem(
     unit: i.unit,
   }))
 
-  const userId = await getUserId()
-  if (!userId) {
+  const getUserIdResult = await getUserId()
+  if (!getUserIdResult.success || !getUserIdResult.data) {
     return {
       success: false,
       message: "認証情報が取得できませんでした。再度ログインしてください。",
     }
   }
+  const userId = getUserIdResult.data
 
-  let shoppingList = []
-  try {
-    const result = await fetchShoppingList()
-    shoppingList = result.filter((r) => r.status === false)
-  } catch (error) {
-    console.error(error)
+  const fetchResult = await fetchShoppingList()
+  if (!fetchResult.success || !fetchResult.data) {
     return {
       success: false,
       message: "アイテムの登録に失敗しました。",
     }
   }
+  const shoppingList = fetchResult.data.filter((r) => r.status === false)
 
   for (const data of convertedData) {
     const sameItem = shoppingList.find(
@@ -96,7 +102,10 @@ export async function createItem(
     )
 
     if (shoppingList.length < 1 || !sameItem) {
-      await insertItem(userId, data.name, data.amount, data.unit)
+      const insertResult = await insertItem(userId, data.name, data.amount, data.unit)
+      if (!insertResult.success) {
+        return insertResult
+      }
       continue
     }
 
@@ -130,7 +139,9 @@ export async function createItem(
   redirect(`/dashboard/shopping-list`)
 }
 
-export async function createFromRecipe(recipes: Recipe[]) {
+export async function createFromRecipe(
+  recipes: Recipe[],
+): Promise<AppActionResult> {
   const ingredients = []
   for (const recipe of recipes) {
     ingredients.push(...recipe.ingredient)
@@ -154,7 +165,14 @@ export async function createFromRecipe(recipes: Recipe[]) {
 
     const result = await createItem(fd)
     if (!result.success) {
-      throw new Error("アイテムの登録に失敗しました。")
+      return {
+        success: false,
+        message: "アイテムの登録に失敗しました。",
+      }
     }
+  }
+
+  return {
+    success: true,
   }
 }

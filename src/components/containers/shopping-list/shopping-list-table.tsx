@@ -94,10 +94,9 @@ export const columns: ColumnDef<ShoppingListItem>[] = [
       const item = row.original
       async function handleDeleteItem() {
         startTransition(async () => {
-          try {
-            await deleteItem(item.id)
-          } catch (_error) {
-            throw new Error("Internal Server Error")
+          const result = await deleteItem(item.id)
+          if (!result.success) {
+            console.error(result.message)
           }
         })
       }
@@ -183,8 +182,12 @@ export default function ShoppingListTable({
     fd.append("shoppingListItemData", JSON.stringify(originalData))
 
     startTransition(async () => {
-      await updateItem(fd)
-      window.location.reload()
+      const result = await updateItem(fd)
+      if (result.success) {
+        window.location.reload()
+      } else {
+        console.error(result.message)
+      }
     })
   }
   return (

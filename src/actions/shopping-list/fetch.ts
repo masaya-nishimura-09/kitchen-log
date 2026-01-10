@@ -4,15 +4,20 @@ import { cookies } from "next/headers"
 import { getUserId } from "@/actions/auth/auth"
 import { shoppingListItemConverter } from "@/lib/shopping-list/shopping-list-item-converter"
 import { createClient } from "@/lib/supabase/server"
+import type { AppActionResult } from "@/types/app-action-result"
 import type { ShoppingListItem } from "@/types/shopping-list/shopping-list-item"
 
-export async function fetchShoppingList(): Promise<ShoppingListItem[]> {
-  const userId = await getUserId()
-  if (!userId) {
-    throw new Error(
-      "認証情報が取得できませんでした。再度ログインしてください。",
-    )
+export async function fetchShoppingList(): Promise<
+  AppActionResult<ShoppingListItem[]>
+> {
+  const getUserIdResult = await getUserId()
+  if (!getUserIdResult.success || !getUserIdResult.data) {
+    return {
+      success: false,
+      message: "認証情報が取得できませんでした。再度ログインしてください。",
+    }
   }
+  const userId = getUserIdResult.data
 
   const supabase = createClient(cookies())
   const { data, error } = await supabase
@@ -22,22 +27,29 @@ export async function fetchShoppingList(): Promise<ShoppingListItem[]> {
     .order("updated_at", { ascending: false })
 
   if (error) {
-    console.error("Shopping List Fetch Failed:", error)
-    throw new Error("買い物リストの取得に失敗しました。")
+    return {
+      success: false,
+      message: "買い物リストの取得に失敗しました。",
+    }
   }
 
-  return data.map(shoppingListItemConverter)
+  return {
+    success: true,
+    data: data?.map(shoppingListItemConverter),
+  }
 }
 
 export async function fetchLatestShoppingList(
   limit: number,
-): Promise<ShoppingListItem[]> {
-  const userId = await getUserId()
-  if (!userId) {
-    throw new Error(
-      "認証情報が取得できませんでした。再度ログインしてください。",
-    )
+): Promise<AppActionResult<ShoppingListItem[]>> {
+  const getUserIdResult = await getUserId()
+  if (!getUserIdResult.success || !getUserIdResult.data) {
+    return {
+      success: false,
+      message: "認証情報が取得できませんでした。再度ログインしてください。",
+    }
   }
+  const userId = getUserIdResult.data
 
   const supabase = createClient(cookies())
   const { data, error } = await supabase
@@ -49,9 +61,14 @@ export async function fetchLatestShoppingList(
     .limit(limit)
 
   if (error) {
-    console.error("Shopping List Fetch Failed:", error)
-    throw new Error("買い物リストの取得に失敗しました。")
+    return {
+      success: false,
+      message: "買い物リストの取得に失敗しました。",
+    }
   }
 
-  return data.map(shoppingListItemConverter)
+  return {
+    success: true,
+    data: data?.map(shoppingListItemConverter),
+  }
 }

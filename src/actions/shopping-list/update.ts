@@ -4,9 +4,10 @@ import { cookies } from "next/headers"
 import { getUserId } from "@/actions/auth/auth"
 import { ShoppingListItemUpdateFormSchema } from "@/lib/schemas/shopping-list-item-update-form"
 import { createClient } from "@/lib/supabase/server"
+import type { AppActionResult } from "@/types/app-action-result"
 import type { ShoppingListItemInput } from "@/types/shopping-list/shopping-list-item-input"
 
-export async function updateItem(formData: FormData) {
+export async function updateItem(formData: FormData): Promise<AppActionResult> {
   const itemData = JSON.parse(
     formData.get("shoppingListItemData") as string,
   ) as ShoppingListItemInput
@@ -14,17 +15,21 @@ export async function updateItem(formData: FormData) {
   const validatedFields = ShoppingListItemUpdateFormSchema.safeParse(itemData)
 
   if (!validatedFields.success) {
-    console.error(validatedFields.error)
-    throw new Error("Internal Server Error")
+    return {
+      success: false,
+      message: "入力内容に誤りがあります。",
+    }
   }
   const data = validatedFields.data
 
-  const userId = await getUserId()
-  if (!userId) {
-    throw new Error(
-      "認証情報が取得できませんでした。再度ログインしてください。",
-    )
+  const getUserIdResult = await getUserId()
+  if (!getUserIdResult.success || !getUserIdResult.data) {
+    return {
+      success: false,
+      message: "認証情報が取得できませんでした。再度ログインしてください。",
+    }
   }
+  const userId = getUserIdResult.data
 
   const supabase = createClient(cookies())
   for (const item of data) {
@@ -35,7 +40,14 @@ export async function updateItem(formData: FormData) {
       .eq("user_id", userId)
     if (error) {
       console.error("Database Error:", error)
-      throw new Error("アイテムの更新に失敗しました。d")
+      return {
+        success: false,
+        message: "アイテムの更新に失敗しました。",
+      }
     }
+  }
+
+  return {
+    success: true,
   }
 }
