@@ -1,25 +1,24 @@
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
+import { IconFolderCode } from "@tabler/icons-react"
 import {
-  Card,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
+  Empty,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from "@/components/ui/empty"
 
 export default function NoSetMeals() {
   return (
-    <Card className="w-xs md:w-md">
-      <CardHeader>
-        <CardTitle>献立がありません</CardTitle>
-        <CardDescription>献立を作成してみましょう。</CardDescription>
-      </CardHeader>
-      <CardFooter>
-        <Button>
-          <Link href="/dashboard/set-meal/new">新規作成</Link>
-        </Button>
-      </CardFooter>
-    </Card>
+    <Empty>
+      <EmptyHeader>
+        <EmptyMedia variant="icon">
+          <IconFolderCode />
+        </EmptyMedia>
+        <EmptyTitle>献立がありません</EmptyTitle>
+        <EmptyDescription>
+          条件を変更するか、新しい献立を作成してみてください。
+        </EmptyDescription>
+      </EmptyHeader>
+    </Empty>
   )
 }
