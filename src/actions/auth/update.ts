@@ -7,21 +7,22 @@ import { EmailFormSchema } from "@/lib/schemas/email-form"
 import { PasswordFormSchema } from "@/lib/schemas/password-form"
 import { UsernameFormSchema } from "@/lib/schemas/username-form"
 import { createClient } from "@/lib/supabase/server"
-import type { EmailState, PasswordState, UsernameState } from "@/types/auth"
+import type { AppActionResult } from "@/types/app-action-result"
 import { getUserId } from "./auth"
 
 export async function updateUsername(
-  _prevState: UsernameState | undefined,
+  _prevState: AppActionResult | undefined,
   formData: FormData,
-) {
+): Promise<AppActionResult> {
   const validatedFields = UsernameFormSchema.safeParse({
     username: formData.get("username"),
   })
 
   if (!validatedFields.success) {
     return {
+      success: false,
       errors: validatedFields.error.flatten().fieldErrors,
-      message: "ユーザーネームの変更に失敗しました。",
+      message: "入力内容に誤りがあります。",
     }
   }
   const { username } = validatedFields.data
@@ -40,9 +41,8 @@ export async function updateUsername(
     }
   }
 
-  try {
-    await updateProfile(username)
-  } catch {
+  const updateProfileResult = await updateProfile(username)
+  if (!updateProfileResult.success) {
     return {
       success: false,
       message: "ユーザーネームの変更に失敗しました。",
@@ -54,17 +54,18 @@ export async function updateUsername(
 }
 
 export async function updateEmail(
-  _prevState: EmailState | undefined,
+  _prevState: AppActionResult | undefined,
   formData: FormData,
-) {
+): Promise<AppActionResult> {
   const validatedFields = EmailFormSchema.safeParse({
     email: formData.get("email"),
   })
 
   if (!validatedFields.success) {
     return {
+      success: false,
       errors: validatedFields.error.flatten().fieldErrors,
-      message: "メールアドレスの変更に失敗しました。",
+      message: "入力内容に誤りがあります。",
     }
   }
   const { email } = validatedFields.data
@@ -76,7 +77,6 @@ export async function updateEmail(
   })
 
   if (error) {
-    console.error("Email update failed:", error)
     return {
       success: false,
       message: "メールアドレスの変更に失敗しました。",
@@ -88,9 +88,9 @@ export async function updateEmail(
 }
 
 export async function updatePassword(
-  _prevState: PasswordState | undefined,
+  _prevState: AppActionResult | undefined,
   formData: FormData,
-) {
+): Promise<AppActionResult> {
   const validatedFields = PasswordFormSchema.safeParse({
     password: formData.get("password"),
     confirmedPassword: formData.get("confirmed-password"),
@@ -98,8 +98,9 @@ export async function updatePassword(
 
   if (!validatedFields.success) {
     return {
+      success: false,
       errors: validatedFields.error.flatten().fieldErrors,
-      message: "パスワードの変更に失敗しました。",
+      message: "入力内容に誤りがあります。",
     }
   }
   const { password } = validatedFields.data
@@ -110,7 +111,6 @@ export async function updatePassword(
     password: password,
   })
   if (error) {
-    console.error("Password update failed:", error)
     return {
       success: false,
       message: "パスワードの変更に失敗しました。",
@@ -121,10 +121,15 @@ export async function updatePassword(
   redirect("/dashboard/setting")
 }
 
-export async function updateProfile(username: string) {
+export async function updateProfile(
+  username: string,
+): Promise<AppActionResult> {
   const userId = await getUserId()
-  if (!userId) {
-    throw new Error("認証情報が取得できませんでした。")
+  if (!userId.success) {
+    return {
+      success: false,
+      message: "認証情報が取得できませんでした。",
+    }
   }
 
   const supabase = createClient(cookies())
@@ -136,6 +141,13 @@ export async function updateProfile(username: string) {
 
   if (error) {
     console.error("Profile display name update failed:", error)
-    throw new Error(error.message)
+    return {
+      success: false,
+      message: "プロファイルの更新に失敗しました。",
+    }
+  }
+
+  return {
+    success: true,
   }
 }
