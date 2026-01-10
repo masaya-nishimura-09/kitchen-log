@@ -86,8 +86,9 @@ export default function MainCalendar({
             />
           </PopoverContent>
         </Popover>
-
-        <Recipes recipes={recipes} size={"280"} />
+        <div className="size-full">
+          <Recipes recipes={recipes} size={"280"} />
+        </div>
       </CardContent>
     </Card>
   )
