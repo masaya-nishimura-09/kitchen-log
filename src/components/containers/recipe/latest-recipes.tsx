@@ -19,7 +19,7 @@ export default function LatestRecipes({ recipes }: { recipes: Recipe[] }) {
         </CardAction>
       </CardHeader>
       <CardContent>
-        <Recipes recipes={recipes} size="200" />
+        <Recipes recipes={recipes} size="sm" />
       </CardContent>
     </Card>
   )

@@ -1,3 +1,4 @@
+import clsx from "clsx"
 import NoRecipes from "@/components/containers/recipe/no-recipes"
 import type { Recipe } from "@/types/recipe/recipe"
 import RecipeCard from "./recipe-card"
@@ -10,11 +11,15 @@ export default function Recipes({
   recipes: Recipe[]
   size: string
 }) {
+  const containerClassName = clsx(
+    "size-full grid",
+    size === "sm" && "grid-cols-[repeat(auto-fill,minmax(200px,1fr))]",
+    size === "md" && "grid-cols-[repeat(auto-fill,minmax(280px,1fr))]",
+  )
+
   if (recipes.length > 0) {
     return (
-      <div
-        className={`size-full grid grid-cols-[repeat(auto-fill,minmax(${size}px,1fr))]`}
-      >
+      <div className={containerClassName}>
         {recipes.map((recipe) => (
           <RecipeCard
             key={recipe.id}

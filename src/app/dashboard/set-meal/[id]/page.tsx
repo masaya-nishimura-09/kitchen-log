@@ -29,7 +29,7 @@ export default async function Page({ params }: { params: { id: string } }) {
         </CardAction>
       </CardHeader>
       <CardContent>
-        <Recipes recipes={setMeal.recipes} size={"280"} />
+        <Recipes recipes={setMeal.recipes} size={"md"} />
       </CardContent>
     </Card>
   )
