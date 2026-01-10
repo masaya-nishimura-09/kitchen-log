@@ -5,10 +5,13 @@ import { cookies } from "next/headers"
 import { redirect } from "next/navigation"
 import { EventFormSchema } from "@/lib/schemas/event-form"
 import { createClient } from "@/lib/supabase/server"
+import type { AppActionResult } from "@/types/app-action-result"
 import type { EventInput } from "@/types/calendar/event-input"
 import { getUserId } from "../auth/auth"
 
-export async function createEvent(formData: FormData) {
+export async function createEvent(
+  formData: FormData,
+): Promise<AppActionResult> {
   const eventData = JSON.parse(
     formData.get("eventData") as string,
   ) as EventInput
@@ -56,7 +59,9 @@ export async function createEvent(formData: FormData) {
   redirect(`/dashboard/calendar/${date}`)
 }
 
-export async function createEvents(formData: FormData) {
+export async function createEvents(
+  formData: FormData,
+): Promise<AppActionResult> {
   const eventData = JSON.parse(
     formData.get("eventData") as string,
   ) as EventInput[]

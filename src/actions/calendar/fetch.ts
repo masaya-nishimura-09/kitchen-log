@@ -4,14 +4,16 @@ import { cookies } from "next/headers"
 import { getUserId } from "@/actions/auth/auth"
 import { calendarEventConverter } from "@/lib/calendar/shopping-list-item-converter"
 import { createClient } from "@/lib/supabase/server"
+import type { AppActionResult } from "@/types/app-action-result"
 import type { CalendarEvent } from "@/types/calendar/calendar-event"
 
-export async function fetchEvents(): Promise<CalendarEvent[]> {
+export async function fetchEvents(): Promise<AppActionResult<CalendarEvent[]>> {
   const userId = await getUserId()
   if (!userId) {
-    throw new Error(
-      "認証情報が取得できませんでした。再度ログインしてください。",
-    )
+    return {
+      success: false,
+      message: "認証情報が取得できませんでした。再度ログインしてください。",
+    }
   }
 
   const supabase = createClient(cookies())
@@ -68,9 +70,14 @@ export async function fetchEvents(): Promise<CalendarEvent[]> {
     .order("updated_at", { ascending: false })
 
   if (error) {
-    console.error("Calendar events Fetch Failed:", error)
-    throw new Error("カレンダー情報の取得に失敗しました。")
+    return {
+      success: false,
+      message: "カレンダー情報の取得に失敗しました。",
+    }
   }
 
-  return data.map(calendarEventConverter)
+  return {
+    success: true,
+    data: data.map(calendarEventConverter),
+  }
 }
