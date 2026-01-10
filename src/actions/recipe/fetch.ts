@@ -314,7 +314,7 @@ export async function fetchIngredients(): Promise<
   }
 
   return {
-    success: false,
+    success: true,
     data: data?.map(ingredientConverter),
   }
 }
