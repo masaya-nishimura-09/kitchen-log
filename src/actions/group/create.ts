@@ -6,9 +6,12 @@ import { redirect } from "next/navigation"
 import { getUserId } from "@/actions/auth/auth"
 import { GroupFormSchema } from "@/lib/schemas/group-form"
 import { createClient } from "@/lib/supabase/server"
-import type { GroupFormInput, GroupFormState } from "@/types/group/group-form"
+import type { AppActionResult } from "@/types/app-action-result"
+import type { GroupFormInput } from "@/types/group/group-form"
 
-export async function createGroup(formData: FormData): Promise<GroupFormState> {
+export async function createGroup(
+  formData: FormData,
+): Promise<AppActionResult> {
   const groupData = JSON.parse(
     formData.get("groupData") as string,
   ) as GroupFormInput

@@ -4,14 +4,16 @@ import { cookies } from "next/headers"
 import { getUserId } from "@/actions/auth/auth"
 import { groupDataConverter } from "@/lib/group/group-data-converter"
 import { createClient } from "@/lib/supabase/server"
+import type { AppActionResult } from "@/types/app-action-result"
 import type { Group } from "@/types/group/group"
 
-export async function fetchGroups(): Promise<Group[]> {
+export async function fetchGroups(): Promise<AppActionResult<Group[]>> {
   const userId = await getUserId()
   if (!userId) {
-    throw new Error(
-      "認証情報が取得できませんでした。再度ログインしてください。",
-    )
+    return {
+      success: false,
+      message: "認証情報が取得できませんでした。再度ログインしてください。",
+    }
   }
 
   const supabase = createClient(cookies())
@@ -35,9 +37,14 @@ export async function fetchGroups(): Promise<Group[]> {
     .order("created_at", { ascending: false })
 
   if (error) {
-    console.error("Groups Fetch Failed:", error)
-    throw new Error("グループの取得に失敗しました。")
+    return {
+      success: false,
+      message: "グループの取得に失敗しました。",
+    }
   }
 
-  return data.map(groupDataConverter)
+  return {
+    success: true,
+    data: data.map(groupDataConverter),
+  }
 }
