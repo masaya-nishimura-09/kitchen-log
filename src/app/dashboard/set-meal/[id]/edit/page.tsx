@@ -6,10 +6,15 @@ import SetMealForm from "@/components/containers/set-meal/form/set-meal-form"
 export default async function Page({ params }: { params: { id: string } }) {
   const { id } = await params
 
-  const setMeal = await fetchSetMealInput(Number(id))
-  if (!setMeal) {
+  const result = await fetchSetMealInput(Number(id))
+  if (!result.success || !result.data) {
     notFound()
   }
-  const recipes = await fetchRecipes(undefined)
+  const setMeal = result.data
+  const recipesResult = await fetchRecipes(undefined)
+  if (!recipesResult.success || !recipesResult.data) {
+    notFound()
+  }
+  const recipes = recipesResult.data
   return <SetMealForm setMeal={setMeal} mode="edit" recipes={recipes} />
 }

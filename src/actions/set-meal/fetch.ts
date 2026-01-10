@@ -4,17 +4,22 @@ import { cookies } from "next/headers"
 import { getUserId } from "@/actions/auth/auth"
 import { setMealConverter } from "@/lib/set-meal/set-meal-converter"
 import { createClient } from "@/lib/supabase/server"
+import type { AppActionResult } from "@/types/app-action-result"
 import type { SetMeal } from "@/types/set-meal/set-meal"
 import type { SetMealInput } from "@/types/set-meal/set-meal-input"
 import type { SetMealSearchParams } from "@/types/set-meal/set-meal-search-params"
 
-export async function fetchSetMeal(setMealId: number): Promise<SetMeal> {
-  const userId = await getUserId()
-  if (!userId) {
-    throw new Error(
-      "認証情報が取得できませんでした。再度ログインしてください。",
-    )
+export async function fetchSetMeal(
+  setMealId: number,
+): Promise<AppActionResult<SetMeal>> {
+  const getUserIdResult = await getUserId()
+  if (!getUserIdResult.success || !getUserIdResult.data) {
+    return {
+      success: false,
+      message: "認証情報が取得できませんでした。再度ログインしてください。",
+    }
   }
+  const userId = getUserIdResult.data
 
   const supabase = createClient(cookies())
   const { data, error } = await supabase
@@ -76,21 +81,29 @@ export async function fetchSetMeal(setMealId: number): Promise<SetMeal> {
     .single()
 
   if (error) {
-    console.error("Recipe Fetch Failed:", error)
-    throw new Error("献立の取得に失敗しました。")
+    return {
+      success: false,
+      message: "献立の取得に失敗しました。",
+    }
   }
-  return setMealConverter(data)
+
+  return {
+    success: true,
+    data: setMealConverter(data),
+  }
 }
 
 export async function fetchSetMeals(
   searchParams: SetMealSearchParams | undefined,
-): Promise<SetMeal[]> {
-  const userId = await getUserId()
-  if (!userId) {
-    throw new Error(
-      "認証情報が取得できませんでした。再度ログインしてください。",
-    )
+): Promise<AppActionResult<SetMeal[]>> {
+  const getUserIdResult = await getUserId()
+  if (!getUserIdResult.success || !getUserIdResult.data) {
+    return {
+      success: false,
+      message: "認証情報が取得できませんでした。再度ログインしてください。",
+    }
   }
+  const userId = getUserIdResult.data
 
   const titleParam = searchParams?.title || ""
 
@@ -154,22 +167,29 @@ export async function fetchSetMeals(
     .order("updated_at", { ascending: false })
 
   if (error) {
-    console.error("Set Meal Fetch Failed:", error)
-    throw new Error("献立の取得に失敗しました。")
+    return {
+      success: false,
+      message: "献立の取得に失敗しました。",
+    }
   }
 
-  return data.map(setMealConverter)
+  return {
+    success: true,
+    data: data?.map(setMealConverter),
+  }
 }
 
 export async function fetchSetMealInput(
   setMealId: number,
-): Promise<SetMealInput> {
-  const userId = await getUserId()
-  if (!userId) {
-    throw new Error(
-      "認証情報が取得できませんでした。再度ログインしてください。",
-    )
+): Promise<AppActionResult<SetMealInput>> {
+  const getUserIdResult = await getUserId()
+  if (!getUserIdResult.success || !getUserIdResult.data) {
+    return {
+      success: false,
+      message: "認証情報が取得できませんでした。再度ログインしてください。",
+    }
   }
+  const userId = getUserIdResult.data
 
   const supabase = createClient(cookies())
   const { data, error } = await supabase
@@ -231,8 +251,10 @@ export async function fetchSetMealInput(
     .single()
 
   if (error) {
-    console.error("Recipe Fetch Failed:", error)
-    throw new Error("献立の取得に失敗しました。")
+    return {
+      success: false,
+      message: "献立の取得に失敗しました。",
+    }
   }
 
   const convertedData = setMealConverter(data)
@@ -243,16 +265,23 @@ export async function fetchSetMealInput(
     recipes: convertedData.recipes,
   } as SetMealInput
 
-  return setMealInput
+  return {
+    success: true,
+    data: setMealInput,
+  }
 }
 
-export async function fetchLatestSetMeals(limit: number): Promise<SetMeal[]> {
-  const userId = await getUserId()
-  if (!userId) {
-    throw new Error(
-      "認証情報が取得できませんでした。再度ログインしてください。",
-    )
+export async function fetchLatestSetMeals(
+  limit: number,
+): Promise<AppActionResult<SetMeal[]>> {
+  const getUserIdResult = await getUserId()
+  if (!getUserIdResult.success || !getUserIdResult.data) {
+    return {
+      success: false,
+      message: "認証情報が取得できませんでした。再度ログインしてください。",
+    }
   }
+  const userId = getUserIdResult.data
 
   const supabase = createClient(cookies())
   const { data, error } = await supabase
@@ -316,9 +345,14 @@ export async function fetchLatestSetMeals(limit: number): Promise<SetMeal[]> {
     .limit(limit)
 
   if (error) {
-    console.error("Set meal Fetch Failed:", error)
-    throw new Error("献立の取得に失敗しました。")
+    return {
+      success: false,
+      message: "献立の取得に失敗しました。",
+    }
   }
 
-  return data.map(setMealConverter)
+  return {
+    success: true,
+    data: data?.map(setMealConverter),
+  }
 }

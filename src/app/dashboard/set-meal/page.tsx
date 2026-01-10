@@ -19,10 +19,11 @@ export default async function Page({
 }) {
   const params = await searchParams
 
-  const setMeals = await fetchSetMeals(params)
-  if (!setMeals) {
+  const result = await fetchSetMeals(params)
+  if (!result.success || !result.data) {
     notFound()
   }
+  const setMeals = result.data
 
   return (
     <Card className="size-full">

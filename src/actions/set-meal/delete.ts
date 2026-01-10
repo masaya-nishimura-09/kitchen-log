@@ -5,26 +5,32 @@ import { cookies } from "next/headers"
 import { redirect } from "next/navigation"
 import { getUserId } from "@/actions/auth/auth"
 import { createClient } from "@/lib/supabase/server"
+import type { AppActionResult } from "@/types/app-action-result"
 
-export async function deleteSetMeal(id: number) {
-  const userId = await getUserId()
-  if (!userId) {
-    throw new Error(
-      "認証情報が取得できませんでした。再度ログインしてください。",
-    )
+export async function deleteSetMeal(id: number): Promise<AppActionResult> {
+  const getUserIdResult = await getUserId()
+  if (!getUserIdResult.success || !getUserIdResult.data) {
+    return {
+      success: false,
+      message: "認証情報が取得できませんでした。再度ログインしてください。",
+    }
   }
+  const userId = getUserIdResult.data
 
   const supabase = createClient(cookies())
   const { error } = await supabase
     .from("set_meals")
     .delete()
     .eq("id", id)
+    .eq("user_id", userId)
     .select()
     .single()
 
   if (error) {
-    console.error("Set meal delete failed:", error)
-    throw new Error("献立の削除に失敗しました。")
+    return {
+      success: false,
+      message: "献立の削除に失敗しました。",
+    }
   }
 
   revalidatePath("/", "layout")

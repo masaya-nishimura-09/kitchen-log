@@ -6,12 +6,10 @@ import { redirect } from "next/navigation"
 import { getUserId } from "@/actions/auth/auth"
 import { SetMealFormSchema } from "@/lib/schemas/set-meal-form"
 import { createClient } from "@/lib/supabase/server"
-import type {
-  SetMealInput,
-  SetMealState,
-} from "@/types/set-meal/set-meal-input"
+import type { AppActionResult } from "@/types/app-action-result"
+import type { SetMealInput } from "@/types/set-meal/set-meal-input"
 
-export async function editSetMeal(formData: FormData): Promise<SetMealState> {
+export async function editSetMeal(formData: FormData): Promise<AppActionResult> {
   const setMealData = JSON.parse(
     formData.get("setMealData") as string,
   ) as SetMealInput
@@ -32,13 +30,14 @@ export async function editSetMeal(formData: FormData): Promise<SetMealState> {
   }
   const { id, title, memo, recipes } = validatedFields.data
 
-  const userId = await getUserId()
-  if (!userId) {
+  const getUserIdResult = await getUserId()
+  if (!getUserIdResult.success || !getUserIdResult.data) {
     return {
       success: false,
       message: "認証情報が取得できませんでした。再度ログインしてください。",
     }
   }
+  const userId = getUserIdResult.data
 
   const supabase = createClient(cookies())
 
@@ -53,7 +52,6 @@ export async function editSetMeal(formData: FormData): Promise<SetMealState> {
     .single<{ id: number }>()
 
   if (error) {
-    console.error("Set meal update failed:", error)
     return {
       success: false,
       message: "データベースの更新に失敗しました。",

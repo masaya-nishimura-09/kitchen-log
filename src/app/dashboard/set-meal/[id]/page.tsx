@@ -14,10 +14,11 @@ import {
 export default async function Page({ params }: { params: { id: string } }) {
   const { id } = await params
 
-  const setMeal = await fetchSetMeal(Number(id))
-  if (!setMeal) {
+  const result = await fetchSetMeal(Number(id))
+  if (!result.success || !result.data) {
     notFound()
   }
+  const setMeal = result.data
 
   return (
     <Card className="size-full">
