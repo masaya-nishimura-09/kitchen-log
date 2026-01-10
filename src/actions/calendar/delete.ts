@@ -11,16 +11,21 @@ import type { CalendarEvent } from "@/types/calendar/calendar-event"
 export async function deleteEvent(
   event: CalendarEvent,
 ): Promise<AppActionResult> {
-  const userId = await getUserId()
-  if (!userId) {
+  const getUserIdResult = await getUserId()
+  if (!getUserIdResult.success || !getUserIdResult.data) {
     return {
       success: false,
       message: "認証情報が取得できませんでした。再度ログインしてください。",
     }
   }
+  const userId = getUserIdResult.data
 
   const supabase = createClient(cookies())
-  const { error } = await supabase.from("calendar").delete().eq("id", event.id)
+  const { error } = await supabase
+    .from("calendar")
+    .delete()
+    .eq("id", event.id)
+    .eq("user_id", userId)
 
   if (error) {
     return {

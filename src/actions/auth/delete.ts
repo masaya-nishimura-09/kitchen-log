@@ -12,7 +12,6 @@ export async function deleteUser(): Promise<AppActionResult> {
     error: getUserError,
   } = await supabase.auth.getUser()
   if (getUserError || !user?.id) {
-    console.error(getUserError)
     return {
       success: false,
       message: "ユーザー情報の取得に失敗しました。",
@@ -23,7 +22,6 @@ export async function deleteUser(): Promise<AppActionResult> {
     user.id,
   )
   if (deleteUserError) {
-    console.error(deleteUserError)
     return {
       success: false,
       message: "アカウントの削除に失敗しました。",

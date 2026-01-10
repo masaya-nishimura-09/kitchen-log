@@ -1,21 +1,12 @@
 "use server"
 
 import { cookies } from "next/headers"
-import { getUserId } from "@/actions/auth/auth"
 import { groupDataConverter } from "@/lib/group/group-data-converter"
 import { createClient } from "@/lib/supabase/server"
 import type { AppActionResult } from "@/types/app-action-result"
 import type { Group } from "@/types/group/group"
 
 export async function fetchGroups(): Promise<AppActionResult<Group[]>> {
-  const userId = await getUserId()
-  if (!userId) {
-    return {
-      success: false,
-      message: "認証情報が取得できませんでした。再度ログインしてください。",
-    }
-  }
-
   const supabase = createClient(cookies())
   const { data, error } = await supabase
     .from("groups")

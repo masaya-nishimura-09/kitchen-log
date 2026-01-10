@@ -34,7 +34,6 @@ export async function updateUsername(
   })
 
   if (error) {
-    console.error("Username update failed:", error)
     return {
       success: false,
       message: "ユーザーネームの変更に失敗しました。",
@@ -124,13 +123,14 @@ export async function updatePassword(
 export async function updateProfile(
   username: string,
 ): Promise<AppActionResult> {
-  const userId = await getUserId()
-  if (!userId.success) {
+  const getUserIdResult = await getUserId()
+  if (!getUserIdResult.success || !getUserIdResult.data) {
     return {
       success: false,
-      message: "認証情報が取得できませんでした。",
+      message: "認証情報が取得できませんでした。再度ログインしてください。",
     }
   }
+  const userId = getUserIdResult.data
 
   const supabase = createClient(cookies())
 
@@ -140,7 +140,6 @@ export async function updateProfile(
     .eq("id", userId)
 
   if (error) {
-    console.error("Profile display name update failed:", error)
     return {
       success: false,
       message: "プロファイルの更新に失敗しました。",

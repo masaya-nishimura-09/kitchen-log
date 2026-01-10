@@ -21,7 +21,6 @@ export async function createGroup(
   })
 
   if (!validatedFields.success) {
-    console.error(validatedFields.error)
     return {
       success: false,
       errors: validatedFields.error.flatten().fieldErrors,
@@ -31,13 +30,14 @@ export async function createGroup(
 
   const { name } = validatedFields.data
 
-  const userId = await getUserId()
-  if (!userId) {
+  const getUserIdResult = await getUserId()
+  if (!getUserIdResult.success || !getUserIdResult.data) {
     return {
       success: false,
       message: "認証情報が取得できませんでした。再度ログインしてください。",
     }
   }
+  const userId = getUserIdResult.data
 
   const supabase = createClient(cookies())
 
@@ -62,7 +62,6 @@ export async function createGroup(
     .single()
 
   if (groupInsertError) {
-    console.error("Group Insert Failed", groupInsertError)
     return {
       success: false,
       message: "グループの作成に失敗しました。",
@@ -70,7 +69,6 @@ export async function createGroup(
   }
 
   if (!data || !data.id) {
-    console.error("Group Insert Failed")
     return {
       success: false,
       message: "グループの作成に失敗しました。",
@@ -87,7 +85,6 @@ export async function createGroup(
     })
 
   if (groupMembersInsertError) {
-    console.error("Group Members Insert Failed", groupMembersInsertError)
     return {
       success: false,
       message: "グループの作成に失敗しました。",

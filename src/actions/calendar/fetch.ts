@@ -8,13 +8,14 @@ import type { AppActionResult } from "@/types/app-action-result"
 import type { CalendarEvent } from "@/types/calendar/calendar-event"
 
 export async function fetchEvents(): Promise<AppActionResult<CalendarEvent[]>> {
-  const userId = await getUserId()
-  if (!userId) {
+  const getUserIdResult = await getUserId()
+  if (!getUserIdResult.success || !getUserIdResult.data) {
     return {
       success: false,
       message: "認証情報が取得できませんでした。再度ログインしてください。",
     }
   }
+  const userId = getUserIdResult.data
 
   const supabase = createClient(cookies())
   const { data, error } = await supabase

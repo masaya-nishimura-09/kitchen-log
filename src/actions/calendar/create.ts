@@ -22,7 +22,6 @@ export async function createEvent(
   })
 
   if (!validatedFields.success) {
-    console.error(validatedFields.error)
     return {
       success: false,
       errors: validatedFields.error.flatten().fieldErrors,
@@ -31,13 +30,14 @@ export async function createEvent(
   }
   const { recipeId, date } = validatedFields.data
 
-  const userId = await getUserId()
-  if (!userId) {
+  const getUserIdResult = await getUserId()
+  if (!getUserIdResult.success || !getUserIdResult.data) {
     return {
       success: false,
       message: "認証情報が取得できませんでした。再度ログインしてください。",
     }
   }
+  const userId = getUserIdResult.data
 
   const supabase = createClient(cookies())
 
@@ -48,7 +48,6 @@ export async function createEvent(
   })
 
   if (error) {
-    console.error("Calendar insert failed:", error)
     return {
       success: false,
       message: "データベースへの保存に失敗しました。",
@@ -66,13 +65,14 @@ export async function createEvents(
     formData.get("eventData") as string,
   ) as EventInput[]
 
-  const userId = await getUserId()
-  if (!userId) {
+  const getUserIdResult = await getUserId()
+  if (!getUserIdResult.success || !getUserIdResult.data) {
     return {
       success: false,
       message: "認証情報が取得できませんでした。再度ログインしてください。",
     }
   }
+  const userId = getUserIdResult.data
 
   const insertData = []
 
@@ -83,7 +83,6 @@ export async function createEvents(
     })
 
     if (!validatedFields.success) {
-      console.error(validatedFields.error)
       return {
         success: false,
         errors: validatedFields.error.flatten().fieldErrors,
@@ -103,7 +102,6 @@ export async function createEvents(
   const { error } = await supabase.from("calendar").insert(insertData)
 
   if (error) {
-    console.error("Calendar insert failed:", error)
     return {
       success: false,
       message: "データベースへの保存に失敗しました。",
