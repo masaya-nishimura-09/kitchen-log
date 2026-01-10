@@ -38,10 +38,7 @@ export async function getUserId(): Promise<AppActionResult<string>> {
   }
 }
 
-export async function signUp(
-  _prevState: AppActionResult | undefined,
-  formData: FormData,
-) {
+export async function signUp(formData: FormData) {
   const validatedFields = SignUpFormSchema.safeParse({
     name: formData.get("name"),
     email: formData.get("email"),
@@ -115,10 +112,7 @@ export async function signUp(
   redirect("/dashboard")
 }
 
-export async function signIn(
-  _prevState: AppActionResult | undefined,
-  formData: FormData,
-) {
+export async function signIn(formData: FormData) {
   const validatedFields = SignInFormSchema.safeParse({
     email: formData.get("email"),
     password: formData.get("password"),

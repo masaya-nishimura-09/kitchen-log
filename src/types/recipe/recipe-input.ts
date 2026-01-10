@@ -26,16 +26,3 @@ export interface StepInput {
   text: string
   order: number
 }
-
-export interface RecipeState {
-  success: boolean
-  errors?: {
-    image?: string[]
-    title?: string[]
-    memo?: string[]
-    tag?: string[]
-    ingredient?: string[]
-    step?: string[]
-  }
-  message?: string | null
-}

@@ -2,7 +2,7 @@
 
 import Image from "next/image"
 import Link from "next/link"
-import { useActionState } from "react"
+import { useState, useTransition } from "react"
 import { signIn } from "@/actions/auth/auth"
 import { Button } from "@/components/ui/button"
 import {
@@ -16,11 +16,22 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Spinner } from "@/components/ui/spinner"
-import type { SignInState } from "@/types/auth"
+import type { AppActionResult } from "@/types/app-action-result"
 
 export default function SignInForm() {
-  const initialState: SignInState = { message: null, errors: {} }
-  const [state, formAction, isPending] = useActionState(signIn, initialState)
+  const [isPending, startTransition] = useTransition()
+  const [state, setState] = useState<AppActionResult>({
+    success: false,
+  })
+
+  const handleSubmit = async (formData: FormData) => {
+    startTransition(async () => {
+      const result = await signIn(formData)
+      if (!result.success) {
+        setState(result)
+      }
+    })
+  }
 
   return (
     <Card className="mx-4 w-sm md:w-md">
@@ -40,7 +51,7 @@ export default function SignInForm() {
         </CardAction>
       </CardHeader>
       <CardContent>
-        <form id="sign-in-form" action={formAction}>
+        <form id="sign-in-form" action={handleSubmit}>
           <div className="flex flex-col gap-6">
             <div className="grid gap-2">
               <Label htmlFor="email">メールアドレス</Label>
