@@ -1,7 +1,11 @@
 import { cookies } from "next/headers"
 import { createClient } from "@/lib/supabase/server"
+import type { AppActionResult } from "@/types/app-action-result"
 
-export async function createProfile(id: string, username: string) {
+export async function createProfile(
+  id: string,
+  username: string,
+): Promise<AppActionResult> {
   const supabase = createClient(cookies())
 
   const { error } = await supabase.from("profiles").insert({
@@ -11,6 +15,13 @@ export async function createProfile(id: string, username: string) {
 
   if (error) {
     console.error("Profiles insert failed:", error)
-    throw new Error(error.message)
+    return {
+      success: false,
+      message: "プロファイルの作成に失敗しました。",
+    }
+  }
+
+  return {
+    success: true,
   }
 }

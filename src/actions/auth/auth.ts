@@ -1,3 +1,5 @@
+// todo: userとprofileの作成をsupabaseで一つの関数に
+
 "use server"
 
 import { revalidatePath } from "next/cache"
@@ -6,10 +8,10 @@ import { redirect } from "next/navigation"
 import { SignInFormSchema } from "@/lib/schemas/sign-in-form"
 import { SignUpFormSchema } from "@/lib/schemas/sign-up-form"
 import { createClient } from "@/lib/supabase/server"
-import type { SignInState, SignUpState } from "@/types/auth"
+import type { AppActionResult } from "@/types/app-action-result"
 import { createProfile } from "./create"
 
-export async function getUserId() {
+export async function getUserId(): Promise<AppActionResult<string>> {
   const supabase = createClient(cookies())
   const {
     data: { user },
@@ -17,18 +19,27 @@ export async function getUserId() {
   } = await supabase.auth.getUser()
 
   if (error) {
-    return null
+    return {
+      success: false,
+      message: "ユーザーIDの取得に失敗しました。",
+    }
   }
 
   if (user) {
-    return user.id
+    return {
+      success: true,
+      data: user.id,
+    }
   } else {
-    return null
+    return {
+      success: false,
+      message: "ユーザーが見つかりませんでした。",
+    }
   }
 }
 
 export async function signUp(
-  _prevState: SignUpState | undefined,
+  _prevState: AppActionResult | undefined,
   formData: FormData,
 ) {
   const validatedFields = SignUpFormSchema.safeParse({
@@ -40,8 +51,9 @@ export async function signUp(
 
   if (!validatedFields.success) {
     return {
+      success: false,
       errors: validatedFields.error.flatten().fieldErrors,
-      message: "会員登録に失敗しました。",
+      message: "入力内容に誤りがあります。",
     }
   }
   const { name, email, password } = validatedFields.data
@@ -60,17 +72,25 @@ export async function signUp(
     }
     switch (error.code) {
       case "email_exists":
-        return { message: "このメールアドレスは既に使用されています。" }
+        return {
+          success: false,
+          message: "このメールアドレスは既に使用されています。",
+        }
       case "validation_failed":
         return {
+          success: false,
           message: "メールアドレスまたはパスワードの形式が正しくありません。",
         }
       case "signup_disabled":
-        return { message: "現在、新規登録を受け付けていません。" }
+        return {
+          success: false,
+          message: "現在、新規登録を受け付けていません。",
+        }
       case "user_banned":
-        return { message: "このアカウントは利用できません。" }
+        return { success: false, message: "このアカウントは利用できません。" }
       default:
         return {
+          success: false,
           message: "会員登録に失敗しました。しばらくしてからお試しください。",
         }
     }
@@ -78,23 +98,25 @@ export async function signUp(
 
   if (!data || !data.user) {
     return {
+      success: false,
       message: "会員登録に失敗しました。",
     }
   }
 
-  try {
-    await createProfile(data.user.id, name)
-  } catch {
+  const createProfileResult = await createProfile(data.user.id, name)
+  if (!createProfileResult.success) {
     return {
+      success: false,
       message: "会員登録に失敗しました。",
     }
   }
+
   revalidatePath("/", "layout")
   redirect("/dashboard")
 }
 
 export async function signIn(
-  _prevState: SignInState | undefined,
+  _prevState: AppActionResult | undefined,
   formData: FormData,
 ) {
   const validatedFields = SignInFormSchema.safeParse({
@@ -104,8 +126,9 @@ export async function signIn(
 
   if (!validatedFields.success) {
     return {
+      success: false,
       errors: validatedFields.error.flatten().fieldErrors,
-      message: "ログインに失敗しました。",
+      message: "入力内容に誤りがあります。",
     }
   }
   const { email, password } = validatedFields.data
@@ -122,16 +145,21 @@ export async function signIn(
     switch (error.code) {
       case "user_banned":
         return {
+          success: false,
           message:
             "このアカウントは利用できません。サポートにお問い合わせください。",
         }
       case "email_not_confirmed":
         return {
+          success: false,
           message:
             "メールアドレスの確認が完了していません。確認メールをご確認ください。",
         }
       default:
-        return { message: "メールアドレスまたはパスワードが正しくありません。" }
+        return {
+          success: false,
+          message: "メールアドレスまたはパスワードが正しくありません。",
+        }
     }
   }
   revalidatePath("/", "layout")
