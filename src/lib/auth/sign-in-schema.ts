@@ -1,6 +1,6 @@
 import { z } from "zod"
 
-export const SignInFormSchema = z.object({
+export const SignInSchema = z.object({
   email: z.email({ message: "メールアドレスの形式で入力して下さい。" }),
   password: z
     .string({

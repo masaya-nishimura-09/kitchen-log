@@ -5,9 +5,9 @@ import { cookies } from "next/headers"
 import { redirect } from "next/navigation"
 import { getUserId } from "@/actions/auth/auth"
 import { fetchShoppingList } from "@/actions/shopping-list/fetch"
-import { zenkakuToHankaku } from "@/lib/recipe/zenkaku-to-hankaku"
-import { ShoppingListItemFormSchema } from "@/lib/schemas/shopping-list-item-form"
+import { ShoppingListItemSchema } from "@/lib/shopping-list/shopping-list-item-schema"
 import { createClient } from "@/lib/supabase/server"
+import { zenkakuToHankaku } from "@/lib/zenkaku-to-hankaku"
 import type { AppActionResult } from "@/types/app-action-result"
 import type { Recipe } from "@/types/recipe/recipe"
 import type { ShoppingListItemInput } from "@/types/shopping-list/shopping-list-item-input"
@@ -52,7 +52,7 @@ export async function createItem(formData: FormData): Promise<AppActionResult> {
   ) as ShoppingListItemInput[]
 
   for (const i of itemData) {
-    const validatedFields = ShoppingListItemFormSchema.safeParse({
+    const validatedFields = ShoppingListItemSchema.safeParse({
       id: i.id,
       name: i.name,
       amount: i.amount,

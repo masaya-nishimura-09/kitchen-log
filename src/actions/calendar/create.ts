@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache"
 import { cookies } from "next/headers"
 import { redirect } from "next/navigation"
-import { EventFormSchema } from "@/lib/schemas/event-form"
+import { EventSchema } from "@/lib/calendar/event-schema"
 import { createClient } from "@/lib/supabase/server"
 import type { AppActionResult } from "@/types/app-action-result"
 import type { EventInput } from "@/types/calendar/event-input"
@@ -16,7 +16,7 @@ export async function createEvent(
     formData.get("eventData") as string,
   ) as EventInput
 
-  const validatedFields = EventFormSchema.safeParse({
+  const validatedFields = EventSchema.safeParse({
     recipeId: eventData.recipeId,
     date: eventData.date,
   })
@@ -77,7 +77,7 @@ export async function createEvents(
   const insertData = []
 
   for (const e of eventData) {
-    const validatedFields = EventFormSchema.safeParse({
+    const validatedFields = EventSchema.safeParse({
       recipeId: e.recipeId,
       date: e.date,
     })

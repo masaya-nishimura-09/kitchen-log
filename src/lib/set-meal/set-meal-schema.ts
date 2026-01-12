@@ -1,6 +1,6 @@
 import { z } from "zod"
 
-export const SetMealFormSchema = z.object({
+export const SetMealSchema = z.object({
   id: z.number(),
   title: z
     .string()

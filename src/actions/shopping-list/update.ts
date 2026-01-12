@@ -2,7 +2,7 @@
 
 import { cookies } from "next/headers"
 import { getUserId } from "@/actions/auth/auth"
-import { ShoppingListItemUpdateFormSchema } from "@/lib/schemas/shopping-list-item-update-form"
+import { ShoppingListItemSchema } from "@/lib/shopping-list/shopping-list-item-schema"
 import { createClient } from "@/lib/supabase/server"
 import type { AppActionResult } from "@/types/app-action-result"
 import type { ShoppingListItemInput } from "@/types/shopping-list/shopping-list-item-input"
@@ -10,17 +10,20 @@ import type { ShoppingListItemInput } from "@/types/shopping-list/shopping-list-
 export async function updateItem(formData: FormData): Promise<AppActionResult> {
   const itemData = JSON.parse(
     formData.get("shoppingListItemData") as string,
-  ) as ShoppingListItemInput
+  ) as ShoppingListItemInput[]
 
-  const validatedFields = ShoppingListItemUpdateFormSchema.safeParse(itemData)
+  const data = []
+  for (const i of itemData) {
+    const validatedFields = ShoppingListItemSchema.safeParse(i)
 
-  if (!validatedFields.success) {
-    return {
-      success: false,
-      message: "入力内容に誤りがあります。",
+    if (!validatedFields.success) {
+      return {
+        success: false,
+        message: "入力内容に誤りがあります。",
+      }
     }
+    data.push(validatedFields.data)
   }
-  const data = validatedFields.data
 
   const getUserIdResult = await getUserId()
   if (!getUserIdResult.success || !getUserIdResult.data) {

@@ -5,8 +5,8 @@
 import { revalidatePath } from "next/cache"
 import { cookies } from "next/headers"
 import { redirect } from "next/navigation"
-import { SignInFormSchema } from "@/lib/schemas/sign-in-form"
-import { SignUpFormSchema } from "@/lib/schemas/sign-up-form"
+import { SignInSchema } from "@/lib/auth/sign-in-schema"
+import { SignUpSchema } from "@/lib/auth/sign-up-schema"
 import { createClient } from "@/lib/supabase/server"
 import type { AppActionResult } from "@/types/app-action-result"
 import { createProfile } from "./create"
@@ -39,7 +39,7 @@ export async function getUserId(): Promise<AppActionResult<string>> {
 }
 
 export async function signUp(formData: FormData) {
-  const validatedFields = SignUpFormSchema.safeParse({
+  const validatedFields = SignUpSchema.safeParse({
     name: formData.get("name"),
     email: formData.get("email"),
     password: formData.get("password"),
@@ -113,7 +113,7 @@ export async function signUp(formData: FormData) {
 }
 
 export async function signIn(formData: FormData) {
-  const validatedFields = SignInFormSchema.safeParse({
+  const validatedFields = SignInSchema.safeParse({
     email: formData.get("email"),
     password: formData.get("password"),
   })

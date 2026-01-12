@@ -1,6 +1,6 @@
 import { z } from "zod"
 
-export const EventFormSchema = z.object({
+export const EventSchema = z.object({
   recipeId: z.number(),
   date: z.string(),
 })

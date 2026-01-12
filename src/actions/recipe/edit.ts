@@ -4,9 +4,9 @@ import { revalidatePath } from "next/cache"
 import { cookies } from "next/headers"
 import { redirect } from "next/navigation"
 import { getUserId } from "@/actions/auth/auth"
-import { zenkakuToHankaku } from "@/lib/recipe/zenkaku-to-hankaku"
-import { RecipeFormSchema } from "@/lib/schemas/recipe-form"
+import { RecipeSchema } from "@/lib/recipe/recipe-schema"
 import { createClient } from "@/lib/supabase/server"
+import { zenkakuToHankaku } from "@/lib/zenkaku-to-hankaku"
 import type { AppActionResult } from "@/types/app-action-result"
 import type { RecipeInput } from "@/types/recipe/recipe-input"
 import { deleteImage, uploadImage } from "./image"
@@ -16,7 +16,7 @@ export async function editRecipe(formData: FormData): Promise<AppActionResult> {
     formData.get("recipeData") as string,
   ) as RecipeInput
 
-  const validatedFields = RecipeFormSchema.safeParse({
+  const validatedFields = RecipeSchema.safeParse({
     id: recipeData.id,
     image: formData.get("image") as File | null,
     imageUrl: recipeData.imageUrl,

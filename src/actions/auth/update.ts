@@ -3,9 +3,9 @@
 import { revalidatePath } from "next/cache"
 import { cookies } from "next/headers"
 import { redirect } from "next/navigation"
-import { EmailFormSchema } from "@/lib/schemas/email-form"
-import { PasswordFormSchema } from "@/lib/schemas/password-form"
-import { UsernameFormSchema } from "@/lib/schemas/username-form"
+import { EmailFormSchema } from "@/lib/auth/email-schema"
+import { PasswordSchema } from "@/lib/auth/password-schema"
+import { UsernameSchema } from "@/lib/auth/username-schema"
 import { createClient } from "@/lib/supabase/server"
 import type { AppActionResult } from "@/types/app-action-result"
 import { getUserId } from "./auth"
@@ -13,7 +13,7 @@ import { getUserId } from "./auth"
 export async function updateUsername(
   formData: FormData,
 ): Promise<AppActionResult> {
-  const validatedFields = UsernameFormSchema.safeParse({
+  const validatedFields = UsernameSchema.safeParse({
     username: formData.get("username"),
   })
 
@@ -87,7 +87,7 @@ export async function updateEmail(
 export async function updatePassword(
   formData: FormData,
 ): Promise<AppActionResult> {
-  const validatedFields = PasswordFormSchema.safeParse({
+  const validatedFields = PasswordSchema.safeParse({
     password: formData.get("password"),
     confirmedPassword: formData.get("confirmed-password"),
   })

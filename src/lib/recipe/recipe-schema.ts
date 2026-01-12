@@ -1,6 +1,6 @@
 import { z } from "zod"
 
-export const RecipeFormSchema = z.object({
+export const RecipeSchema = z.object({
   id: z.number(),
   image: z
     .instanceof(File)

@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache"
 import { cookies } from "next/headers"
 import { redirect } from "next/navigation"
 import { getUserId } from "@/actions/auth/auth"
-import { GroupFormSchema } from "@/lib/schemas/group-form"
+import { GroupSchema } from "@/lib/group/group-schema"
 import { createClient } from "@/lib/supabase/server"
 import type { AppActionResult } from "@/types/app-action-result"
 import type { GroupFormInput } from "@/types/group/group-form"
@@ -16,7 +16,7 @@ export async function createGroup(
     formData.get("groupData") as string,
   ) as GroupFormInput
 
-  const validatedFields = GroupFormSchema.safeParse({
+  const validatedFields = GroupSchema.safeParse({
     name: groupData.name,
   })
 

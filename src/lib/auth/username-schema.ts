@@ -1,6 +1,6 @@
 import { z } from "zod"
 
-export const UsernameFormSchema = z.object({
+export const UsernameSchema = z.object({
   username: z
     .string({
       message: "ユーザーネームを入力してください。",

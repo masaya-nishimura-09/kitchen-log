@@ -1,7 +1,13 @@
 import { z } from "zod"
 
-export const PasswordFormSchema = z
+export const SignUpSchema = z
   .object({
+    name: z
+      .string({
+        message: "ユーザーネームを入力してください。",
+      })
+      .min(1, { message: "ユーザーネームを入力して下さい。" }),
+    email: z.email({ message: "メールアドレスの形式で入力して下さい。" }),
     password: z
       .string({
         message: "パスワードを入力してください。",
