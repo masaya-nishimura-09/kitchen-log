@@ -17,14 +17,16 @@ export default function SignOutForm() {
   }
 
   return (
-    <Button
-      variant="outline"
-      type="button"
-      disabled={isPending}
-      onClick={handleSubmit}
-    >
-      {isPending && <Spinner />}
-      {isPending ? "ログアウト中..." : "ログアウト"}
-    </Button>
+    <div>
+      <Button
+        variant="outline"
+        type="button"
+        disabled={isPending}
+        onClick={handleSubmit}
+      >
+        {isPending && <Spinner />}
+        {isPending ? "ログアウト中..." : "ログアウト"}
+      </Button>
+    </div>
   )
 }
