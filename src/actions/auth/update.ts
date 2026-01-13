@@ -5,7 +5,6 @@ import { cookies } from "next/headers"
 import { redirect } from "next/navigation"
 import { EmailFormSchema } from "@/lib/auth/email-schema"
 import { PasswordSchema } from "@/lib/auth/password-schema"
-import { UpdatePasswordSchema } from "@/lib/auth/update-password-schema"
 import { UsernameSchema } from "@/lib/auth/username-schema"
 import { createClient } from "@/lib/supabase/server"
 import type { AppActionResult } from "@/types/app-action-result"
@@ -168,7 +167,7 @@ export async function sendResetPasswordEmail(
   const supabase = createClient(cookies())
 
   const { error } = await supabase.auth.resetPasswordForEmail(email, {
-    redirectTo: "http://localhost:3000/update-password",
+    redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/update-password`,
   })
 
   if (error) {
@@ -181,39 +180,4 @@ export async function sendResetPasswordEmail(
   return {
     success: true,
   }
-}
-
-export async function resetPassword(
-  formData: FormData,
-): Promise<AppActionResult> {
-  const validatedFields = UpdatePasswordSchema.safeParse({
-    password: formData.get("password"),
-    confirmedPassword: formData.get("confirmed-password"),
-  })
-
-  if (!validatedFields.success) {
-    return {
-      success: false,
-      errors: validatedFields.error.flatten().fieldErrors,
-      message: "入力内容に誤りがあります。",
-    }
-  }
-  const { password } = validatedFields.data
-
-  const supabase = createClient(cookies())
-
-  const { error } = await supabase.auth.updateUser({
-    password: password,
-  })
-
-  if (error) {
-    console.error(error)
-    return {
-      success: false,
-      message: "パスワードのリセットに失敗しました。",
-    }
-  }
-
-  revalidatePath("/", "layout")
-  redirect("/sign-in")
 }

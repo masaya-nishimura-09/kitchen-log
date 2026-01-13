@@ -1,21 +1,22 @@
 "use client"
 
 import Image from "next/image"
-import { useState, useTransition } from "react"
-import { Toaster, toast } from "sonner"
-import { sendResetPasswordEmail } from "@/actions/auth/update"
-import { Button } from "@/components/ui/button"
+import {useState, useTransition} from "react"
+import {Toaster, toast} from "sonner"
+import {sendResetPasswordEmail} from "@/actions/auth/update"
+import {Button} from "@/components/ui/button"
 import {
   Card,
   CardContent,
+  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Spinner } from "@/components/ui/spinner"
-import type { AppActionResult } from "@/types/app-action-result"
+import {Input} from "@/components/ui/input"
+import {Label} from "@/components/ui/label"
+import {Spinner} from "@/components/ui/spinner"
+import type {AppActionResult} from "@/types/app-action-result"
 
 export default function EmailForm() {
   const [isPending, startTransition] = useTransition()
@@ -47,8 +48,11 @@ export default function EmailForm() {
       />
       <CardHeader>
         <CardTitle>
-          パスワード再設定の案内を受け取るメールアドレスを入力してください
+          メールアドレス
         </CardTitle>
+        <CardDescription>
+          パスワード再設定の案内を受け取るメールアドレスを入力してください
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <form className="grid gap-2" id="email-form" action={handleSubmit}>
