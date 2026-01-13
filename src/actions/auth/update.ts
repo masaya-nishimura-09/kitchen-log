@@ -5,6 +5,7 @@ import { cookies } from "next/headers"
 import { redirect } from "next/navigation"
 import { EmailFormSchema } from "@/lib/auth/email-schema"
 import { PasswordSchema } from "@/lib/auth/password-schema"
+import { UpdatePasswordSchema } from "@/lib/auth/update-password-schema"
 import { UsernameSchema } from "@/lib/auth/username-schema"
 import { createClient } from "@/lib/supabase/server"
 import type { AppActionResult } from "@/types/app-action-result"
@@ -146,4 +147,73 @@ export async function updateProfile(
   return {
     success: true,
   }
+}
+
+export async function sendResetPasswordEmail(
+  formData: FormData,
+): Promise<AppActionResult> {
+  const validatedFields = EmailFormSchema.safeParse({
+    email: formData.get("email"),
+  })
+
+  if (!validatedFields.success) {
+    return {
+      success: false,
+      errors: validatedFields.error.flatten().fieldErrors,
+      message: "入力内容に誤りがあります。",
+    }
+  }
+  const { email } = validatedFields.data
+
+  const supabase = createClient(cookies())
+
+  const { error } = await supabase.auth.resetPasswordForEmail(email, {
+    redirectTo: "http://localhost:3000/update-password",
+  })
+
+  if (error) {
+    return {
+      success: false,
+      message: "パスワードのアップデート用メールの送信に失敗しました。",
+    }
+  }
+
+  return {
+    success: true,
+  }
+}
+
+export async function resetPassword(
+  formData: FormData,
+): Promise<AppActionResult> {
+  const validatedFields = UpdatePasswordSchema.safeParse({
+    password: formData.get("password"),
+    confirmedPassword: formData.get("confirmed-password"),
+  })
+
+  if (!validatedFields.success) {
+    return {
+      success: false,
+      errors: validatedFields.error.flatten().fieldErrors,
+      message: "入力内容に誤りがあります。",
+    }
+  }
+  const { password } = validatedFields.data
+
+  const supabase = createClient(cookies())
+
+  const { error } = await supabase.auth.updateUser({
+    password: password,
+  })
+
+  if (error) {
+    console.error(error)
+    return {
+      success: false,
+      message: "パスワードのリセットに失敗しました。",
+    }
+  }
+
+  revalidatePath("/", "layout")
+  redirect("/sign-in")
 }
