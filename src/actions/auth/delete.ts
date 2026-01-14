@@ -1,14 +1,16 @@
 "use server"
 
-import { cookies } from "next/headers"
-import { createClient } from "@/lib/supabase/server"
-import type { AppActionResult } from "@/types/app-action-result"
+import {cookies} from "next/headers"
+import type {AppActionResult} from "@/types/app-action-result"
+import {createClient} from "@/lib/supabase/admin"
+import {revalidatePath} from "next/cache"
+import {redirect} from "next/navigation"
 
 export async function deleteUser(): Promise<AppActionResult> {
   const supabase = createClient(cookies())
 
   const {
-    data: { user },
+    data: {user},
     error: getUserError,
   } = await supabase.auth.getUser()
   if (getUserError || !user?.id) {
@@ -18,7 +20,7 @@ export async function deleteUser(): Promise<AppActionResult> {
     }
   }
 
-  const { error: deleteUserError } = await supabase.auth.admin.deleteUser(
+  const {error: deleteUserError} = await supabase.auth.admin.deleteUser(
     user.id,
   )
   if (deleteUserError) {
@@ -28,7 +30,8 @@ export async function deleteUser(): Promise<AppActionResult> {
     }
   }
 
-  return {
-    success: true,
-  }
+  await supabase.auth.signOut()
+
+  revalidatePath("/", "layout")
+  redirect("/dashboard")
 }
