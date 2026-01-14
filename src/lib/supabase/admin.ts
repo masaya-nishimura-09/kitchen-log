@@ -1,5 +1,5 @@
-import {createServerClient} from "@supabase/ssr"
-import type {cookies} from "next/headers"
+import { createServerClient } from "@supabase/ssr"
+import type { cookies } from "next/headers"
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
 const supabaseKey = process.env.SUPABASE_SECRET_KEY
@@ -12,7 +12,7 @@ export const createClient = (cookieStore: ReturnType<typeof cookies>) => {
       },
       setAll(cookiesToSet) {
         try {
-          cookiesToSet.forEach(async ({name, value, options}) =>
+          cookiesToSet.forEach(async ({ name, value, options }) =>
             (await cookieStore).set(name, value, options),
           )
         } catch {

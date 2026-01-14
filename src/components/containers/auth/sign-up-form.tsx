@@ -3,6 +3,7 @@
 import Image from "next/image"
 import Link from "next/link"
 import { useState, useTransition } from "react"
+import { Toaster, toast } from "sonner"
 import { signUp } from "@/actions/auth/auth"
 import { Button } from "@/components/ui/button"
 import {
@@ -30,11 +31,17 @@ export default function SignUpForm() {
       if (!result.success) {
         setState(result)
       }
+      if (result.success) {
+        toast.success(
+          "入力していただいたメールアドレス宛に確認メールを送信しましたので、ご確認ください。",
+        )
+      }
     })
   }
 
   return (
     <Card className="mx-4 w-sm md:w-md">
+      <Toaster richColors position="top-center" />
       <Image
         src={"/logo/logo/vector/default-monochrome.svg"}
         alt="logo"
