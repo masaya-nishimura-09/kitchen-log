@@ -1,6 +1,7 @@
 # Kitchen Log
 
-Kitchen Log is an application designed to simplify the management of recipes, meal plans, and shopping lists, making your daily cooking more efficient and enjoyable.
+Kitchen Log is an application designed to simplify the management of recipes,
+meal plans, and shopping lists, making your daily cooking more efficient and enjoyable.
 
 ## Features
 
@@ -22,5 +23,8 @@ Kitchen Log is an application designed to simplify the management of recipes, me
 
 ## Background
 
-- This app was created to share recipes with family members and streamline the shopping process, making daily life easier.
-- It also served as a learning and practical project for mastering Next.js and TypeScript.
+- This app was created to share recipes with family members and streamline the
+shopping process, making daily life easier.
+- It also served as a learning and practical project for mastering Next.js and
+TypeScript.
+
