@@ -4,9 +4,9 @@ import { IconCircleX } from "@tabler/icons-react"
 import Image from "next/image"
 import type { Dispatch, SetStateAction } from "react"
 import { useState } from "react"
-import { AccordionContent } from "@/components/ui/accordion"
 import { Input } from "@/components/ui/input"
 import { Item, ItemActions, ItemContent, ItemTitle } from "@/components/ui/item"
+import { Label } from "@/components/ui/label"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import type { AppActionResult } from "@/types/app-action-result"
 import type { Recipe } from "@/types/recipe/recipe"
@@ -55,7 +55,8 @@ export default function RecipesInput({
   }
 
   return (
-    <AccordionContent className="grid gap-2 max-w-lg">
+    <div className="grid gap-2">
+      <Label>レシピ</Label>
       <div className="w-full flex flex-col gap-2">
         <Input
           id="recipes"
@@ -128,6 +129,6 @@ export default function RecipesInput({
           </p>
         ))}
       </div>
-    </AccordionContent>
+    </div>
   )
 }
