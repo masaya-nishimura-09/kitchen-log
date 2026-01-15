@@ -1,10 +1,12 @@
 "use client"
 
 import { IconCircleX } from "@tabler/icons-react"
-import { type Dispatch, type SetStateAction, useState } from "react"
+import type { Dispatch, SetStateAction } from "react"
+import { useState } from "react"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
 import type { AppActionResult } from "@/types/app-action-result"
 import type { RecipeInput } from "@/types/recipe/recipe-input"
 
@@ -47,7 +49,8 @@ export default function TagInput({
   }
 
   return (
-    <div className="grid gap-2 w-full">
+    <div className="grid gap-2">
+      <Label>タグ</Label>
       <div className="flex w-full items-center gap-2">
         <Input
           id="tag"

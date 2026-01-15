@@ -7,12 +7,6 @@ import { createRecipe } from "@/actions/recipe/create"
 import { deleteRecipe } from "@/actions/recipe/delete"
 import { editRecipe } from "@/actions/recipe/edit"
 import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion"
-import {
   AlertDialog,
   AlertDialogAction,
   AlertDialogCancel,
@@ -33,6 +27,7 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
 import { Spinner } from "@/components/ui/spinner"
 import { Textarea } from "@/components/ui/textarea"
 import type { AppActionResult } from "@/types/app-action-result"
@@ -152,117 +147,89 @@ export default function RecipeForm({
       <CardContent>
         <form
           id="new-recipe-form"
-          className="flex flex-col gap-6"
+          className="max-w-xl flex flex-col gap-6"
           onSubmit={handleSubmit}
         >
-          <Accordion
-            type="single"
-            collapsible
-            className="w-full"
-            defaultValue="image"
-          >
-            <AccordionItem value="image">
-              <AccordionTrigger>写真</AccordionTrigger>
-              <AccordionContent className="grid gap-2 max-w-xl">
-                <Input
-                  id="image"
-                  name="image"
-                  type="file"
-                  onChange={(e) =>
-                    setFormDataAction({
-                      ...formData,
-                      image: e.target.files?.[0] || null,
-                    })
-                  }
-                />
-                <div aria-live="polite" aria-atomic="true">
-                  {state?.errors?.image?.map((error: string) => (
-                    <p className="mt-2 text-red-500 text-sm" key={error}>
-                      {error}
-                    </p>
-                  ))}
-                </div>
-              </AccordionContent>
-            </AccordionItem>
+          <div className="grid gap-2">
+            <Label>写真</Label>
+            <Input
+              id="image"
+              name="image"
+              type="file"
+              onChange={(e) =>
+                setFormDataAction({
+                  ...formData,
+                  image: e.target.files?.[0] || null,
+                })
+              }
+            />
+            <div aria-live="polite" aria-atomic="true">
+              {state?.errors?.image?.map((error: string) => (
+                <p className="mt-2 text-red-500 text-sm" key={error}>
+                  {error}
+                </p>
+              ))}
+            </div>
+          </div>
 
-            <AccordionItem value="title">
-              <AccordionTrigger>タイトル</AccordionTrigger>
-              <AccordionContent className="grid gap-2 max-w-xl">
-                <Input
-                  id="title"
-                  name="title"
-                  type="text"
-                  placeholder="タイトルを入力してください"
-                  value={formData.title}
-                  onChange={(e) =>
-                    setFormDataAction({ ...formData, title: e.target.value })
-                  }
-                />
-                <div aria-live="polite" aria-atomic="true">
-                  {state?.errors?.title?.map((error: string) => (
-                    <p className="mt-2 text-red-500 text-sm" key={error}>
-                      {error}
-                    </p>
-                  ))}
-                </div>
-              </AccordionContent>
-            </AccordionItem>
+          <div className="grid gap-2">
+            <Label>タイトル</Label>
+            <Input
+              id="title"
+              name="title"
+              type="text"
+              placeholder="タイトルを入力してください"
+              value={formData.title}
+              onChange={(e) =>
+                setFormDataAction({ ...formData, title: e.target.value })
+              }
+            />
+            <div aria-live="polite" aria-atomic="true">
+              {state?.errors?.title?.map((error: string) => (
+                <p className="mt-2 text-red-500 text-sm" key={error}>
+                  {error}
+                </p>
+              ))}
+            </div>
+          </div>
 
-            <AccordionItem value="memo">
-              <AccordionTrigger>メモ</AccordionTrigger>
-              <AccordionContent className="grid gap-2 max-w-xl">
-                <Textarea
-                  id="memo"
-                  name="memo"
-                  placeholder="メモすることがある場合入力してください"
-                  value={formData.memo}
-                  onChange={(e) =>
-                    setFormDataAction({ ...formData, memo: e.target.value })
-                  }
-                />
-                <div aria-live="polite" aria-atomic="true">
-                  {state?.errors?.memo?.map((error: string) => (
-                    <p className="mt-2 text-red-500 text-sm" key={error}>
-                      {error}
-                    </p>
-                  ))}
-                </div>
-              </AccordionContent>
-            </AccordionItem>
+          <div className="grid gap-2">
+            <Label>メモ</Label>
+            <Textarea
+              id="memo"
+              name="memo"
+              placeholder="メモすることがある場合入力してください"
+              value={formData.memo}
+              onChange={(e) =>
+                setFormDataAction({ ...formData, memo: e.target.value })
+              }
+            />
+            <div aria-live="polite" aria-atomic="true">
+              {state?.errors?.memo?.map((error: string) => (
+                <p className="mt-2 text-red-500 text-sm" key={error}>
+                  {error}
+                </p>
+              ))}
+            </div>
+          </div>
 
-            <AccordionItem value="tag">
-              <AccordionTrigger>タグ</AccordionTrigger>
-              <AccordionContent className="max-w-xl">
-                <TagInput
-                  formData={formData}
-                  setFormDataAction={setFormDataAction}
-                  state={state}
-                />
-              </AccordionContent>
-            </AccordionItem>
+          <TagInput
+            formData={formData}
+            setFormDataAction={setFormDataAction}
+            state={state}
+          />
 
-            <AccordionItem value="ingredient">
-              <AccordionTrigger>材料</AccordionTrigger>
-              <AccordionContent className="max-w-xl">
-                <IngredientInput
-                  formData={formData}
-                  setFormDataAction={setFormDataAction}
-                  state={state}
-                />
-              </AccordionContent>
-            </AccordionItem>
+          <IngredientInput
+            formData={formData}
+            setFormDataAction={setFormDataAction}
+            state={state}
+          />
 
-            <AccordionItem value="step">
-              <AccordionTrigger>手順</AccordionTrigger>
-              <AccordionContent className="max-w-xl">
-                <StepInput
-                  formData={formData}
-                  setFormDataAction={setFormDataAction}
-                  state={state}
-                />
-              </AccordionContent>
-            </AccordionItem>
-          </Accordion>
+          <StepInput
+            formData={formData}
+            setFormDataAction={setFormDataAction}
+            state={state}
+          />
 
           <div aria-live="polite" aria-atomic="true">
             {state?.message && (

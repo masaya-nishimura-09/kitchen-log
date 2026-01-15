@@ -1,9 +1,9 @@
 "use client"
 
+import type { DragEndEvent } from "@dnd-kit/core"
 import {
   closestCenter,
   DndContext,
-  type DragEndEvent,
   KeyboardSensor,
   PointerSensor,
   useSensor,
@@ -18,7 +18,8 @@ import {
 } from "@dnd-kit/sortable"
 import { CSS } from "@dnd-kit/utilities"
 import { IconCircleX, IconGripVertical } from "@tabler/icons-react"
-import { type Dispatch, type SetStateAction, useState } from "react"
+import type { Dispatch, SetStateAction } from "react"
+import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import {
   Item,
@@ -27,6 +28,7 @@ import {
   ItemMedia,
   ItemTitle,
 } from "@/components/ui/item"
+import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import type { AppActionResult } from "@/types/app-action-result"
 import type { RecipeInput } from "@/types/recipe/recipe-input"
@@ -151,7 +153,8 @@ export default function StepInput({
   }
 
   return (
-    <div className="grid gap-2 w-full">
+    <div className="grid gap-2">
+      <Label>手順</Label>
       <div className="flex w-full items-center gap-2">
         <Textarea
           id="step"

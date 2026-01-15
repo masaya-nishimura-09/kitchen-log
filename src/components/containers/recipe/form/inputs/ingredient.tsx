@@ -23,6 +23,7 @@ import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Item, ItemActions, ItemContent, ItemMedia } from "@/components/ui/item"
+import { Label } from "@/components/ui/label"
 import {
   Select,
   SelectContent,
@@ -183,7 +184,8 @@ export default function IngredientInput({
   }
 
   return (
-    <div className="grid gap-2 w-full">
+    <div className="grid gap-2">
+      <Label>材料</Label>
       <div className="flex w-full gap-2">
         <div className="flex flex-col w-full items-center gap-2">
           <Input
