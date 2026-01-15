@@ -8,7 +8,6 @@ import { PasswordSchema } from "@/lib/auth/password-schema"
 import { UsernameSchema } from "@/lib/auth/username-schema"
 import { createClient } from "@/lib/supabase/server"
 import type { AppActionResult } from "@/types/app-action-result"
-import { getUserId } from "./auth"
 
 export async function updateUsername(
   formData: FormData,
@@ -33,14 +32,6 @@ export async function updateUsername(
   })
 
   if (error) {
-    return {
-      success: false,
-      message: "ユーザーネームの変更に失敗しました。",
-    }
-  }
-
-  const updateProfileResult = await updateProfile(username)
-  if (!updateProfileResult.success) {
     return {
       success: false,
       message: "ユーザーネームの変更に失敗しました。",
@@ -115,37 +106,6 @@ export async function updatePassword(
 
   revalidatePath("/", "layout")
   redirect("/dashboard/setting")
-}
-
-export async function updateProfile(
-  username: string,
-): Promise<AppActionResult> {
-  const getUserIdResult = await getUserId()
-  if (!getUserIdResult.success || !getUserIdResult.data) {
-    return {
-      success: false,
-      message: "認証情報が取得できませんでした。再度ログインしてください。",
-    }
-  }
-  const userId = getUserIdResult.data
-
-  const supabase = createClient(cookies())
-
-  const { error } = await supabase
-    .from("profiles")
-    .update({ display_name: username })
-    .eq("id", userId)
-
-  if (error) {
-    return {
-      success: false,
-      message: "プロファイルの更新に失敗しました。",
-    }
-  }
-
-  return {
-    success: true,
-  }
 }
 
 export async function sendResetPasswordEmail(

@@ -1,5 +1,3 @@
-// todo: userとprofileの作成をsupabaseで一つの関数に
-
 "use server"
 
 import { revalidatePath } from "next/cache"
@@ -9,7 +7,6 @@ import { SignInSchema } from "@/lib/auth/sign-in-schema"
 import { SignUpSchema } from "@/lib/auth/sign-up-schema"
 import { createClient } from "@/lib/supabase/server"
 import type { AppActionResult } from "@/types/app-action-result"
-// import { createProfile } from "./create"
 
 export async function getUserId(): Promise<AppActionResult<string>> {
   const supabase = createClient(cookies())
@@ -99,14 +96,6 @@ export async function signUp(formData: FormData) {
       message: "会員登録に失敗しました。",
     }
   }
-
-  // const createProfileResult = await createProfile(data.user.id, name)
-  // if (!createProfileResult.success) {
-  //   return {
-  //     success: false,
-  //     message: "会員登録に失敗しました。",
-  //   }
-  // }
 
   return {
     success: true,

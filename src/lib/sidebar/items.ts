@@ -5,7 +5,6 @@ import {
   IconHome,
   IconSettings,
   IconShoppingCart,
-  // IconUsersGroup,
 } from "@tabler/icons-react"
 import { getDateStr } from "@/lib/date/date"
 
@@ -35,11 +34,6 @@ export const items = [
     url: `/dashboard/calendar/${getDateStr()}`,
     icon: IconCalendarEvent,
   },
-  // {
-  //   title: "グループ",
-  //   url: "/dashboard/group",
-  //   icon: IconUsersGroup,
-  // },
   {
     title: "設定",
     url: "/dashboard/setting",
