@@ -1,11 +1,12 @@
 "use client"
 
-import { ja } from "date-fns/locale"
-import { ChevronDownIcon } from "lucide-react"
-import { useState } from "react"
-import CreateButton from "@/components/containers/button/create-button"
+import jaLocale from "@fullcalendar/core/locales/ja"
+import dayGridPlugin from "@fullcalendar/daygrid"
+import interactionPlugin from "@fullcalendar/interaction"
+import FullCalendar from "@fullcalendar/react"
+import { ChevronLeft, ChevronRight } from "lucide-react"
+import { useRef, useState } from "react"
 import { Button } from "@/components/ui/button"
-import { Calendar } from "@/components/ui/calendar"
 import {
   Card,
   CardAction,
@@ -13,80 +14,78 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover"
+import { formatDateToYYYYMMDD, getDateWithDayOfWeek } from "@/lib/date/date"
 import type { CalendarEvent } from "@/types/calendar/calendar-event"
-import type { Recipe } from "@/types/recipe/recipe"
-import {
-  formatDateToYYYYMMDD,
-  getDateWithDayOfWeek,
-} from "../../../lib/date/date"
-import Recipes from "../recipe/recipes"
 
-export default function MainCalendar({
-  events,
-  defaultDateStr,
-}: {
-  events: CalendarEvent[]
-  defaultDateStr: string
-}) {
-  const defaultDate = new Date(defaultDateStr)
+export default function MainCalendar({ events }: { events: CalendarEvent[] }) {
+  const today = new Date()
+  const todayStr = formatDateToYYYYMMDD(today)
+  const [date, setDate] = useState<string>(todayStr)
 
-  const [date, setDate] = useState<Date | undefined>(defaultDate)
+  const calendarRef = useRef<FullCalendar>(null)
 
-  const [open, setOpen] = useState(false)
+  const handlePrev = () => calendarRef.current?.getApi().prev()
+  const handleNext = () => calendarRef.current?.getApi().next()
 
-  const [recipes, setRecipes] = useState<Recipe[]>(
-    events.filter((e) => e.date === defaultDateStr).map((e) => e.recipe),
-  )
-
-  const handleSelect = (date: Date | undefined) => {
-    const selectedRecipes = events
-      .filter((e) => e.date === formatDateToYYYYMMDD(date))
-      .map((e) => e.recipe)
-    setRecipes(selectedRecipes)
+  const handleTodayClick = () => {
+    const calendarApi = calendarRef.current?.getApi()
+    if (calendarApi) {
+      calendarApi.today()
+      calendarApi.select(todayStr)
+      setDate(todayStr)
+    }
   }
 
+  const eventExample = [
+    {
+      title: "温泉旅行",
+      start: new Date(),
+      end: new Date().setDate(new Date().getDate() + 5),
+      description: "友達と温泉旅行",
+      backgroundColor: "green",
+      borderColor: "green",
+    },
+    {
+      title: "期末テスト",
+      start: new Date().setDate(new Date().getDate() + 5),
+      description: "2年最後の期末テスト",
+      backgroundColor: "blue",
+      borderColor: "blue",
+    },
+  ]
+
   return (
-    <Card className="size-full">
+    <Card className="flex flex-col size-full">
       <CardHeader>
-        <CardTitle>カレンダー</CardTitle>
+        <CardTitle>{getDateWithDayOfWeek(date)}</CardTitle>
         <CardAction>
-          <CreateButton link="/dashboard/calendar/new" />
+          <div className="flex items-center gap-2">
+            <Button variant="outline" size="icon" onClick={handlePrev}>
+              <ChevronLeft className="h-4 w-4" />
+            </Button>
+            <Button variant="outline" size="icon" onClick={handleNext}>
+              <ChevronRight className="h-4 w-4" />
+            </Button>
+            <Button variant="default" onClick={handleTodayClick}>
+              今日
+            </Button>
+          </div>
         </CardAction>
       </CardHeader>
-      <CardContent className="flex flex-col gap-4">
-        <Popover open={open} onOpenChange={setOpen}>
-          <PopoverTrigger asChild>
-            <Button
-              variant="outline"
-              id="date"
-              className="w-48 justify-between font-normal"
-            >
-              {date
-                ? getDateWithDayOfWeek(formatDateToYYYYMMDD(date))
-                : "日付を選択"}
-              <ChevronDownIcon />
-            </Button>
-          </PopoverTrigger>
-          <PopoverContent className="w-auto overflow-hidden p-0" align="start">
-            <Calendar
-              mode="single"
-              selected={date}
-              captionLayout="dropdown"
-              onSelect={(date) => {
-                setDate(date)
-                handleSelect(date)
-                setOpen(false)
-              }}
-              locale={ja}
-            />
-          </PopoverContent>
-        </Popover>
-        <Recipes recipes={recipes} size={"md"} />
+      <CardContent className="flex-1 min-h-0">
+        <FullCalendar
+          ref={calendarRef}
+          plugins={[dayGridPlugin, interactionPlugin]}
+          initialView="dayGridMonth"
+          events={eventExample}
+          locale={jaLocale}
+          headerToolbar={false}
+          selectable={true}
+          dateClick={(info) => {
+            setDate(info.dateStr)
+          }}
+          height="100%"
+        />
       </CardContent>
     </Card>
   )

@@ -123,3 +123,8 @@
     @apply bg-background text-foreground;
   }
 }
+
+.fc-event {
+  border-radius: 10px; /* Adjust radius as needed */
+  border: none; /* Optional: removes border for cleaner look */
+}
