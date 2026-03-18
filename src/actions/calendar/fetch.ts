@@ -1,13 +1,13 @@
 "use server"
 
+import type { EventInput } from "@fullcalendar/core"
 import { cookies } from "next/headers"
 import { getUserId } from "@/actions/auth/auth"
 import { calendarEventConverter } from "@/lib/calendar/shopping-list-item-converter"
 import { createClient } from "@/lib/supabase/server"
 import type { AppActionResult } from "@/types/app-action-result"
-import type { CalendarEvent } from "@/types/calendar/calendar-event"
 
-export async function fetchEvents(): Promise<AppActionResult<CalendarEvent[]>> {
+export async function fetchEvents(): Promise<AppActionResult<EventInput[]>> {
   const getUserIdResult = await getUserId()
   if (!getUserIdResult.success || !getUserIdResult.data) {
     return {
@@ -25,7 +25,9 @@ export async function fetchEvents(): Promise<AppActionResult<CalendarEvent[]>> {
       id,
       user_id,
       recipe_id,
-      date,
+      start,
+      background_color,
+      border_color,
       updated_at,
       created_at,
       recipes (

@@ -1,5 +1,6 @@
 "use client"
 
+import type { EventInput } from "@fullcalendar/core"
 import jaLocale from "@fullcalendar/core/locales/ja"
 import dayGridPlugin from "@fullcalendar/daygrid"
 import interactionPlugin from "@fullcalendar/interaction"
@@ -15,9 +16,8 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { formatDateToYYYYMMDD, getDateWithDayOfWeek } from "@/lib/date/date"
-import type { CalendarEvent } from "@/types/calendar/calendar-event"
 
-export default function MainCalendar({ events }: { events: CalendarEvent[] }) {
+export default function MainCalendar({ events }: { events: EventInput[] }) {
   const today = new Date()
   const todayStr = formatDateToYYYYMMDD(today)
   const [date, setDate] = useState<string>(todayStr)
@@ -36,23 +36,134 @@ export default function MainCalendar({ events }: { events: CalendarEvent[] }) {
     }
   }
 
-  const eventExample = [
-    {
-      title: "温泉旅行",
-      start: new Date(),
-      end: new Date().setDate(new Date().getDate() + 5),
-      description: "友達と温泉旅行",
-      backgroundColor: "green",
-      borderColor: "green",
-    },
-    {
-      title: "期末テスト",
-      start: new Date().setDate(new Date().getDate() + 5),
-      description: "2年最後の期末テスト",
-      backgroundColor: "blue",
-      borderColor: "blue",
-    },
-  ]
+  // const eventExample = [
+  //   {
+  //     title: "唐揚げ",
+  //     start: new Date(),
+  //     description: "",
+  //     backgroundColor: "blue",
+  //     borderColor: "blue",
+  //   },
+  //   {
+  //     title: "唐揚げ",
+  //     start: new Date(),
+  //     description: "",
+  //     backgroundColor: "green",
+  //     borderColor: "blue",
+  //   },
+  //   {
+  //     title: "唐揚げ",
+  //     start: new Date(),
+  //     description: "",
+  //     backgroundColor: "blue",
+  //     borderColor: "blue",
+  //   },
+  //   {
+  //     title: "唐揚げ",
+  //     start: new Date(),
+  //     description: "",
+  //     backgroundColor: "blue",
+  //     borderColor: "blue",
+  //   },
+  //   {
+  //     title: "唐揚げ",
+  //     start: new Date(),
+  //     description: "",
+  //     backgroundColor: "blue",
+  //     borderColor: "green",
+  //   },
+  //   {
+  //     title: "唐揚げ",
+  //     start: new Date(),
+  //     description: "",
+  //     backgroundColor: "blue",
+  //     borderColor: "blue",
+  //   },
+  //   {
+  //     title: "唐揚げ",
+  //     start: new Date(),
+  //     description: "",
+  //     backgroundColor: "blue",
+  //     borderColor: "blue",
+  //   },
+  //   {
+  //     title: "唐揚げ",
+  //     start: new Date().setDate(new Date().getDate() + 5),
+  //     description: "",
+  //     backgroundColor: "blue",
+  //     borderColor: "blue",
+  //   },
+  //   {
+  //     title: "唐揚げ",
+  //     start: new Date().setDate(new Date().getDate() + 5),
+  //     description: "",
+  //     backgroundColor: "blue",
+  //     borderColor: "blue",
+  //   },
+  //   {
+  //     title: "唐揚げ",
+  //     start: new Date().setDate(new Date().getDate() + 5),
+  //     description: "",
+  //     backgroundColor: "blue",
+  //     borderColor: "blue",
+  //   },
+  //   {
+  //     title: "唐揚げ",
+  //     start: new Date().setDate(new Date().getDate() + 5),
+  //     description: "",
+  //     backgroundColor: "blue",
+  //     borderColor: "blue",
+  //   },
+  //   {
+  //     title: "唐揚げ",
+  //     start: new Date().setDate(new Date().getDate() + 5),
+  //     description: "",
+  //     backgroundColor: "blue",
+  //     borderColor: "blue",
+  //   },
+  //   {
+  //     title: "唐揚げ",
+  //     start: new Date().setDate(new Date().getDate() - 5),
+  //     description: "",
+  //     backgroundColor: "blue",
+  //     borderColor: "blue",
+  //   },
+  //   {
+  //     title: "唐揚げ",
+  //     start: new Date().setDate(new Date().getDate() - 5),
+  //     description: "",
+  //     backgroundColor: "blue",
+  //     borderColor: "blue",
+  //   },
+  //   {
+  //     title: "唐揚げ",
+  //     start: new Date().setDate(new Date().getDate() - 5),
+  //     description: "",
+  //     backgroundColor: "blue",
+  //     borderColor: "blue",
+  //   },
+  //   {
+  //     title: "唐揚げ",
+  //     start: new Date().setDate(new Date().getDate() - 5),
+  //     description: "",
+  //     backgroundColor: "blue",
+  //     borderColor: "blue",
+  //   },
+  //   {
+  //     title: "唐揚げ",
+  //     start: new Date().setDate(new Date().getDate() - 5),
+  //     description: "",
+  //     backgroundColor: "blue",
+  //     borderColor: "blue",
+  //   },
+  //   {
+  //     title: "唐揚げ",
+  //     start: new Date().setDate(new Date().getDate() - 5),
+  //     description: "",
+  //     backgroundColor: "blue",
+  //     borderColor: "blue",
+  //   },
+  // ]
 
   return (
     <Card className="flex flex-col size-full">
@@ -77,7 +188,7 @@ export default function MainCalendar({ events }: { events: CalendarEvent[] }) {
           ref={calendarRef}
           plugins={[dayGridPlugin, interactionPlugin]}
           initialView="dayGridMonth"
-          events={eventExample}
+          events={events}
           locale={jaLocale}
           headerToolbar={false}
           selectable={true}
@@ -85,6 +196,8 @@ export default function MainCalendar({ events }: { events: CalendarEvent[] }) {
             setDate(info.dateStr)
           }}
           height="100%"
+          displayEventTime={false}
+          dayMaxEvents={3}
         />
       </CardContent>
     </Card>
