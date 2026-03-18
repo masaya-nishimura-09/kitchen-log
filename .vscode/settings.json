@@ -1,8 +1,5 @@
 {
-  "cSpell.words": [
-    "supabase",
-    "tabler"
-  ],
+  "cSpell.words": ["fullcalendar", "supabase", "tabler"],
   "editor.formatOnSave": true,
   "editor.defaultFormatter": "biomejs.biome",
   "editor.codeActionsOnSave": {
