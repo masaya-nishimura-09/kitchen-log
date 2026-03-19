@@ -1,5 +1,6 @@
 "use client"
 
+import { IconCircleFilled } from "@tabler/icons-react"
 import { useState, useTransition } from "react"
 import { createEvent } from "@/actions/calendar/create"
 import { Button } from "@/components/ui/button"
@@ -10,7 +11,16 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog"
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 import { Spinner } from "@/components/ui/spinner"
+import { eventColor } from "@/lib/calendar/event-color"
 import type { AppActionResult } from "@/types/app-action-result"
 import type { EventInput } from "@/types/calendar/event-input"
 import type { Recipe } from "@/types/recipe/recipe"
@@ -31,7 +41,8 @@ export default function CalendarEventForm({
 
   const [formData, setFormDataAction] = useState<EventInput>({
     recipeId: null,
-    date: dateStr,
+    start: dateStr,
+    color: "blue",
   })
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -43,7 +54,8 @@ export default function CalendarEventForm({
       "eventData",
       JSON.stringify({
         recipeId: formData.recipeId,
-        date: formData.date,
+        start: formData.start,
+        color: formData.color,
       }),
     )
 
@@ -65,6 +77,24 @@ export default function CalendarEventForm({
         onSubmit={handleSubmit}
         className="flex flex-col gap-6 w-full mt-6"
       >
+        <Select
+          defaultValue={formData.color}
+          onValueChange={(e) => setFormDataAction({ ...formData, color: e })}
+        >
+          <SelectTrigger className="w-max-sm">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectGroup>
+              {eventColor.map((c) => (
+                <SelectItem key={c.color} value={c.color}>
+                  <IconCircleFilled fill={c.color} />
+                </SelectItem>
+              ))}
+            </SelectGroup>
+          </SelectContent>
+        </Select>
+
         <RecipeInput
           formData={formData}
           setFormDataAction={setFormDataAction}

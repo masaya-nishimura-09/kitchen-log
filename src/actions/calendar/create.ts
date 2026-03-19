@@ -18,7 +18,8 @@ export async function createEvent(
 
   const validatedFields = EventSchema.safeParse({
     recipeId: eventData.recipeId,
-    date: eventData.date,
+    start: eventData.start,
+    color: eventData.color,
   })
 
   if (!validatedFields.success) {
@@ -28,7 +29,7 @@ export async function createEvent(
       message: "入力内容に誤りがあります。",
     }
   }
-  const { recipeId, date } = validatedFields.data
+  const { recipeId, start, color } = validatedFields.data
 
   const getUserIdResult = await getUserId()
   if (!getUserIdResult.success || !getUserIdResult.data) {
@@ -44,7 +45,9 @@ export async function createEvent(
   const { error } = await supabase.from("calendar").insert({
     user_id: userId,
     recipe_id: recipeId,
-    date: date,
+    start: start,
+    background_color: color,
+    border_color: color,
   })
 
   if (error) {
@@ -55,7 +58,7 @@ export async function createEvent(
   }
 
   revalidatePath("/", "layout")
-  redirect(`/dashboard/calendar/${date}`)
+  redirect(`/dashboard/calendar`)
 }
 
 export async function createEvents(
@@ -79,7 +82,8 @@ export async function createEvents(
   for (const e of eventData) {
     const validatedFields = EventSchema.safeParse({
       recipeId: e.recipeId,
-      date: e.date,
+      start: e.start,
+      color: e.color,
     })
 
     if (!validatedFields.success) {
@@ -93,7 +97,9 @@ export async function createEvents(
     insertData.push({
       user_id: userId,
       recipe_id: validatedFields.data.recipeId,
-      date: validatedFields.data.date,
+      start: validatedFields.data.start,
+      background_color: validatedFields.data.color,
+      border_color: validatedFields.data.color,
     })
   }
 
@@ -109,5 +115,5 @@ export async function createEvents(
   }
 
   revalidatePath("/", "layout")
-  redirect(`/dashboard/calendar/${insertData[0].date}`)
+  redirect(`/dashboard/calendar`)
 }
