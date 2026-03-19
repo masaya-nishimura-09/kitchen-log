@@ -3,7 +3,7 @@
 import type { EventInput } from "@fullcalendar/core"
 import { cookies } from "next/headers"
 import { getUserId } from "@/actions/auth/auth"
-import { calendarEventConverter } from "@/lib/calendar/shopping-list-item-converter"
+import { calendarEventConverter } from "@/lib/calendar/calendar-event-converter"
 import { createClient } from "@/lib/supabase/server"
 import type { AppActionResult } from "@/types/app-action-result"
 

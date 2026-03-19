@@ -15,7 +15,13 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import { Dialog } from "@/components/ui/dialog"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog"
 import { formatDateToYYYYMMDD } from "@/lib/date/date"
 import type { Recipe } from "@/types/recipe/recipe"
 import CalendarEventForm from "./calendar-event-form"
@@ -53,7 +59,9 @@ export default function MainCalendar({
     }
   }
 
-  const [isOpen, setIsOpen] = useState(false)
+  const [isFormOpen, setIsFormOpen] = useState(false)
+  const [isEventOpen, setIsEventOpen] = useState(false)
+  const [selectedRecipe, setSelectedRecipe] = useState<Recipe | null>(null)
 
   return (
     <Card className="flex flex-col size-full">
@@ -76,8 +84,17 @@ export default function MainCalendar({
         </CardAction>
       </CardHeader>
       <CardContent className="flex-1 min-h-0">
-        <Dialog open={isOpen} onOpenChange={setIsOpen}>
+        <Dialog open={isFormOpen} onOpenChange={setIsFormOpen}>
           <CalendarEventForm dateStr={dateStr} recipes={recipes} />
+        </Dialog>
+
+        <Dialog open={isEventOpen} onOpenChange={setIsEventOpen}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>{selectedRecipe?.title}</DialogTitle>
+              <DialogDescription>{selectedRecipe?.memo}</DialogDescription>
+            </DialogHeader>
+          </DialogContent>
         </Dialog>
 
         <FullCalendar
@@ -90,7 +107,7 @@ export default function MainCalendar({
           selectable={true}
           dateClick={(info) => {
             setDateStr(info.dateStr)
-            setIsOpen(true)
+            setIsFormOpen(true)
           }}
           datesSet={(info) => {
             const date = info.view.currentStart
@@ -102,6 +119,10 @@ export default function MainCalendar({
           height="100%"
           displayEventTime={false}
           dayMaxEvents={3}
+          eventClick={(info) => {
+            setSelectedRecipe(info.event.extendedProps.recipe)
+            setIsEventOpen(true)
+          }}
         />
       </CardContent>
     </Card>
