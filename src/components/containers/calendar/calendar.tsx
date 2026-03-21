@@ -1,3 +1,5 @@
+// todo: コンポーネント化
+
 "use client"
 
 import type { EventInput } from "@fullcalendar/core"
@@ -6,7 +8,10 @@ import dayGridPlugin from "@fullcalendar/daygrid"
 import interactionPlugin from "@fullcalendar/interaction"
 import FullCalendar from "@fullcalendar/react"
 import { ChevronLeft, ChevronRight } from "lucide-react"
-import { useRef, useState } from "react"
+import Image from "next/image"
+import { useRef, useState, useTransition } from "react"
+import { deleteEvent } from "@/actions/calendar/delete"
+import { AspectRatio } from "@/components/ui/aspect-ratio"
 import { Button } from "@/components/ui/button"
 import {
   Card,
@@ -19,10 +24,12 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog"
-import { formatDateToYYYYMMDD } from "@/lib/date/date"
+import { Spinner } from "@/components/ui/spinner"
+import { formatDateToYYYYMMDD, getDateWithDayOfWeek } from "@/lib/date/date"
 import type { Recipe } from "@/types/recipe/recipe"
 import CalendarEventForm from "./calendar-event-form"
 
@@ -61,7 +68,18 @@ export default function MainCalendar({
 
   const [isFormOpen, setIsFormOpen] = useState(false)
   const [isEventOpen, setIsEventOpen] = useState(false)
+  const [selectedEventId, setSelectedEventId] = useState<number | null>(null)
   const [selectedRecipe, setSelectedRecipe] = useState<Recipe | null>(null)
+
+  const [isPending, startTransition] = useTransition()
+
+  const handleDelete = async (e: React.FormEvent) => {
+    e.preventDefault()
+
+    startTransition(async () => {
+      await deleteEvent(selectedEventId)
+    })
+  }
 
   return (
     <Card className="flex flex-col size-full">
@@ -90,10 +108,41 @@ export default function MainCalendar({
 
         <Dialog open={isEventOpen} onOpenChange={setIsEventOpen}>
           <DialogContent>
-            <DialogHeader>
-              <DialogTitle>{selectedRecipe?.title}</DialogTitle>
-              <DialogDescription>{selectedRecipe?.memo}</DialogDescription>
-            </DialogHeader>
+            {selectedRecipe && (
+              <div className="flex flex-col gap-4">
+                <DialogHeader className="flex flex-col gap-4">
+                  <DialogTitle>{selectedRecipe?.title}</DialogTitle>
+                  <DialogDescription>
+                    {getDateWithDayOfWeek(dateStr)}
+                  </DialogDescription>
+                </DialogHeader>
+                <AspectRatio ratio={16 / 9} className="bg-muted rounded-lg">
+                  <Image
+                    src={
+                      selectedRecipe.imageUrl
+                        ? `/api/recipe-image?path=${selectedRecipe.imageUrl}`
+                        : "/image-not-found/cover.png"
+                    }
+                    alt="recipe image"
+                    width={500}
+                    height={300}
+                    className="h-full w-full rounded-lg object-cover"
+                    unoptimized
+                  />
+                </AspectRatio>
+
+                <DialogFooter className="sm:justify-start">
+                  <Button
+                    type="button"
+                    onClick={(e) => handleDelete(e)}
+                    disabled={isPending}
+                  >
+                    {isPending && <Spinner />}
+                    {isPending ? "削除中..." : "削除"}
+                  </Button>
+                </DialogFooter>
+              </div>
+            )}
           </DialogContent>
         </Dialog>
 
@@ -120,6 +169,7 @@ export default function MainCalendar({
           displayEventTime={false}
           dayMaxEvents={3}
           eventClick={(info) => {
+            setSelectedEventId(Number(info.event.id))
             setSelectedRecipe(info.event.extendedProps.recipe)
             setIsEventOpen(true)
           }}

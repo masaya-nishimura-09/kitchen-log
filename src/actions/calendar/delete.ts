@@ -6,11 +6,17 @@ import { redirect } from "next/navigation"
 import { getUserId } from "@/actions/auth/auth"
 import { createClient } from "@/lib/supabase/server"
 import type { AppActionResult } from "@/types/app-action-result"
-import type { CalendarEvent } from "@/types/calendar/calendar-event"
 
 export async function deleteEvent(
-  event: CalendarEvent,
+  eventId: number | null,
 ): Promise<AppActionResult> {
+  if (!eventId) {
+    return {
+      success: false,
+      message: "イベントIDは必須です。",
+    }
+  }
+
   const getUserIdResult = await getUserId()
   if (!getUserIdResult.success || !getUserIdResult.data) {
     return {
@@ -24,7 +30,7 @@ export async function deleteEvent(
   const { error } = await supabase
     .from("calendar")
     .delete()
-    .eq("id", event.id)
+    .eq("id", eventId)
     .eq("user_id", userId)
 
   if (error) {
@@ -35,5 +41,5 @@ export async function deleteEvent(
   }
 
   revalidatePath("/", "layout")
-  redirect(`/dashboard/calendar/${event.date}`)
+  redirect(`/dashboard/calendar`)
 }
