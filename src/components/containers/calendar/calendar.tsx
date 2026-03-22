@@ -69,6 +69,7 @@ export default function MainCalendar({
   const [isFormOpen, setIsFormOpen] = useState(false)
   const [isEventOpen, setIsEventOpen] = useState(false)
   const [selectedEventId, setSelectedEventId] = useState<number | null>(null)
+  const [selectedEventDate, setSelectedEventDate] = useState<string>("")
   const [selectedRecipe, setSelectedRecipe] = useState<Recipe | null>(null)
 
   const [isPending, startTransition] = useTransition()
@@ -112,9 +113,7 @@ export default function MainCalendar({
               <div className="flex flex-col gap-4">
                 <DialogHeader className="flex flex-col gap-4">
                   <DialogTitle>{selectedRecipe?.title}</DialogTitle>
-                  <DialogDescription>
-                    {getDateWithDayOfWeek(dateStr)}
-                  </DialogDescription>
+                  <DialogDescription>{selectedEventDate}</DialogDescription>
                 </DialogHeader>
                 <AspectRatio ratio={16 / 9} className="bg-muted rounded-lg">
                   <Image
@@ -170,6 +169,9 @@ export default function MainCalendar({
           dayMaxEvents={3}
           eventClick={(info) => {
             setSelectedEventId(Number(info.event.id))
+            setSelectedEventDate(
+              getDateWithDayOfWeek(formatDateToYYYYMMDD(info.event.start)),
+            )
             setSelectedRecipe(info.event.extendedProps.recipe)
             setIsEventOpen(true)
           }}
