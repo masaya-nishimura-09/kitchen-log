@@ -2,7 +2,7 @@
 
 "use client"
 
-import type { EventInput } from "@fullcalendar/core"
+import type { EventContentArg, EventInput } from "@fullcalendar/core"
 import jaLocale from "@fullcalendar/core/locales/ja"
 import dayGridPlugin from "@fullcalendar/daygrid"
 import interactionPlugin from "@fullcalendar/interaction"
@@ -32,6 +32,14 @@ import { Spinner } from "@/components/ui/spinner"
 import { formatDateToYYYYMMDD, getDateWithDayOfWeek } from "@/lib/date/date"
 import type { Recipe } from "@/types/recipe/recipe"
 import CalendarEventForm from "./calendar-event-form"
+
+function renderEventContent(eventInfo: EventContentArg) {
+  return (
+    <div className="px-2">
+      <p className="font-bold">{eventInfo.event.title}</p>
+    </div>
+  )
+}
 
 export default function MainCalendar({
   events,
@@ -76,6 +84,8 @@ export default function MainCalendar({
 
   const handleDelete = async (e: React.FormEvent) => {
     e.preventDefault()
+
+    if (selectedEventId == null) return
 
     startTransition(async () => {
       await deleteEvent(selectedEventId)
@@ -150,6 +160,7 @@ export default function MainCalendar({
           plugins={[dayGridPlugin, interactionPlugin]}
           initialView="dayGridMonth"
           events={events}
+          eventContent={renderEventContent}
           locale={jaLocale}
           headerToolbar={false}
           selectable={true}
@@ -168,10 +179,12 @@ export default function MainCalendar({
           displayEventTime={false}
           dayMaxEvents={3}
           eventClick={(info) => {
-            setSelectedEventId(Number(info.event.id))
+            if (!info.event.start) return
+
             setSelectedEventDate(
               getDateWithDayOfWeek(formatDateToYYYYMMDD(info.event.start)),
             )
+            setSelectedEventId(Number(info.event.id))
             setSelectedRecipe(info.event.extendedProps.recipe)
             setIsEventOpen(true)
           }}

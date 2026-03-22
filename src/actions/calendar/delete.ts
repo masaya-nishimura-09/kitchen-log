@@ -7,16 +7,7 @@ import { getUserId } from "@/actions/auth/auth"
 import { createClient } from "@/lib/supabase/server"
 import type { AppActionResult } from "@/types/app-action-result"
 
-export async function deleteEvent(
-  eventId: number | null,
-): Promise<AppActionResult> {
-  if (!eventId) {
-    return {
-      success: false,
-      message: "イベントIDは必須です。",
-    }
-  }
-
+export async function deleteEvent(eventId: number): Promise<AppActionResult> {
   const getUserIdResult = await getUserId()
   if (!getUserIdResult.success || !getUserIdResult.data) {
     return {
