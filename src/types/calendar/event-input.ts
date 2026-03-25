@@ -1,4 +1,5 @@
 export interface EventInput {
   recipeId: number | null
-  date: string
+  start: string
+  color: string
 }

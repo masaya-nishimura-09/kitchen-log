@@ -1,5 +1,6 @@
 "use client"
 
+import { IconCircleFilled } from "@tabler/icons-react"
 import { ja } from "date-fns/locale"
 import { ChevronDownIcon } from "lucide-react"
 import { useState, useTransition } from "react"
@@ -21,7 +22,16 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 import { Spinner } from "@/components/ui/spinner"
+import { eventColor } from "@/lib/calendar/event-color"
 import { formatDateToYYYYMMDD, getDateWithDayOfWeek } from "@/lib/date/date"
 import type { AppActionResult } from "@/types/app-action-result"
 import type { EventInput } from "@/types/calendar/event-input"
@@ -39,7 +49,8 @@ export default function EventForm({ recipes }: { recipes: Recipe[] }) {
 
   const [formData, setFormDataAction] = useState<EventInput>({
     recipeId: 0,
-    date: formatDateToYYYYMMDD(today),
+    start: formatDateToYYYYMMDD(today),
+    color: "blue",
   })
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -47,7 +58,8 @@ export default function EventForm({ recipes }: { recipes: Recipe[] }) {
 
     const convertedData = recipes.map((r) => ({
       recipeId: r.id,
-      date: formData.date,
+      start: formData.start,
+      color: formData.color,
     }))
 
     const fd = new FormData()
@@ -82,6 +94,26 @@ export default function EventForm({ recipes }: { recipes: Recipe[] }) {
           onSubmit={handleSubmit}
           className="flex flex-col gap-6"
         >
+          <Select
+            defaultValue={formData.color}
+            onValueChange={(e) => setFormDataAction({ ...formData, color: e })}
+          >
+            <SelectTrigger className="w-max-sm">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                {Object.entries(eventColor).map(([key, value]) => {
+                  return (
+                    <SelectItem key={key} value={key}>
+                      <IconCircleFilled fill={value.bg} />
+                    </SelectItem>
+                  )
+                })}
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+
           <div className="grid gap-2">
             <Label htmlFor="date" className="px-1">
               日付を選択してください
@@ -93,7 +125,7 @@ export default function EventForm({ recipes }: { recipes: Recipe[] }) {
                   id="date"
                   className="w-full justify-between font-normal"
                 >
-                  {getDateWithDayOfWeek(formData.date)}
+                  {getDateWithDayOfWeek(formData.start)}
                   <ChevronDownIcon />
                 </Button>
               </PopoverTrigger>
@@ -108,7 +140,7 @@ export default function EventForm({ recipes }: { recipes: Recipe[] }) {
                   onSelect={(date) => {
                     setFormDataAction({
                       ...formData,
-                      date: formatDateToYYYYMMDD(date),
+                      start: formatDateToYYYYMMDD(date),
                     })
                     setOpen(false)
                   }}
