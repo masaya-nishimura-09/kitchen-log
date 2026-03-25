@@ -12,18 +12,19 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog"
 import { Spinner } from "@/components/ui/spinner"
-import type { Recipe } from "@/types/recipe/recipe"
+import type { CalendarEvent } from "@/types/calendar/calendar-event"
 
 export default function CalendarEventCard({
-  selectedRecipe,
-  selectedEventId,
-  selectedEventDate,
+  selectedEvent,
 }: {
-  selectedRecipe: Recipe | null
-  selectedEventId: number | null
-  selectedEventDate: string
+  selectedEvent: CalendarEvent | null
 }) {
   const [isPending, startTransition] = useTransition()
+
+  if (!selectedEvent) return
+  const selectedEventId = selectedEvent.id
+  const selectedRecipe = selectedEvent.recipe
+  const selectedEventDate = selectedEvent.start
 
   const handleDelete = async (e: React.FormEvent) => {
     e.preventDefault()

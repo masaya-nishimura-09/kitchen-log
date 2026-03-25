@@ -1,5 +1,3 @@
-// todo: コンポーネント化
-
 "use client"
 
 import type { EventContentArg, EventInput } from "@fullcalendar/core"
@@ -8,7 +6,6 @@ import dayGridPlugin from "@fullcalendar/daygrid"
 import interactionPlugin from "@fullcalendar/interaction"
 import FullCalendar from "@fullcalendar/react"
 import { ChevronLeft, ChevronRight } from "lucide-react"
-
 import { useRef, useState } from "react"
 import { Button } from "@/components/ui/button"
 import {
@@ -18,18 +15,13 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog"
-import { eventColor } from "@/lib/calendar/event-color"
+import { Dialog } from "@/components/ui/dialog"
 import { formatDateToYYYYMMDD, getDateWithDayOfWeek } from "@/lib/date/date"
 import type { CalendarEvent } from "@/types/calendar/calendar-event"
 import type { Recipe } from "@/types/recipe/recipe"
 import CalendarEventCard from "./calendar-event-card"
 import CalendarEventForm from "./calendar-event-form"
+import CalendarMoreEventsCard from "./calendar-more-events-card"
 
 function renderEventContent(eventInfo: EventContentArg) {
   return (
@@ -75,9 +67,7 @@ export default function MainCalendar({
   const [isFormOpen, setIsFormOpen] = useState(false)
   const [isEventOpen, setIsEventOpen] = useState(false)
   const [isMoreDialogOpen, setIsMoreDialogOpen] = useState(false)
-  const [selectedEventId, setSelectedEventId] = useState<number | null>(null)
-  const [selectedEventDate, setSelectedEventDate] = useState<string>("")
-  const [selectedRecipe, setSelectedRecipe] = useState<Recipe | null>(null)
+  const [selectedEvent, setSelectedEvent] = useState<CalendarEvent | null>(null)
   const [selectedEvents, setSelectedEvents] = useState<CalendarEvent[]>([])
 
   return (
@@ -106,44 +96,15 @@ export default function MainCalendar({
         </Dialog>
 
         <Dialog open={isEventOpen} onOpenChange={setIsEventOpen}>
-          <CalendarEventCard
-            selectedRecipe={selectedRecipe}
-            selectedEventId={selectedEventId}
-            selectedEventDate={selectedEventDate}
-          />
+          <CalendarEventCard selectedEvent={selectedEvent} />
         </Dialog>
 
         <Dialog open={isMoreDialogOpen} onOpenChange={setIsMoreDialogOpen}>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>イベント一覧</DialogTitle>
-            </DialogHeader>
-            <div className="flex flex-col gap-1">
-              {selectedEvents.map((event) => {
-                return (
-                  <button
-                    type="button"
-                    key={event.id}
-                    className={`w-full font-bold text-white rounded-2xl px-2 text-left`}
-                    style={{
-                      backgroundColor:
-                        eventColor[event.color as keyof typeof eventColor].bg,
-                    }}
-                    onClick={() => {
-                      if (!event.start) return
-
-                      setSelectedEventDate(event.start)
-                      setSelectedEventId(Number(event.id))
-                      setSelectedRecipe(event.recipe)
-                      setIsEventOpen(true)
-                    }}
-                  >
-                    {event.title}
-                  </button>
-                )
-              })}
-            </div>
-          </DialogContent>
+          <CalendarMoreEventsCard
+            selectedEvents={selectedEvents}
+            setSelectedEvent={setSelectedEvent}
+            setIsEventOpen={setIsEventOpen}
+          />
         </Dialog>
 
         <FullCalendar
@@ -193,13 +154,19 @@ export default function MainCalendar({
             return "none"
           }}
           eventClick={(info) => {
-            if (!info.event.start) return
-
-            setSelectedEventDate(
-              getDateWithDayOfWeek(formatDateToYYYYMMDD(info.event.start)),
-            )
-            setSelectedEventId(Number(info.event.id))
-            setSelectedRecipe(info.event.extendedProps.recipe)
+            setSelectedEvent({
+              id: Number(info.event.id),
+              userId: info.event.extendedProps.userId,
+              title: info.event.extendedProps.title,
+              start: getDateWithDayOfWeek(
+                formatDateToYYYYMMDD(info.event.start),
+              ),
+              allDay: true,
+              color: info.event.backgroundColor,
+              updatedAt: info.event.extendedProps.updatedAt,
+              createdAt: info.event.extendedProps.createdAt,
+              recipe: info.event.extendedProps.recipe,
+            })
             setIsEventOpen(true)
           }}
         />
