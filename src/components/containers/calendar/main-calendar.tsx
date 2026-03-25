@@ -9,6 +9,7 @@ import interactionPlugin from "@fullcalendar/interaction"
 import FullCalendar from "@fullcalendar/react"
 import { ChevronLeft, ChevronRight } from "lucide-react"
 import Image from "next/image"
+import Link from "next/link"
 import { useRef, useState, useTransition } from "react"
 import { deleteEvent } from "@/actions/calendar/delete"
 import { AspectRatio } from "@/components/ui/aspect-ratio"
@@ -30,7 +31,6 @@ import {
 } from "@/components/ui/dialog"
 import { Spinner } from "@/components/ui/spinner"
 import { eventColor } from "@/lib/calendar/event-color"
-// import { eventColor } from "@/lib/calendar/event-color"
 import { formatDateToYYYYMMDD, getDateWithDayOfWeek } from "@/lib/date/date"
 import type { CalendarEvent } from "@/types/calendar/calendar-event"
 import type { Recipe } from "@/types/recipe/recipe"
@@ -146,10 +146,19 @@ export default function MainCalendar({
                 </AspectRatio>
 
                 <DialogFooter className="sm:justify-start">
+                  <Button type="button" variant="default">
+                    <Link
+                      href={`/dashboard/recipe/${selectedRecipe.id}`}
+                      className="flex gap-1 items-center"
+                    >
+                      レシピを見る
+                    </Link>
+                  </Button>
                   <Button
                     type="button"
                     onClick={(e) => handleDelete(e)}
                     disabled={isPending}
+                    variant="destructive"
                   >
                     {isPending && <Spinner />}
                     {isPending ? "削除中..." : "削除"}
