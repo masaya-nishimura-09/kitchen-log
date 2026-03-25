@@ -168,16 +168,25 @@ export default function MainCalendar({
             <div className="flex flex-col gap-1">
               {selectedEvents.map((event) => {
                 return (
-                  <div
+                  <button
+                    type="button"
                     key={event.id}
-                    className={`w-full font-bold text-white rounded-2xl px-2`}
+                    className={`w-full font-bold text-white rounded-2xl px-2 text-left`}
                     style={{
                       backgroundColor:
                         eventColor[event.color as keyof typeof eventColor].bg,
                     }}
+                    onClick={() => {
+                      if (!event.start) return
+
+                      setSelectedEventDate(event.start)
+                      setSelectedEventId(Number(event.id))
+                      setSelectedRecipe(event.recipe)
+                      setIsEventOpen(true)
+                    }}
                   >
                     {event.title}
-                  </div>
+                  </button>
                 )
               })}
             </div>
