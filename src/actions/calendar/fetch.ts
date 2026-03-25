@@ -26,8 +26,7 @@ export async function fetchEvents(): Promise<AppActionResult<EventInput[]>> {
       user_id,
       recipe_id,
       start,
-      background_color,
-      border_color,
+      color,
       updated_at,
       created_at,
       recipes (

@@ -11,8 +11,7 @@ export function calendarEventConverter(data: CalendarEventRaw): EventInput {
     ).title,
     start: data.start as string,
     allDay: true,
-    backgroundColor: data.background_color,
-    borderColor: data.border_color,
+    color: data.color,
     updatedAt: data.updated_at as string,
     createdAt: data.created_at as string,
     recipe: recipeConverter(

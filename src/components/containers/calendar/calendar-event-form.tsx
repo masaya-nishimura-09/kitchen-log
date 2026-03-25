@@ -86,11 +86,13 @@ export default function CalendarEventForm({
           </SelectTrigger>
           <SelectContent>
             <SelectGroup>
-              {eventColor.map((c) => (
-                <SelectItem key={c.color} value={c.color}>
-                  <IconCircleFilled fill={c.color} />
-                </SelectItem>
-              ))}
+              {Object.entries(eventColor).map(([key, value]) => {
+                return (
+                  <SelectItem key={key} value={key}>
+                    <IconCircleFilled fill={value.bg} />
+                  </SelectItem>
+                )
+              })}
             </SelectGroup>
           </SelectContent>
         </Select>

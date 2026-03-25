@@ -29,7 +29,10 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog"
 import { Spinner } from "@/components/ui/spinner"
+import { eventColor } from "@/lib/calendar/event-color"
+// import { eventColor } from "@/lib/calendar/event-color"
 import { formatDateToYYYYMMDD, getDateWithDayOfWeek } from "@/lib/date/date"
+import type { CalendarEvent } from "@/types/calendar/calendar-event"
 import type { Recipe } from "@/types/recipe/recipe"
 import CalendarEventForm from "./calendar-event-form"
 
@@ -76,9 +79,11 @@ export default function MainCalendar({
 
   const [isFormOpen, setIsFormOpen] = useState(false)
   const [isEventOpen, setIsEventOpen] = useState(false)
+  const [isMoreDialogOpen, setIsMoreDialogOpen] = useState(false)
   const [selectedEventId, setSelectedEventId] = useState<number | null>(null)
   const [selectedEventDate, setSelectedEventDate] = useState<string>("")
   const [selectedRecipe, setSelectedRecipe] = useState<Recipe | null>(null)
+  const [selectedEvents, setSelectedEvents] = useState<CalendarEvent[]>([])
 
   const [isPending, startTransition] = useTransition()
 
@@ -155,6 +160,30 @@ export default function MainCalendar({
           </DialogContent>
         </Dialog>
 
+        <Dialog open={isMoreDialogOpen} onOpenChange={setIsMoreDialogOpen}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>イベント一覧</DialogTitle>
+            </DialogHeader>
+            <div className="flex flex-col gap-1">
+              {selectedEvents.map((event) => {
+                return (
+                  <div
+                    key={event.id}
+                    className={`w-full font-bold text-white rounded-2xl px-2`}
+                    style={{
+                      backgroundColor:
+                        eventColor[event.color as keyof typeof eventColor].bg,
+                    }}
+                  >
+                    {event.title}
+                  </div>
+                )
+              })}
+            </div>
+          </DialogContent>
+        </Dialog>
+
         <FullCalendar
           ref={calendarRef}
           plugins={[dayGridPlugin, interactionPlugin]}
@@ -178,6 +207,29 @@ export default function MainCalendar({
           height="100%"
           displayEventTime={false}
           dayMaxEvents={3}
+          moreLinkClick={(arg) => {
+            setSelectedEvents(
+              arg.allSegs.map((seg) => {
+                const event = seg.event
+                return {
+                  id: Number(event.id),
+                  userId: event.extendedProps.userId,
+                  title: event.title,
+                  start: getDateWithDayOfWeek(
+                    formatDateToYYYYMMDD(event.start),
+                  ),
+                  allDay: true,
+                  color: event.backgroundColor,
+                  updatedAt: event.extendedProps.updatedAt,
+                  createdAt: event.extendedProps.createdAt,
+                  recipe: event.extendedProps.recipe,
+                }
+              }),
+            )
+            setIsMoreDialogOpen(true)
+
+            return "none"
+          }}
           eventClick={(info) => {
             if (!info.event.start) return
 

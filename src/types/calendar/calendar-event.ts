@@ -6,8 +6,7 @@ export interface CalendarEvent {
   title: string
   start: string
   allDay: boolean
-  backgroundColor: string
-  borderColor: string
+  color: string
   updatedAt: string
   createdAt: string
   recipe: Recipe

@@ -46,8 +46,7 @@ export async function createEvent(
     user_id: userId,
     recipe_id: recipeId,
     start: start,
-    background_color: color,
-    border_color: color,
+    color: color,
   })
 
   if (error) {
@@ -98,8 +97,7 @@ export async function createEvents(
       user_id: userId,
       recipe_id: validatedFields.data.recipeId,
       start: validatedFields.data.start,
-      background_color: validatedFields.data.color,
-      border_color: validatedFields.data.color,
+      color: validatedFields.data.color,
     })
   }
 

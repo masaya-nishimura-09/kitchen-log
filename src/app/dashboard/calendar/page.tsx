@@ -3,7 +3,7 @@
 import { notFound } from "next/navigation"
 import { fetchEvents } from "@/actions/calendar/fetch"
 import { fetchRecipes } from "@/actions/recipe/fetch"
-import MainCalendar from "@/components/containers/calendar/calendar"
+import MainCalendar from "@/components/containers/calendar/main-calendar"
 
 export default async function Page() {
   const fetchEventsResult = await fetchEvents()

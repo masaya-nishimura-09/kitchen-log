@@ -5,8 +5,7 @@ export interface CalendarEventRaw {
   user_id: string
   recipe_id: number
   start: string
-  background_color: string
-  border_color: string
+  color: string
   updated_at: string
   created_at: string
   recipes: RecipeRaw | RecipeRaw[]
