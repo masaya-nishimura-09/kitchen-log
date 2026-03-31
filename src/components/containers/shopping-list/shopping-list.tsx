@@ -35,10 +35,10 @@ export default function ShoppingListItems({
             <TabsTrigger value="done">購入済み</TabsTrigger>
           </TabsList>
           <TabsContent value="undone">
-            <ShoppingListTable items={undone} />
+            <ShoppingListTable status="undone" items={undone} />
           </TabsContent>
           <TabsContent value="done">
-            <ShoppingListTable items={done} />
+            <ShoppingListTable status="done" items={done} />
           </TabsContent>
         </Tabs>
       </CardContent>

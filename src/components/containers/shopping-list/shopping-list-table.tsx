@@ -141,8 +141,10 @@ export const columns: ColumnDef<ShoppingListItem>[] = [
 ]
 
 export default function ShoppingListTable({
+  status,
   items,
 }: {
+  status: string
   items: ShoppingListItem[]
 }) {
   const [sorting, setSorting] = useState<SortingState>([])
