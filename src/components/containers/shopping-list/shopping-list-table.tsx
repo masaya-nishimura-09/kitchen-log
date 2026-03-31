@@ -255,7 +255,9 @@ export default function ShoppingListTable({
               {isPending && <Spinner />}
               {isPending
                 ? "変更中..."
-                : `${table.getFilteredSelectedRowModel().rows.length}個のステータスを変更`}
+                : status === "done"
+                  ? `${table.getFilteredSelectedRowModel().rows.length}個を未購入にする`
+                  : `${table.getFilteredSelectedRowModel().rows.length}個を購入済にする`}
             </Button>
           )}
         </div>
