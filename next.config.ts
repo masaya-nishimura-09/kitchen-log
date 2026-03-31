@@ -8,7 +8,11 @@ const nextConfig: NextConfig = {
     localPatterns: [
       {
         pathname: "/api/recipe-image",
-        search: "path=**",
+        search: "path=*",
+      },
+      {
+        pathname: "/**",
+        search: "",
       },
     ],
   },

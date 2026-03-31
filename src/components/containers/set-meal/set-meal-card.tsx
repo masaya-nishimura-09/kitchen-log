@@ -20,7 +20,7 @@ export default function SetMealCard({ setMeal }: { setMeal: SetMeal }) {
               src={
                 r.imageUrl
                   ? `/api/recipe-image?path=${r.imageUrl}`
-                  : "/image-not-found/cover.png"
+                  : "/not_found.png"
               }
               alt="recipe image"
               width={500}

@@ -51,7 +51,7 @@ export default async function Page({ params }: { params: { id: string } }) {
           ) : (
             <AspectRatio ratio={16 / 9} className="bg-muted rounded-lg">
               <Image
-                src="/image-not-found/cover.png"
+                src="/not_found.png"
                 alt="recipe image"
                 width={500}
                 height={300}

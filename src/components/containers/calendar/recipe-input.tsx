@@ -91,7 +91,7 @@ export default function RecipeInput({
               src={
                 selectedRecipe.imageUrl
                   ? `/api/recipe-image?path=${selectedRecipe.imageUrl}`
-                  : "/image-not-found/cover.png"
+                  : "/not_found.png"
               }
               alt="recipe image"
               width={50}

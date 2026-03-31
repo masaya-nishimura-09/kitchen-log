@@ -21,7 +21,7 @@ export default function RecipeCard({
           src={
             recipe.imageUrl
               ? `/api/recipe-image?path=${recipe.imageUrl}`
-              : "/image-not-found/cover.png"
+              : "/not_found.png"
           }
           alt="recipe image"
           width={500}
