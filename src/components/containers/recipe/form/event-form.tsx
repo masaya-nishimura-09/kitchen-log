@@ -135,9 +135,10 @@ export default function EventForm({ id }: { id: number }) {
               >
                 <Calendar
                   mode="single"
-                  selected={today}
+                  selected={new Date(formData.start)}
                   captionLayout="dropdown"
                   onSelect={(date) => {
+                    if (!date) return
                     setFormDataAction({
                       ...formData,
                       start: formatDateToYYYYMMDD(date),
