@@ -145,33 +145,27 @@ export async function createItem(formData: FormData): Promise<AppActionResult> {
 export async function createFromRecipe(
   recipes: Recipe[],
 ): Promise<AppActionResult> {
-  const ingredients = []
+  const items = []
   for (const recipe of recipes) {
-    ingredients.push(...recipe.ingredient)
+    const formattedItems = recipe.ingredient.map((i) => ({
+      id: 0,
+      name: i.name,
+      amount: i.amount,
+      unit: i.unit,
+      status: false,
+    }))
+
+    items.push(...formattedItems)
   }
 
-  for (const ingredient of ingredients) {
-    const fd = new FormData()
+  const fd = new FormData()
+  fd.append("shoppingListItemData", JSON.stringify(items))
 
-    fd.append(
-      "shoppingListItemData",
-      JSON.stringify([
-        {
-          id: ingredient.id,
-          name: ingredient.name,
-          amount: ingredient.amount,
-          unit: ingredient.unit,
-          status: false,
-        },
-      ]),
-    )
-
-    const result = await createItem(fd)
-    if (!result.success) {
-      return {
-        success: false,
-        message: "アイテムの登録に失敗しました。",
-      }
+  const result = await createItem(fd)
+  if (!result.success) {
+    return {
+      success: false,
+      message: "アイテムの登録に失敗しました。",
     }
   }
 

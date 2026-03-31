@@ -16,7 +16,7 @@ import {
 } from "@tanstack/react-table"
 import { MoreHorizontal } from "lucide-react"
 import { useState, useTransition } from "react"
-import { deleteItem } from "@/actions/shopping-list/delete"
+import { deleteItem, deleteItems } from "@/actions/shopping-list/delete"
 import { updateItem } from "@/actions/shopping-list/update"
 import {
   AlertDialog,
@@ -95,7 +95,9 @@ export const columns: ColumnDef<ShoppingListItem>[] = [
       async function handleDeleteItem() {
         startTransition(async () => {
           const result = await deleteItem(item.id)
-          if (!result.success) {
+          if (result.success) {
+            window.location.reload()
+          } else {
             console.error(result.message)
           }
         })
@@ -141,8 +143,10 @@ export const columns: ColumnDef<ShoppingListItem>[] = [
 ]
 
 export default function ShoppingListTable({
+  status,
   items,
 }: {
+  status: string
   items: ShoppingListItem[]
 }) {
   const [sorting, setSorting] = useState<SortingState>([])
@@ -169,8 +173,10 @@ export default function ShoppingListTable({
     },
   })
 
-  const [isPending, startTransition] = useTransition()
-  const handleSubmit = async (e: React.FormEvent) => {
+  const [isUpdatePending, startUpdateTransition] = useTransition()
+  const [isDeletePending, startDeleteTransition] = useTransition()
+
+  const handleUpdate = async (e: React.FormEvent) => {
     e.preventDefault()
 
     const originalData = table
@@ -181,7 +187,7 @@ export default function ShoppingListTable({
 
     fd.append("shoppingListItemData", JSON.stringify(originalData))
 
-    startTransition(async () => {
+    startUpdateTransition(async () => {
       const result = await updateItem(fd)
       if (result.success) {
         window.location.reload()
@@ -190,6 +196,28 @@ export default function ShoppingListTable({
       }
     })
   }
+
+  const handleDeleteItems = async (e: React.FormEvent) => {
+    e.preventDefault()
+
+    const originalData = table
+      .getFilteredSelectedRowModel()
+      .rows.map((i) => i.original)
+
+    const fd = new FormData()
+
+    fd.append("shoppingListItemData", JSON.stringify(originalData))
+
+    startDeleteTransition(async () => {
+      const result = await deleteItems(fd)
+      if (result.success) {
+        window.location.reload()
+      } else {
+        console.error(result.message)
+      }
+    })
+  }
+
   return (
     <div className="w-full">
       <div className="overflow-hidden rounded-md border">
@@ -242,21 +270,33 @@ export default function ShoppingListTable({
           </TableBody>
         </Table>
       </div>
-      <div className="flex items-center justify-end space-x-2 py-4">
-        <div className="text-muted-foreground flex-1 text-sm">
-          {table.getFilteredSelectedRowModel().rows.length > 0 && (
+      <div className="flex flex-col items-center justify-end gap-2 py-4 md:flex-row">
+        {table.getFilteredSelectedRowModel().rows.length > 0 && (
+          <div className="flex gap-2 text-muted-foreground flex-1 text-sm">
             <Button
               variant="outline"
-              onClick={handleSubmit}
-              disabled={isPending}
+              onClick={handleUpdate}
+              disabled={isUpdatePending}
             >
-              {isPending && <Spinner />}
-              {isPending
+              {isUpdatePending && <Spinner />}
+              {isUpdatePending
                 ? "変更中..."
-                : `${table.getFilteredSelectedRowModel().rows.length}個のステータスを変更`}
+                : status === "done"
+                  ? `${table.getFilteredSelectedRowModel().rows.length}個を未購入にする`
+                  : `${table.getFilteredSelectedRowModel().rows.length}個を購入済にする`}
             </Button>
-          )}
-        </div>
+            <Button
+              variant="destructive"
+              onClick={handleDeleteItems}
+              disabled={isDeletePending}
+            >
+              {isDeletePending && <Spinner />}
+              {isDeletePending
+                ? "削除中..."
+                : `${table.getFilteredSelectedRowModel().rows.length}個を削除する`}
+            </Button>
+          </div>
+        )}
         <div className="space-x-2">
           <Button
             variant="outline"
