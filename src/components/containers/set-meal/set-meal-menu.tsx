@@ -3,7 +3,7 @@
 import { IconDots } from "@tabler/icons-react"
 import Link from "next/link"
 import { useTransition } from "react"
-import { createFromRecipe } from "@/actions/shopping-list/create"
+import { createItemsFromRecipes } from "@/actions/shopping-list/create"
 import EventForm from "@/components/containers/set-meal/form/event-form"
 import {
   DropdownMenu,
@@ -21,7 +21,7 @@ export default function SetMealMenu({ setMeal }: { setMeal: SetMeal }) {
     e.preventDefault()
 
     startTransition(async () => {
-      await createFromRecipe(setMeal.recipes)
+      await createItemsFromRecipes(setMeal.recipes)
     })
   }
 

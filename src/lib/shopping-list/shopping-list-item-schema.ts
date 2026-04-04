@@ -1,3 +1,5 @@
+// todo: 適量の時はamountがnullになるため、修正
+
 import { z } from "zod"
 
 export const ShoppingListItemSchema = z.object({

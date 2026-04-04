@@ -46,7 +46,9 @@ async function insertItem(
   }
 }
 
-export async function createItem(formData: FormData): Promise<AppActionResult> {
+export async function createItems(
+  formData: FormData,
+): Promise<AppActionResult> {
   const itemData = JSON.parse(
     formData.get("shoppingListItemData") as string,
   ) as ShoppingListItemInput[]
@@ -142,7 +144,7 @@ export async function createItem(formData: FormData): Promise<AppActionResult> {
   redirect(`/dashboard/shopping-list`)
 }
 
-export async function createFromRecipe(
+export async function createItemsFromRecipes(
   recipes: Recipe[],
 ): Promise<AppActionResult> {
   const items = []
@@ -161,7 +163,7 @@ export async function createFromRecipe(
   const fd = new FormData()
   fd.append("shoppingListItemData", JSON.stringify(items))
 
-  const result = await createItem(fd)
+  const result = await createItems(fd)
   if (!result.success) {
     return {
       success: false,

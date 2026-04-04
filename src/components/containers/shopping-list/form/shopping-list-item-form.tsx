@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { useState, useTransition } from "react"
-import { createItem } from "@/actions/shopping-list/create"
+import { createItems } from "@/actions/shopping-list/create"
 import { Button } from "@/components/ui/button"
 import {
   Card,
@@ -32,7 +32,7 @@ export default function ShoppingListItemForm() {
     fd.append("shoppingListItemData", JSON.stringify(formData))
 
     startTransition(async () => {
-      const result = await createItem(fd)
+      const result = await createItems(fd)
       if (!result.success) {
         setState(result)
       }
