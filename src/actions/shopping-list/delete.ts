@@ -3,8 +3,9 @@
 import { revalidatePath } from "next/cache"
 import { cookies } from "next/headers"
 import { redirect } from "next/navigation"
+import z from "zod"
 import { getUserId } from "@/actions/auth/auth"
-import { ShoppingListItemSchema } from "@/lib/shopping-list/shopping-list-item-schema"
+import { DeleteShoppingListItemSchema } from "@/lib/shopping-list/shopping-list-item-schema"
 import { createClient } from "@/lib/supabase/server"
 import type { AppActionResult } from "@/types/app-action-result"
 import type { ShoppingListItemInput } from "@/types/shopping-list/shopping-list-item-input"
@@ -46,17 +47,15 @@ export async function deleteItems(
     formData.get("shoppingListItemData") as string,
   ) as ShoppingListItemInput[]
 
-  const data = []
-  for (const i of itemData) {
-    const validatedFields = ShoppingListItemSchema.safeParse(i)
+  const validatedFields = z
+    .array(DeleteShoppingListItemSchema)
+    .safeParse(itemData)
 
-    if (!validatedFields.success) {
-      return {
-        success: false,
-        message: "入力内容に誤りがあります。",
-      }
+  if (!validatedFields.success) {
+    return {
+      success: false,
+      message: "入力内容に誤りがあります。",
     }
-    data.push(validatedFields.data)
   }
 
   const getUserIdResult = await getUserId()
@@ -68,19 +67,20 @@ export async function deleteItems(
   }
   const userId = getUserIdResult.data
 
+  const ids = validatedFields.data.map((item) => item.id)
+
   const supabase = createClient(cookies())
-  for (const item of data) {
-    const { error } = await supabase
-      .from("shopping_list")
-      .delete()
-      .eq("id", item.id)
-      .eq("user_id", userId)
-    if (error) {
-      console.error("Database Error:", error)
-      return {
-        success: false,
-        message: "アイテムの削除に失敗しました。",
-      }
+  const { error } = await supabase
+    .from("shopping_list")
+    .delete()
+    .in("id", ids)
+    .eq("user_id", userId)
+
+  if (error) {
+    console.error("Database Error:", error)
+    return {
+      success: false,
+      message: "アイテムの削除に失敗しました。",
     }
   }
 

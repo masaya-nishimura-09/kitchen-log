@@ -1,5 +1,3 @@
-// todo: 適量の時はamountがnullになるため、修正
-
 import { z } from "zod"
 
 export const ShoppingListItemSchema = z.object({
@@ -10,4 +8,8 @@ export const ShoppingListItemSchema = z.object({
     .transform((val) => (val === "" ? null : val)),
   unit: z.string({ message: "単位を入力してください。" }),
   status: z.boolean({ message: "状態を入力してください。" }),
+})
+
+export const DeleteShoppingListItemSchema = z.object({
+  id: z.number(),
 })
