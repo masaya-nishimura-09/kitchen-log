@@ -152,7 +152,7 @@ export async function createItemsFromRecipes(
     const formattedItems = recipe.ingredient.map((i) => ({
       id: 0,
       name: i.name,
-      amount: i.amount,
+      amount: i.amount ?? "",
       unit: i.unit,
       status: false,
     }))
