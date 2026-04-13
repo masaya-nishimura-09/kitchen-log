@@ -41,7 +41,7 @@ export default function CalendarEventForm({
 
   const [formData, setFormDataAction] = useState<EventInput>({
     recipeId: null,
-    start: dateStr,
+    start: "",
     color: "blue",
   })
 
@@ -54,7 +54,7 @@ export default function CalendarEventForm({
       "eventData",
       JSON.stringify({
         recipeId: formData.recipeId,
-        start: formData.start,
+        start: dateStr,
         color: formData.color,
       }),
     )
