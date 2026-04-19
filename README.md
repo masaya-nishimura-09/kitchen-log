@@ -10,13 +10,13 @@ meal plans, and shopping lists, making your daily cooking more efficient and enj
 
 ## Screenshots
 
-### ホーム
+### Home
 ![Home](./docs/screenshots/home.png)
 
-### レシピ詳細
+### Recipe
 ![Recipe](./docs/screenshots/recipe.png)
 
-### カレンダー
+### Calendar
 ![Calendar](./docs/screenshots/calendar.png)
 
 ## Demo
