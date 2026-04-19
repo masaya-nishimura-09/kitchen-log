@@ -8,6 +8,17 @@ meal plans, and shopping lists, making your daily cooking more efficient and enj
 - Manage recipes, meal plans, and shopping lists effortlessly.
 - Automatically generate shopping lists from recipes and meal plans.
 
+## Screenshots
+
+### ホーム
+![Home](./docs/screenshots/home.png)
+
+### レシピ詳細
+![Recipe](./docs/screenshots/recipe.png)
+
+### カレンダー
+![Calendar](./docs/screenshots/calendar.png)
+
 ## Demo
 
 - [Kitchen Log Demo](https://kitchen-log.vercel.app)
